@@ -53,23 +53,28 @@ docs/                      Plan, API-Notizen, Balance
 | 1.6 | .NET Framework 4.7.2 (bzw. .NET SDK mit `Microsoft.NETFramework.ReferenceAssemblies`) | **2.4.3** | `Assembly-CSharp.dll`, `UnityEngine.CoreModule.dll` |
 | 1.7 | **.NET 10 SDK** (`net10.0`), VS2026 / Rider 2026 | **3.0** | `Assembly-CSharp.dll`, `UnityStubs.dll`, `Waylith.dll` |
 
-Die DLLs liegen unter `RimWorld/RimWorldWin64_Data/Managed/`. Für 1.7 nimm die Dateien aus der **unstable**-Installation.
+**Wichtiger Unterschied:** Bei 1.6 liegen die Referenzen unter `RimWorld/RimWorldWin64_Data/Managed/`. Bei **1.7 (Waylith) existiert dieser Ordner nicht mehr** – `Assembly-CSharp.dll`, `UnityStubs.dll` und `Waylith.dll` liegen direkt im **Spiel-Installationsverzeichnis**. `$RW17` zeigt deshalb auf das Spiel-Root, nicht auf `Managed`. Für 1.7 die Dateien aus der **unstable**-Installation nehmen.
 
 ### Windows (PowerShell)
 
 ```powershell
 $RW16 = "C:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed"
-$RW17 = "C:\Program Files (x86)\Steam\steamapps\common\RimWorld 1.7\RimWorldWin64_Data\Managed"
+$RW17 = "C:\Games\RimWorld_1_7_Beta"   # Spiel-Root, KEIN Managed-Ordner
+$HRM  = "C:\Program Files (x86)\Steam\steamapps\workshop\content\294100\2009463077"
 
-dotnet build Source\RectShield.1.6.csproj -c Release -p:ManagedPath="$RW16"
-dotnet build Source\RectShield.1.7.csproj -c Release -p:ManagedPath="$RW17"
+dotnet build Source\RectShield.1.6.csproj -c Release -p:ManagedPath="$RW16" -p:HarmonyPath="$HRM\1.6\Assemblies"
+dotnet build Source\RectShield.1.7.csproj -c Release -p:GameDir="$RW17" -p:HarmonyPath="$HRM\1.7\Assemblies"
 ```
+
+Für Windows liegt zusätzlich das Paket `windows-p0/` bereit (`P0-Windows.md` mit `Build-RectShield.ps1`, `Check-API.ps1`, `Install-DevMod.ps1`).
 
 ### Linux / macOS (bash)
 
 ```bash
 RW16_MANAGED=~/Games/RimWorld/RimWorldWin64_Data/Managed \
-RW17_MANAGED=~/Games/RimWorld17/RimWorldWin64_Data/Managed \
+RW17_DIR=~/Games/RimWorld_1_7_Beta \
+HARMONY_2=~/Games/Harmony/1.6/Assemblies \
+HARMONY_3=~/Games/Harmony/1.7/Assemblies \
 ./Source/build.sh
 ```
 

@@ -15,9 +15,10 @@
     <OutputPath>..\1.6\Assemblies\</OutputPath>
   </PropertyGroup>
 
+  <!-- Defaults; both can be overridden with -p:... on the command line. -->
   <PropertyGroup>
     <ManagedPath Condition="'$(ManagedPath)' == ''">C:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed</ManagedPath>
-    <HarmonyPath Condition="'$(HarmonyPath)' == ''">$(ManagedPath)</HarmonyPath>
+    <HarmonyPath Condition="'$(HarmonyPath)' == ''">C:\Program Files (x86)\Steam\steamapps\workshop\content\294100\2009463077\1.6\Assemblies</HarmonyPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -25,6 +26,11 @@
     <Compile Include="Mod\**\*.cs" />
     <Compile Include="UI\**\*.cs" />
     <Compile Include="Patches\**\*.cs" />
+  </ItemGroup>
+
+  <!-- Build net472 without an installed .NET Framework 4.7.2 targeting pack. -->
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,7 +42,7 @@
       <HintPath>$(ManagedPath)\UnityEngine.CoreModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="UnityEngine">
+    <Reference Include="UnityEngine" Condition="Exists('$(ManagedPath)\UnityEngine.dll')">
       <HintPath>$(ManagedPath)\UnityEngine.dll</HintPath>
       <Private>false</Private>
     </Reference>

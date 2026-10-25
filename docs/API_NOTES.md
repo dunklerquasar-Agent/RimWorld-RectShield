@@ -70,8 +70,9 @@ if (ceType != null) { /* AccessTools.Method(ceType, "Tick") patchen */ }
 
 ## 4. 1.7-spezifisch (Waylith)
 
-- `net10.0`, SDK-style csproj, VS2026 / Rider 2026.
-- Referenzen: `Assembly-CSharp.dll`, `UnityStubs.dll`, `Waylith.dll`. `using UnityEngine;` bleibt dank Stubs gültig.
+- `net10.0`, SDK-style csproj, VS2026 / Rider 2026 (VS2022 kann kein .NET 10).
+- **Kein `RimWorldWin64_Data/Managed` mehr!** `Assembly-CSharp.dll`, `UnityStubs.dll`, `Waylith.dll` (und ggf. `Waylith.UnityCompat.dll`) liegen im **Spiel-Installations-Root**. Deshalb nutzt `RectShield.1.7.csproj` die Property `GameDir` (nicht `ManagedPath`). `using UnityEngine;` bleibt dank `UnityStubs` gültig; Unity-DLL-Referenzen wurden entfernt.
+- Referenzen: `Assembly-CSharp.dll`, `UnityStubs.dll`, `Waylith.dll`, optional `Waylith.UnityCompat.dll`. `0Harmony.dll` (Harmony 3) kommt aus dem Harmony-Workshop-Ordner `1.7/Assemblies/`.
 - **Harmony 3** prüft `__instance`/`__result`-Typen exakt. Unsere Postfixes nutzen nur `__instance` mit dem korrekten Typ – das ist der Grund, warum wir auf `CheckForFreeInterceptBetween` verzichten.
 - `LoadFolders.xml` lädt `Common/` + `1.7/`.
 

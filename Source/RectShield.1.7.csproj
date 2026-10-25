@@ -1,6 +1,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <!-- RimWorld 1.7 (Waylith Beta): .NET 10 + Harmony 3 -->
+  <!-- RimWorld 1.7 (Waylith Beta): .NET 10 + Harmony 3
+       IMPORTANT: 1.7 has NO "RimWorldWin64_Data/Managed" folder.
+       Assembly-CSharp.dll, UnityStubs.dll and Waylith.dll live in the
+       GAME INSTALL ROOT. GameDir points there. -->
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <AssemblyName>RectShield</AssemblyName>
@@ -16,8 +19,8 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <ManagedPath Condition="'$(ManagedPath)' == ''">C:\Program Files (x86)\Steam\steamapps\common\RimWorld\RimWorldWin64_Data\Managed</ManagedPath>
-    <HarmonyPath Condition="'$(HarmonyPath)' == ''">$(ManagedPath)</HarmonyPath>
+    <GameDir Condition="'$(GameDir)' == ''">C:\Games\RimWorld_1_7_Beta</GameDir>
+    <HarmonyPath Condition="'$(HarmonyPath)' == ''">C:\Program Files (x86)\Steam\steamapps\workshop\content\294100\2009463077\1.7\Assemblies</HarmonyPath>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,15 +32,19 @@
 
   <ItemGroup>
     <Reference Include="Assembly-CSharp">
-      <HintPath>$(ManagedPath)\Assembly-CSharp.dll</HintPath>
+      <HintPath>$(GameDir)\Assembly-CSharp.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="UnityStubs">
-      <HintPath>$(ManagedPath)\UnityStubs.dll</HintPath>
+      <HintPath>$(GameDir)\UnityStubs.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="Waylith">
-      <HintPath>$(ManagedPath)\Waylith.dll</HintPath>
+      <HintPath>$(GameDir)\Waylith.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="Waylith.UnityCompat" Condition="Exists('$(GameDir)\Waylith.UnityCompat.dll')">
+      <HintPath>$(GameDir)\Waylith.UnityCompat.dll</HintPath>
       <Private>false</Private>
     </Reference>
     <Reference Include="0Harmony">

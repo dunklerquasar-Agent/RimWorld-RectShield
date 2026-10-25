@@ -72,15 +72,32 @@ for thing in buildings.findall("ThingDef"):
     if thing.find("uiIconPath") is None or thing.find("graphicData/texPath") is None:
         ui_issues.append(name or "?")
 
-print(f"Geprueft: {len(required)} Pflichtpfade, {len(graphics)} Grafiken, "
-      f"{len(list((ROOT / 'Source').rglob('*.cs')))} C#-Dateien.")
+# Build-Konfiguration: 1.7 braucht GameDir (Spiel-Root), 1.6 das Referenzpaket.
+build_issues = []
+c16 = (ROOT / "Source/RectShield.1.6.csproj").read_text(encoding="utf-8")
+c17 = (ROOT / "Source/RectShield.1.7.csproj").read_text(encoding="utf-8")
+if "Microsoft.NETFramework.ReferenceAssemblies" not in c16:
+    build_issues.append("1.6.csproj: Microsoft.NETFramework.ReferenceAssemblies fehlt")
+if "net472" not in c16 or "ManagedPath" not in c16:
+    build_issues.append("1.6.csproj: net472/ManagedPath fehlt")
+if "GameDir" not in c17 or "UnityStubs" not in c17 or "Waylith" not in c17:
+    build_issues.append("1.7.csproj: GameDir/UnityStubs/Waylith fehlt")
+if "ManagedPath" in c17:
+    build_issues.append("1.7.csproj: enthaelt noch ManagedPath (1.7 hat keinen Managed-Ordner)")
+if "net10.0" not in c17:
+    build_issues.append("1.7.csproj: net10.0 fehlt")
 
-if missing or cs_bad or ui_issues:
+print(f"Geprueft: {len(required)} Pflichtpfade, {len(graphics)} Grafiken, "
+      f"{len(list((ROOT / 'Source').rglob('*.cs')))} C#-Dateien, 2 csproj.")
+
+if missing or cs_bad or ui_issues or build_issues:
     for p in missing:
         print(f"  FEHLT: {p}", file=sys.stderr)
     for p in cs_bad:
         print(f"  FALSCHER NAMESPACE: {p}", file=sys.stderr)
     for name in ui_issues:
         print(f"  FEHLENDE GRAFIK-REFERENZ: {name}", file=sys.stderr)
+    for issue in build_issues:
+        print(f"  BUILD-KONFIG: {issue}", file=sys.stderr)
     sys.exit(1)
-print("OK: Mod-Struktur und Grafik-Referenzen vollstaendig.")
+print("OK: Mod-Struktur, Grafik-Referenzen und Build-Konfiguration vollstaendig.")

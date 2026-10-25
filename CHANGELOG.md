@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.1.2] - 2026-10-25 - Waylith-Buildpfade korrigiert
+
+### Fix (P0-Vorbereitung)
+- **`RectShield.1.7.csproj`**: `ManagedPath` → **`GameDir`**. RimWorld 1.7 (Waylith) hat keinen `RimWorldWin64_Data/Managed`-Ordner mehr; `Assembly-CSharp.dll`, `UnityStubs.dll`, `Waylith.dll` und optional `Waylith.UnityCompat.dll` liegen im Spiel-Root. Unity-DLL-Referenzen entfernt, Harmony-Default zeigt auf `1.7/Assemblies`.
+- **`RectShield.1.6.csproj`**: `PackageReference Microsoft.NETFramework.ReferenceAssemblies 1.0.3` ergänzt (verhindert `MSB3644` ohne installiertes .NET-4.7.2-Targeting-Pack); `UnityEngine.dll`-Referenz nur noch bei vorhandener Datei; Harmony-Default auf `1.6/Assemblies`.
+- `Source/build.sh`: `RW17_MANAGED` → `RW17_DIR` (`-p:GameDir=...`), Harmony-Pfade `HARMONY_2`/`HARMONY_3` ergänzt.
+- `README.md`, `docs/API_NOTES.md`, `.github/workflows/validate.yml`: Build-Anleitung und CI an die 1.7-Pfade angepasst (`RW17_DIR`, `HARMONY_3`).
+- Zusätzliches Windows-Paket `windows-p0/` (außerhalb des Repos): `P0-Windows.md`, `Build-RectShield.ps1`, `Check-API.ps1`, `Apply-WindowsFix.ps1`, `Install-DevMod.ps1`.
+
 ## [0.1.1] - 2026-10-25 - Ingame-Grafiken & Forschungsbaum
 
 ### Neu

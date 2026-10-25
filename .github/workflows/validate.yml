@@ -42,10 +42,11 @@ jobs:
       - name: Build 1.7 if assemblies are present
         shell: pwsh
         env:
-          RW_MANAGED: ${{ secrets.RW17_MANAGED }}
+          RW17_DIR: ${{ secrets.RW17_DIR }}
+          HARMONY_3: ${{ secrets.HARMONY_3 }}
         run: |
-          if (-not $env:RW_MANAGED) {
-            Write-Host "::warning::Kein RW17_MANAGED Secret gesetzt - Game-Build uebersprungen."
+          if (-not $env:RW17_DIR) {
+            Write-Host "::warning::Kein RW17_DIR Secret gesetzt (Spiel-Root von 1.7) - Game-Build uebersprungen."
             exit 0
           }
-          dotnet build Source/RectShield.1.7.csproj -c Release -p:ManagedPath="$env:RW_MANAGED"
+          dotnet build Source/RectShield.1.7.csproj -c Release -p:GameDir="$env:RW17_DIR" -p:HarmonyPath="$env:HARMONY_3"
