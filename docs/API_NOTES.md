@@ -64,8 +64,10 @@ if (ceType != null) { /* AccessTools.Method(ceType, "Tick") patchen */ }
 | `RimWorld.Faction` | `OfPlayer`, `HostileTo(Faction)` | Drop-Pod-Filter |
 | `RimWorld.FleckMaker` | `ThrowMicroSparks(Vector3, Map)` | Treffer-Effekt (in try/catch) |
 | `RimWorld.FloatMenu` / `FloatMenuOption` | Konstruktoren | Größen-Menü |
-| `Verse.ProjectileProperties` | `flyOverhead`, `GetDamageAmount(float)` | Mk1/Mk2-Unterscheidung, Energiekosten |
-| `Verse.VersionControl` | `CurrentVersionString` | nur Debug-Ausgabe, in `VersionInfo` abgesichert |
+| `Verse.ProjectileProperties` | `flyOverhead`, `GetDamageAmount(Thing weapon, StringBuilder explanation = null)` | **GEPRÜFT**: erwartet ein `Thing`, keinen `float`. `GetDamageAmount(1f)` ergab `CS1503`. |
+| `RimWorld.VersionControl` | `CurrentVersionString` | **GEPRÜFT**: liegt in `RimWorld`, nicht `Verse`. Ohne `using RimWorld;` gab es `CS0103`. |
+| `Verse.Gizmo` | `Disabled` (Property), `disabledReason` | **GEPRÜFT**: das Feld `disabled` ist `protected`; `disabled = true` ergab `CS0122`, korrekt ist `Disabled = true`. |
+| `Verse.GenDraw` | `DrawFieldEdges(List<IntVec3>, Color, float? = null, HashSet<IntVec3> = null, int = 2900)` | **GEPRÜFT**: 5 Parameter mit Defaults, Aufruf mit 2 Argumenten ist gültig. |
 | `UnityEngine` | `Vector3`, `Color`, `Rect` | DrawPos, Overlay, Settings |
 
 ## 4. 1.7-spezifisch (Waylith)

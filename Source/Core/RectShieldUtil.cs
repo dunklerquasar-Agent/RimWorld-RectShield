@@ -57,7 +57,9 @@ namespace RectShield
             {
                 if (projectile != null && projectile.def != null && projectile.def.projectile != null)
                 {
-                    float amount = projectile.def.projectile.GetDamageAmount(1f);
+                    // 1.6/1.7: GetDamageAmount(Thing weapon, StringBuilder explanation = null)
+                    // Die erste Ueberladung erwartet eine Thing-Waffe, keinen float-Multiplikator.
+                    int amount = projectile.def.projectile.GetDamageAmount(null);
                     if (amount > 0f)
                     {
                         return amount;

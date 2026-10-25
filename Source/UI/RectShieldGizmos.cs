@@ -50,7 +50,8 @@ namespace RectShield
             {
                 defaultLabel = RectShieldStrings.GizmoFixedSize(comp.Width, comp.Height),
                 defaultDesc = RectShieldStrings.DescFixedSize,
-                disabled = true,
+                // Gizmo.disabled ist protected; das oeffentliche Property heisst "Disabled".
+                Disabled = true,
                 action = () => { }
             };
         }
