@@ -35,7 +35,10 @@ required = [
     "docs/BALANCE.md",
     "Tests/validate_xml.py",
     "Tests/parse_csharp.py",
-    ".github/workflows/validate.yml",
+    ".github/workflows/build.yml",
+    "Source/RectShield.NuGet.1.6.csproj",
+    "Source/RectShield.NuGet.1.7.csproj",
+    "Tests/verify_build.py",
 ]
 
 # Alle Ingame-Grafiken

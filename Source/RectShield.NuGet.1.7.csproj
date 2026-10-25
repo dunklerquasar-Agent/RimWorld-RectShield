@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- CI-Build fuer RimWorld 1.7 (Waylith): Krafs.Rimworld.Ref enthaelt
+       Assembly-CSharp.dll, UnityStubs.dll und Waylith.dll als ref/net10.0.
+       Versionen koennen per -p:... uebersteuert werden (workflow_dispatch). -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>RectShield</AssemblyName>
+    <RootNamespace>RectShield</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <DebugType>none</DebugType>
+    <OutputPath>..\1.7\Assemblies\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RimWorldRefVersion17 Condition="'$(RimWorldRefVersion17)' == ''">1.7.4985-unstable</RimWorldRefVersion17>
+    <HarmonyRefVersion17 Condition="'$(HarmonyRefVersion17)' == ''">3.0.0-rc.3</HarmonyRefVersion17>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Core\**\*.cs" />
+    <Compile Include="Mod\**\*.cs" />
+    <Compile Include="UI\**\*.cs" />
+    <Compile Include="Patches\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Krafs.Rimworld.Ref" Version="$(RimWorldRefVersion17)" PrivateAssets="All" ExcludeAssets="runtime" />
+    <PackageReference Include="Lib.Harmony.Ref" Version="$(HarmonyRefVersion17)" PrivateAssets="All" ExcludeAssets="runtime" />
+  </ItemGroup>
+
+</Project>

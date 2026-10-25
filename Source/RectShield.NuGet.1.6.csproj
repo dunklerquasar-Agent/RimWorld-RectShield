@@ -1,0 +1,38 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- CI-Build fuer RimWorld 1.6: Referenz-Assemblies kommen aus NuGet,
+       damit GitHub Actions ohne lokale Spielinstallation kompilieren kann.
+       Versionen koennen per -p:... uebersteuert werden (workflow_dispatch). -->
+  <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
+    <AssemblyName>RectShield</AssemblyName>
+    <RootNamespace>RectShield</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <GenerateDependencyFile>false</GenerateDependencyFile>
+    <DebugType>none</DebugType>
+    <OutputPath>..\1.6\Assemblies\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <RimWorldRefVersion16 Condition="'$(RimWorldRefVersion16)' == ''">1.6.4871</RimWorldRefVersion16>
+    <HarmonyRefVersion16 Condition="'$(HarmonyRefVersion16)' == ''">2.4.3</HarmonyRefVersion16>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Core\**\*.cs" />
+    <Compile Include="Mod\**\*.cs" />
+    <Compile Include="UI\**\*.cs" />
+    <Compile Include="Patches\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" PrivateAssets="All" />
+    <PackageReference Include="Krafs.Rimworld.Ref" Version="$(RimWorldRefVersion16)" PrivateAssets="All" ExcludeAssets="runtime" />
+    <PackageReference Include="Lib.Harmony.Ref" Version="$(HarmonyRefVersion16)" PrivateAssets="All" ExcludeAssets="runtime" />
+  </ItemGroup>
+
+</Project>

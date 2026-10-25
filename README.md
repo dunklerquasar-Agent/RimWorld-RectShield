@@ -68,6 +68,17 @@ dotnet build Source\RectShield.1.7.csproj -c Release -p:GameDir="$RW17" -p:Harmo
 
 Für Windows liegt zusätzlich das Paket `windows-p0/` bereit (`P0-Windows.md` mit `Build-RectShield.ps1`, `Check-API.ps1`, `Install-DevMod.ps1`).
 
+### Automatisch in GitHub Actions (empfohlen)
+
+Der Workflow [`.github/workflows/build.yml`](.github/workflows/build.yml) kompiliert **beide Versionen ohne lokale Spielinstallation**. Die RimWorld-Referenz-Assemblies kommen aus den öffentlichen NuGet-Paketen `Krafs.Rimworld.Ref` (1.6.4871 / 1.7.4985-unstable) und `Lib.Harmony.Ref` (2.4.3 / 3.0.0-rc.3) – es werden keine Spiel-DLLs hochgeladen.
+
+- Start: bei jedem Push auf `main`, bei Pull Requests oder manuell über **Actions → Build RectShield → Run workflow** (dort lassen sich die vier Paketversionen übersteuern).
+- Ergebnis: drei Artefakte (`RectShield-1.6-Assembly`, `RectShield-1.7-Assembly`, `RectShield-Release-Assemblies`), 90 Tage Aufbewahrung.
+- Vor dem Build laufen `validate_xml.py`, `parse_csharp.py`, `check_structure.py`; danach prüft `verify_build.py`, dass beide DLLs PE-Header haben und keine `0Harmony.dll`/Spiel-DLL im Output liegt.
+- Die heruntergeladenen DLLs gehören nach `1.6/Assemblies/` bzw. `1.7/Assemblies/`.
+
+Die lokalen Projekte (`RectShield.1.6.csproj` / `RectShield.1.7.csproj`) bleiben für den Build gegen die echte Spielinstallation; die `*.NuGet.*`-Projekte sind die CI-Varianten. Beide teilen sich denselben Quellcode.
+
 ### Linux / macOS (bash)
 
 ```bash

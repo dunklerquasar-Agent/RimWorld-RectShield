@@ -1,0 +1,115 @@
+name: Build RectShield (1.6 + 1.7)
+
+# Kompiliert beide Mod-Assemblies komplett in GitHub Actions.
+# Die RimWorld-Referenz-Assemblies kommen aus oeffentlichen NuGet-Paketen
+# (Krafs.Rimworld.Ref, Lib.Harmony.Ref) - es werden KEINE Spiel-DLLs
+# hochgeladen oder benoetigt.
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - '**/*.md'
+      - 'docs/**'
+      - '*.zip'
+      - '*.bundle'
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      rimworld_ref_16:
+        description: 'Krafs.Rimworld.Ref version for 1.6'
+        required: false
+        default: '1.6.4871'
+      rimworld_ref_17:
+        description: 'Krafs.Rimworld.Ref version for 1.7'
+        required: false
+        default: '1.7.4985-unstable'
+      harmony_ref_16:
+        description: 'Lib.Harmony.Ref version for 1.6'
+        required: false
+        default: '2.4.3'
+      harmony_ref_17:
+        description: 'Lib.Harmony.Ref version for 1.7'
+        required: false
+        default: '3.0.0-rc.3'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: XML / C# / structure checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Install parsers
+        run: pip install --quiet tree-sitter tree-sitter-c-sharp
+      - name: Validate XML defs
+        run: python3 Tests/validate_xml.py
+      - name: Parse all C# sources
+        run: python3 Tests/parse_csharp.py
+      - name: Check mod structure
+        run: python3 Tests/check_structure.py
+
+  build:
+    name: Compile 1.6 + 1.7 in GitHub Actions
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Show SDKs
+        run: dotnet --list-sdks
+
+      - name: Restore + build RimWorld 1.6 (net472 / Harmony 2.4.3)
+        run: |
+          dotnet build Source/RectShield.NuGet.1.6.csproj -c Release \
+            -p:RimWorldRefVersion16="${{ inputs.rimworld_ref_16 || '1.6.4871' }}" \
+            -p:HarmonyRefVersion16="${{ inputs.harmony_ref_16 || '2.4.3' }}"
+
+      - name: Restore + build RimWorld 1.7 Waylith (net10.0 / Harmony 3)
+        run: |
+          dotnet build Source/RectShield.NuGet.1.7.csproj -c Release \
+            -p:RimWorldRefVersion17="${{ inputs.rimworld_ref_17 || '1.7.4985-unstable' }}" \
+            -p:HarmonyRefVersion17="${{ inputs.harmony_ref_17 || '3.0.0-rc.3' }}"
+
+      - name: Verify build outputs
+        run: python3 Tests/verify_build.py
+
+      - name: Show produced assemblies
+        run: |
+          echo "--- 1.6 ---"; ls -lh 1.6/Assemblies/
+          echo "--- 1.7 ---"; ls -lh 1.7/Assemblies/
+
+      - name: Upload 1.6 assembly
+        uses: actions/upload-artifact@v4
+        with:
+          name: RectShield-1.6-Assembly
+          path: 1.6/Assemblies/RectShield.dll
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Upload 1.7 assembly
+        uses: actions/upload-artifact@v4
+        with:
+          name: RectShield-1.7-Assembly
+          path: 1.7/Assemblies/RectShield.dll
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Upload both as one bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: RectShield-Release-Assemblies
+          path: |
+            1.6/Assemblies/RectShield.dll
+            1.7/Assemblies/RectShield.dll
+          if-no-files-found: error
+          retention-days: 90
