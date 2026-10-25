@@ -1,5 +1,25 @@
 # Changelog
 
+## [0.1.3] - 2026-10-25 - Kompilierung in GitHub Actions
+
+- **Neuer Workflow `.github/workflows/build.yml`** kompiliert `RectShield.dll` für
+  **RimWorld 1.6 (net472)** und **1.7 Waylith (net10.0)** komplett in GitHub Actions –
+  ohne lokale Spielinstallation. Referenzen aus NuGet:
+  `Krafs.Rimworld.Ref` 1.6.4871 / 1.7.4985-unstable,
+  `Lib.Harmony.Ref` 2.4.3 / 3.0.0-rc.3. Versionen sind per `workflow_dispatch`
+  übersteuerbar.
+- Neue CI-Projekte `Source/RectShield.NuGet.1.6.csproj` und `.1.7.csproj` teilen sich
+  den Quellcode mit den lokalen Projekten. `Tests/verify_build.py` prüft PE-Header,
+  Dateigröße und dass keine Spiel-/Harmony-DLL im Output liegt.
+- **Beide Assemblys sind jetzt im Repo** (`1.6/Assemblies/`, `1.7/Assemblies/`) –
+  die Mod ist ohne lokalen Build installierbar.
+- Acht API-Signaturen gegen die echten 1.6-Referenz-Assemblies korrigiert
+  (`CS0115`, `CS1503`, `CS0103`, `CS0122`): `PostDeSpawn(Map, DestroyMode)`,
+  `PostDrawExtraSelectionOverlays()`, `GetDamageAmount(Thing)`,
+  `RimWorld.VersionControl`, `Gizmo.Disabled`, `GenDraw.DrawFieldEdges(...)`,
+  `PlaceWorker.AllowsPlacing` (6 Parameter), `Projectile.Tick`/`Skyfaller.Tick`.
+  Details in `docs/API_NOTES.md`.
+
 ## [0.1.2] - 2026-10-25 - Waylith-Buildpfade korrigiert
 
 ### Fix (P0-Vorbereitung)
