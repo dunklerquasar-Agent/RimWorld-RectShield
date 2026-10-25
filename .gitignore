@@ -1,0 +1,29 @@
+# Build-Artefakte
+bin/
+obj/
+*.user
+*.suo
+.vs/
+.vscode/
+*.dll
+*.pdb
+*.deps.json
+
+# Ausnahme: die fertigen Mod-Assemblies duerfen committet werden
+!1.6/Assemblies/*.dll
+!1.7/Assemblies/*.dll
+
+# Lokale Build-Konfiguration (enthaelt eigene Spielpfade)
+Directory.Build.local.props
+.env
+*.local
+
+# OS
+Thumbs.db
+.DS_Store
+__pycache__/
+*.pyc
+
+# Workspace-spezifisch
+*.zip
+*.bundle

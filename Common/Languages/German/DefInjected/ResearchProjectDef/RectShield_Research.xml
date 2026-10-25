@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <RectShield_Mk1_Research.label>Rechteckige Schilde Mk I</RectShield_Mk1_Research.label>
+  <RectShield_Mk1_Research.description>Erforscht drei rechteckige Schildgeneratoren mit festen Groessen, die direkte Schuesse abfangen.</RectShield_Mk1_Research.description>
+
+  <RectShield_Mk2_Research.label>Rechteckige Schilde Mk II</RectShield_Mk2_Research.label>
+  <RectShield_Mk2_Research.description>Erforscht einen groessenverstellbaren Rechteckschild, der auch indirektes Feuer und Drop Pods abfaengt.</RectShield_Mk2_Research.description>
+</LanguageData>

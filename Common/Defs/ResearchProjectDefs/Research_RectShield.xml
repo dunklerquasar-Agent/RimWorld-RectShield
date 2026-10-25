@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- Hinweis: RimWorld 1.6/1.7 haben KEIN iconPath an ResearchProjectDef.
+       Die Icons im Forschungsbaum kommen aus uiIconPath der freigeschalteten
+       Gebaeude (UnlockedDefs). Siehe docs/GRAPHICS.md. -->
+
+  <ResearchProjectDef>
+    <defName>RectShield_Mk1_Research</defName>
+    <label>Rectangular shielding Mk I</label>
+    <description>Unlocks three fixed-size rectangular shield generators that stop direct fire.</description>
+    <baseCost>900</baseCost>
+    <techLevel>Spacer</techLevel>
+    <tab>RectShield_ResearchTab</tab>
+    <prerequisites>
+      <li>Electricity</li>
+    </prerequisites>
+    <researchViewX>1</researchViewX>
+    <researchViewY>1.4</researchViewY>
+  </ResearchProjectDef>
+
+  <ResearchProjectDef>
+    <defName>RectShield_Mk2_Research</defName>
+    <label>Rectangular shielding Mk II</label>
+    <description>Unlocks a resizable rectangular shield that also intercepts indirect fire and drop pods.</description>
+    <baseCost>1600</baseCost>
+    <techLevel>Spacer</techLevel>
+    <tab>RectShield_ResearchTab</tab>
+    <prerequisites>
+      <li>RectShield_Mk1_Research</li>
+    </prerequisites>
+    <researchViewX>2</researchViewX>
+    <researchViewY>1.4</researchViewY>
+  </ResearchProjectDef>
+
+</Defs>

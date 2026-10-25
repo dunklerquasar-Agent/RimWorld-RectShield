@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <RS_Online>online</RS_Online>
+  <RS_Offline>offline</RS_Offline>
+  <RS_Rebooting>rebooting ({0} ticks)</RS_Rebooting>
+  <RS_TierMk1>Mk I</RS_TierMk1>
+  <RS_TierMk2>Mk II</RS_TierMk2>
+  <RS_ModeVolume>volume</RS_ModeVolume>
+  <RS_ModePerimeter>perimeter</RS_ModePerimeter>
+  <RS_Inspect>{0} | field {1}x{2} ({3} cells) | energy {4}/{5} | {6} W | mode: {7} | {8}</RS_Inspect>
+
+  <RS_GizmoFixedSize>Fixed size {0}x{1}</RS_GizmoFixedSize>
+  <RS_GizmoWidth>Width {0}</RS_GizmoWidth>
+  <RS_GizmoHeight>Height {0}</RS_GizmoHeight>
+  <RS_GizmoPresets>Size presets</RS_GizmoPresets>
+  <RS_GizmoOffset>Move field</RS_GizmoOffset>
+  <RS_GizmoMode>Toggle mode</RS_GizmoMode>
+  <RS_GizmoReset>Reset field</RS_GizmoReset>
+  <RS_GizmoOverlay>Toggle overlay</RS_GizmoOverlay>
+
+  <RS_DescResize>Change the field size by 2 tiles. Larger fields need more power.</RS_DescResize>
+  <RS_DescPresets>Choose one of the predefined rectangular sizes.</RS_DescPresets>
+  <RS_DescOffset>Shift the field relative to the generator by 2 tiles.</RS_DescOffset>
+  <RS_DescMode>Switch between protecting the whole area or only the perimeter wall.</RS_DescMode>
+  <RS_DescReset>Reset size, offset and mode to their defaults.</RS_DescReset>
+  <RS_DescOverlay>Show or hide the field outline.</RS_DescOverlay>
+  <RS_DescFixedSize>This Mk I generator has a fixed field size. Use Mk II for adjustable fields.</RS_DescFixedSize>
+  <RS_Preset>{0}x{1} tiles</RS_Preset>
+
+  <RS_OffsetNorth>Move north</RS_OffsetNorth>
+  <RS_OffsetSouth>Move south</RS_OffsetSouth>
+  <RS_OffsetEast>Move east</RS_OffsetEast>
+  <RS_OffsetWest>Move west</RS_OffsetWest>
+
+  <RS_SettingsHeader>RectShield settings</RS_SettingsHeader>
+  <RS_SettingsOverlay>Show a faint outline for all active shields</RS_SettingsOverlay>
+  <RS_SettingsFriendlyPods>Mk II also blocks friendly and neutral drop pods</RS_SettingsFriendlyPods>
+  <RS_SettingsDebug>Write debug messages to the log</RS_SettingsDebug>
+  <RS_SettingsPower>Mk II power per cell multiplier: {0}</RS_SettingsPower>
+  <RS_SettingsEnergy>Energy cost per damage multiplier: {0}</RS_SettingsEnergy>
+  <RS_SettingsHint>Changes to the power multiplier apply within a second. Field sizes are limited by each generator definition.</RS_SettingsHint>
+</LanguageData>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Defs>
+
+  <!-- ===================================================================== -->
+  <!-- Gemeinsamer Basis-Def                                                  -->
+  <!-- ===================================================================== -->
+  <ThingDef Name="RectShieldBuildingBase" ParentName="BuildingBase" Abstract="True">
+    <thingClass>Building</thingClass>
+    <category>Building</category>
+    <tickerType>Normal</tickerType>
+    <rotatable>true</rotatable>
+    <size>(2,2)</size>
+    <altitudeLayer>Building</altitudeLayer>
+    <passability>PassThroughOnly</passability>
+    <pathCost>60</pathCost>
+    <blockLight>false</blockLight>
+    <designationCategory>Security</designationCategory>
+    <techLevel>Spacer</techLevel>
+    <constructionSkillPrerequisite>8</constructionSkillPrerequisite>
+    <clearBuildingArea>false</clearBuildingArea>
+    <statBases>
+      <MaxHitPoints>400</MaxHitPoints>
+      <WorkToBuild>3200</WorkToBuild>
+      <Flammability>0.4</Flammability>
+    </statBases>
+    <placeWorkers>
+      <li>RectShield.PlaceWorker_RectShield</li>
+    </placeWorkers>
+  </ThingDef>
+
+  <!-- ===================================================================== -->
+  <!-- Mk I - feste Groessen, blockt NUR direkte Schuesse                     -->
+  <!-- Jede Variante hat ein eigenes Ingame-Sprite + eigenes Menue-Icon.      -->
+  <!-- uiIconPath erscheint auch als Icon im Forschungsbaum.                  -->
+  <!-- ===================================================================== -->
+
+  <ThingDef ParentName="RectShieldBuildingBase">
+    <defName>RectShield_Mk1_S</defName>
+    <label>RectShield Mk I (small)</label>
+    <description>A small rectangular shield, 9 x 7 tiles. Blocks direct fire only. Fixed size.</description>
+    <graphicData>
+      <texPath>Things/Building/RectShield/RectShield_Mk1_S</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2,2)</drawSize>
+    </graphicData>
+    <uiIconPath>UI/Icons/Buildings/RectShield_Mk1_S</uiIconPath>
+    <researchPrerequisites><li>RectShield_Mk1_Research</li></researchPrerequisites>
+    <costList>
+      <Steel>140</Steel>
+      <Plasteel>30</Plasteel>
+      <ComponentIndustrial>6</ComponentIndustrial>
+    </costList>
+    <comps>
+      <li Class="CompProperties_Power"><compClass>CompPowerTrader</compClass><basePowerConsumption>150</basePowerConsumption></li>
+      <li Class="CompProperties_Flickable"><compClass>CompFlickable</compClass></li>
+      <li Class="CompProperties_Breakdownable"><compClass>CompBreakdownable</compClass></li>
+      <li Class="RectShield.CompProperties_RectShield">
+        <tier>Mk1</tier>
+        <fixedSize>true</fixedSize>
+        <fixedWidth>9</fixedWidth>
+        <fixedHeight>7</fixedHeight>
+        <maxEnergy>600</maxEnergy>
+        <energyPerDamage>1</energyPerDamage>
+        <regenPerTick>0.5</regenPerTick>
+        <basePowerW>150</basePowerW>
+        <wattsPerCell>0</wattsPerCell>
+        <blocksShots>true</blocksShots>
+        <blocksIndirectFire>false</blocksIndirectFire>
+        <blocksSkyfallers>false</blocksSkyfallers>
+        <rebootTicks>900</rebootTicks>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="RectShieldBuildingBase">
+    <defName>RectShield_Mk1_M</defName>
+    <label>RectShield Mk I (medium)</label>
+    <description>A medium rectangular shield, 15 x 11 tiles. Blocks direct fire only. Fixed size.</description>
+    <graphicData>
+      <texPath>Things/Building/RectShield/RectShield_Mk1_M</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2,2)</drawSize>
+    </graphicData>
+    <uiIconPath>UI/Icons/Buildings/RectShield_Mk1_M</uiIconPath>
+    <researchPrerequisites><li>RectShield_Mk1_Research</li></researchPrerequisites>
+    <costList>
+      <Steel>220</Steel>
+      <Plasteel>55</Plasteel>
+      <ComponentIndustrial>9</ComponentIndustrial>
+    </costList>
+    <comps>
+      <li Class="CompProperties_Power"><compClass>CompPowerTrader</compClass><basePowerConsumption>250</basePowerConsumption></li>
+      <li Class="CompProperties_Flickable"><compClass>CompFlickable</compClass></li>
+      <li Class="CompProperties_Breakdownable"><compClass>CompBreakdownable</compClass></li>
+      <li Class="RectShield.CompProperties_RectShield">
+        <tier>Mk1</tier>
+        <fixedSize>true</fixedSize>
+        <fixedWidth>15</fixedWidth>
+        <fixedHeight>11</fixedHeight>
+        <maxEnergy>900</maxEnergy>
+        <energyPerDamage>1</energyPerDamage>
+        <regenPerTick>0.6</regenPerTick>
+        <basePowerW>250</basePowerW>
+        <wattsPerCell>0</wattsPerCell>
+        <blocksShots>true</blocksShots>
+        <blocksIndirectFire>false</blocksIndirectFire>
+        <blocksSkyfallers>false</blocksSkyfallers>
+        <rebootTicks>900</rebootTicks>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <ThingDef ParentName="RectShieldBuildingBase">
+    <defName>RectShield_Mk1_L</defName>
+    <label>RectShield Mk I (large)</label>
+    <description>A large rectangular shield, 23 x 15 tiles. Blocks direct fire only. Fixed size.</description>
+    <graphicData>
+      <texPath>Things/Building/RectShield/RectShield_Mk1_L</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2,2)</drawSize>
+    </graphicData>
+    <uiIconPath>UI/Icons/Buildings/RectShield_Mk1_L</uiIconPath>
+    <researchPrerequisites><li>RectShield_Mk1_Research</li></researchPrerequisites>
+    <costList>
+      <Steel>320</Steel>
+      <Plasteel>85</Plasteel>
+      <ComponentIndustrial>12</ComponentIndustrial>
+    </costList>
+    <comps>
+      <li Class="CompProperties_Power"><compClass>CompPowerTrader</compClass><basePowerConsumption>400</basePowerConsumption></li>
+      <li Class="CompProperties_Flickable"><compClass>CompFlickable</compClass></li>
+      <li Class="CompProperties_Breakdownable"><compClass>CompBreakdownable</compClass></li>
+      <li Class="RectShield.CompProperties_RectShield">
+        <tier>Mk1</tier>
+        <fixedSize>true</fixedSize>
+        <fixedWidth>23</fixedWidth>
+        <fixedHeight>15</fixedHeight>
+        <maxEnergy>1200</maxEnergy>
+        <energyPerDamage>1</energyPerDamage>
+        <regenPerTick>0.7</regenPerTick>
+        <basePowerW>400</basePowerW>
+        <wattsPerCell>0</wattsPerCell>
+        <blocksShots>true</blocksShots>
+        <blocksIndirectFire>false</blocksIndirectFire>
+        <blocksSkyfallers>false</blocksSkyfallers>
+        <rebootTicks>900</rebootTicks>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <!-- ===================================================================== -->
+  <!-- Mk II - anpassbar, blockt auch Drop Pods                               -->
+  <!-- Strombedarf = 300 W + 3 W pro geschuetzter Kachel                      -->
+  <!-- ===================================================================== -->
+
+  <ThingDef ParentName="RectShieldBuildingBase">
+    <defName>RectShield_Mk2</defName>
+    <label>RectShield Mk II (adjustable)</label>
+    <description>A freely configurable rectangular shield. Blocks direct fire, indirect fire, drop pods and meteorites. Larger fields consume more power.</description>
+    <graphicData>
+      <texPath>Things/Building/RectShield/RectShield_Mk2</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2,2)</drawSize>
+    </graphicData>
+    <uiIconPath>UI/Icons/Buildings/RectShield_Mk2</uiIconPath>
+    <researchPrerequisites><li>RectShield_Mk2_Research</li></researchPrerequisites>
+    <costList>
+      <Steel>380</Steel>
+      <Plasteel>140</Plasteel>
+      <ComponentIndustrial>16</ComponentIndustrial>
+      <Gold>20</Gold>
+    </costList>
+    <statBases>
+      <MaxHitPoints>600</MaxHitPoints>
+      <WorkToBuild>5200</WorkToBuild>
+      <Flammability>0.3</Flammability>
+    </statBases>
+    <comps>
+      <li Class="CompProperties_Power"><compClass>CompPowerTrader</compClass><basePowerConsumption>300</basePowerConsumption></li>
+      <li Class="CompProperties_Flickable"><compClass>CompFlickable</compClass></li>
+      <li Class="CompProperties_Breakdownable"><compClass>CompBreakdownable</compClass></li>
+      <li Class="RectShield.CompProperties_RectShield">
+        <tier>Mk2</tier>
+        <fixedSize>false</fixedSize>
+        <defaultWidth>13</defaultWidth>
+        <defaultHeight>9</defaultHeight>
+        <minWidth>5</minWidth>
+        <minHeight>5</minHeight>
+        <maxWidth>41</maxWidth>
+        <maxHeight>41</maxHeight>
+        <maxEnergy>1400</maxEnergy>
+        <energyPerDamage>1</energyPerDamage>
+        <regenPerTick>0.7</regenPerTick>
+        <skyfallerEnergyCost>180</skyfallerEnergyCost>
+        <basePowerW>300</basePowerW>
+        <wattsPerCell>3</wattsPerCell>
+        <blocksShots>true</blocksShots>
+        <blocksIndirectFire>true</blocksIndirectFire>
+        <blocksSkyfallers>true</blocksSkyfallers>
+        <blocksExplosions>false</blocksExplosions>
+        <rebootTicks>1200</rebootTicks>
+      </li>
+    </comps>
+  </ThingDef>
+
+</Defs>

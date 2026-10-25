@@ -1,0 +1,5 @@
+# Nach dem Steam-Workshop-Upload diese Datei in PublishedFileId.txt umbenennen
+# und die Workshop-Datei-ID (reine Zahl) eintragen. Beispiel:
+# 3591234567
+#
+# Solange die Datei "-example" heisst, wird sie von RimWorld ignoriert.

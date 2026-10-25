@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LanguageData>
+  <RectShield_Mk1_S.label>Rechteckschild Mk I (klein)</RectShield_Mk1_S.label>
+  <RectShield_Mk1_S.description>Ein kleines rechteckiges Schutzfeld, 9 x 7 Kacheln. Blockt nur direkte Schuesse. Feste Groesse.</RectShield_Mk1_S.description>
+
+  <RectShield_Mk1_M.label>Rechteckschild Mk I (mittel)</RectShield_Mk1_M.label>
+  <RectShield_Mk1_M.description>Ein mittleres rechteckiges Schutzfeld, 15 x 11 Kacheln. Blockt nur direkte Schuesse. Feste Groesse.</RectShield_Mk1_M.description>
+
+  <RectShield_Mk1_L.label>Rechteckschild Mk I (gross)</RectShield_Mk1_L.label>
+  <RectShield_Mk1_L.description>Ein grosses rechteckiges Schutzfeld, 23 x 15 Kacheln. Blockt nur direkte Schuesse. Feste Groesse.</RectShield_Mk1_L.description>
+
+  <RectShield_Mk2.label>Rechteckschild Mk II (anpassbar)</RectShield_Mk2.label>
+  <RectShield_Mk2.description>Ein frei konfigurierbares rechteckiges Schutzfeld. Blockt direktes und indirektes Feuer sowie Drop Pods und Meteoriten. Groessere Felder verbrauchen mehr Strom.</RectShield_Mk2.description>
+</LanguageData>
