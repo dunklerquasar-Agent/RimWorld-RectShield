@@ -137,11 +137,12 @@ namespace RectShield
             mapComp?.Register(this);
         }
 
-        public override void PostDeSpawn(Map map)
+        // RimWorld 1.6/1.7: PostDeSpawn(Map map, DestroyMode mode = DestroyMode.Vanish)
+        public override void PostDeSpawn(Map map, DestroyMode mode = DestroyMode.Vanish)
         {
             var mapComp = map?.GetComponent<RectShieldMapComponent>();
             mapComp?.Unregister(this);
-            base.PostDeSpawn(map);
+            base.PostDeSpawn(map, mode);
         }
 
         public override void PostExposeData()
@@ -367,9 +368,10 @@ namespace RectShield
             }
         }
 
-        public override void DrawExtraSelectionOverlays()
+        // Heisst in Vanilla "PostDrawExtraSelectionOverlays", nicht "DrawExtraSelectionOverlays".
+        public override void PostDrawExtraSelectionOverlays()
         {
-            base.DrawExtraSelectionOverlays();
+            base.PostDrawExtraSelectionOverlays();
 
             try
             {

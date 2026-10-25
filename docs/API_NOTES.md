@@ -34,11 +34,11 @@ if (ceType != null) { /* AccessTools.Method(ceType, "Tick") patchen */ }
 | Signatur | Datei | Risiko |
 |---|---|---|
 | `PostSpawnSetup(bool respawningAfterLoad)` | `CompRectShield.cs` | stabil |
-| `PostDeSpawn(Map map)` | `CompRectShield.cs` | **PRÜFEN** – in manchen Versionen `PostDeSpawn()` ohne Parameter |
+| `PostDeSpawn(Map map, DestroyMode mode = DestroyMode.Vanish)` | `CompRectShield.cs` | **GEPRÜFT 1.6.4871** – zwei Parameter; die Ein-Parameter-Version erzeugte `CS0115` |
 | `PostExposeData()` | `CompRectShield.cs` | stabil |
 | `CompTick()` | `CompRectShield.cs` | benötigt `tickerType = Normal` im ThingDef |
 | `CompGetGizmosExtra()` → `IEnumerable<Gizmo>` | `CompRectShield.cs` | stabil |
-| `DrawExtraSelectionOverlays()` | `CompRectShield.cs` | stabil |
+| `PostDrawExtraSelectionOverlays()` | `CompRectShield.cs` | **GEPRÜFT 1.6.4871** – nicht `DrawExtraSelectionOverlays()` |
 | `CompInspectStringExtra()` → `string` | `CompRectShield.cs` | stabil |
 | `MapComponentTick()` / `MapComponentDraw()` | `RectShieldMapComponent.cs` | stabil |
 | `PlaceWorker.AllowsPlacing(BuildableDef, IntVec3, Rot4, Map, Thing, Thing)` | `PlaceWorker_RectShield.cs` | **PRÜFEN** – Parameterzahl variiert zwischen 1.4/1.5/1.6 |
