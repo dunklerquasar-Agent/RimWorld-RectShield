@@ -32,6 +32,10 @@ namespace RectShield
         public static string GizmoMode => T("RS_GizmoMode");
         public static string GizmoReset => T("RS_GizmoReset");
         public static string GizmoOverlay => T("RS_GizmoOverlay");
+        public static string GizmoFit(bool on) => T(on ? "RS_GizmoFitOn" : "RS_GizmoFitOff");
+        public static string InspectFit(int cells, bool found) => found
+            ? string.Format(T("RS_InspectFit"), cells)
+            : T("RS_FitNoPlates");
         public static string GizmoPlus => "+";
         public static string GizmoMinus => "-";
         public static string DescResize => T("RS_DescResize");
@@ -41,6 +45,7 @@ namespace RectShield
         public static string DescReset => T("RS_DescReset");
         public static string DescOverlay => T("RS_DescOverlay");
         public static string DescFixedSize => T("RS_DescFixedSize");
+        public static string DescFit => T("RS_DescFit");
         public static string PresetLabel(int w, int h) => string.Format(T("RS_Preset"), w, h);
 
         // --- Settings ---

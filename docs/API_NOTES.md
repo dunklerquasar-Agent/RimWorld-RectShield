@@ -130,3 +130,24 @@ bleiben unverändert; das sind C#-Enum-Namen, keine defNames.
 
 `Tests/validate_xml.py` enthält seit v0.2.1 einen Regressionstest, der alle
 `ThingDef`-defNames im `Common/Defs/`-Baum auf ein numerisches Endzeichen prüft.
+
+---
+
+## Ergänzung 26.10.2026 – Gravschiff-Substructure (v0.3.0)
+
+Geprüft gegen das 1.6-Dekompilat ([Dyyrlysh/RimworldDecompile](https://github.com/Dyyrlysh/RimworldDecompile),
+`Verse/TerrainGrid.cs`, `Verse/TerrainDef.cs`, `RimWorld/GravshipUtility.cs`):
+
+| API | Signatur / Bedeutung |
+|---|---|
+| `Verse.TerrainGrid.FoundationAt(IntVec3 c)` | `TerrainDef` der **Foundation-Layer** (seit 1.6.4518). `TerrainAt()` liefert dagegen die oberste Schicht. |
+| `Verse.TerrainGrid.FoundationAt(int ind)` | Index-Variante. |
+| `Verse.TerrainDef.isFoundation` | `bool`-Feld, markiert Foundation-Terrains. |
+| `Verse.TerrainDef.IsSubstructure` | Property: `ModsConfig.OdysseyActive && HasTag("Substructure")`. |
+| `Verse.Def.HasTag(string)` | Stabile Basis-API; in `RectShieldSubstructure` bewusst **statt** `IsSubstructure` verwendet, um keine Odyssey-Abhängigkeit zu kompilieren. |
+| `RimWorld.GravshipUtility.GetConnectedSubstructure(Building_GravEngine, HashSet<IntVec3>, int, bool)` | Vanilla-Floodfill ab dem Grav-Engine. **Nicht verwendet**, weil es einen Odyssey-Typ voraussetzt und nur *verbundene* Platten liefert. Unser Scan nimmt alle Platten auf der Map. |
+
+`Command_Action.icon` (geerbt von `Verse.Command`) ist ein öffentliches `UnityEngine.Texture2D`-Feld;
+`ContentFinder<Texture2D>.Get(string path, bool reportFailure)` lädt Texturen aus `Textures/<path>.png`.
+Beides wird in `RectShieldGizmos` mit einem try/catch-Fallback verwendet, damit eine fehlende
+Textur nie den Spielstart blockiert.

@@ -5,7 +5,7 @@
   <RS_Rebooting>rebooting ({0} ticks)</RS_Rebooting>
   <RS_TierMk1>Mk I</RS_TierMk1>
   <RS_TierMk2>Mk II</RS_TierMk2>
-  <RS_TierMk3>Mk III</RS_TierMk3>
+  <RS_TierMk3>Gravship</RS_TierMk3>
   <RS_ModeVolume>volume</RS_ModeVolume>
   <RS_ModePerimeter>perimeter</RS_ModePerimeter>
   <RS_Inspect>{0} | field {1}x{2} ({3} cells) | energy {4}/{5} | {6} W | mode: {7} | {8}</RS_Inspect>
@@ -33,6 +33,11 @@
   <RS_OffsetEast>Move east</RS_OffsetEast>
   <RS_OffsetWest>Move west</RS_OffsetWest>
 
+  <RS_GizmoFitOn>Fit hull: ON</RS_GizmoFitOn>
+  <RS_GizmoFitOff>Fit hull: OFF</RS_GizmoFitOff>
+  <RS_DescFit>Automatically wrap the field around all gravship substructure (hull) plates on the map. Turn off to size the field manually.</RS_DescFit>
+  <RS_InspectFit> | hull fit: {0} plates</RS_InspectFit>
+  <RS_FitNoPlates> | hull fit: no plates found</RS_FitNoPlates>
   <RS_SettingsHeader>RectShield settings</RS_SettingsHeader>
   <RS_SettingsOverlay>Show a faint outline for all active shields</RS_SettingsOverlay>
   <RS_SettingsFriendlyPods>Mk II/Mk III also block friendly and neutral drop pods</RS_SettingsFriendlyPods>

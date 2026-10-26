@@ -25,7 +25,8 @@ TEX = ROOT / "Common/Textures"
 BUILDINGS = TEX / "Things/Building/RectShield"
 MENU_ICONS = TEX / "UI/Icons/Buildings"
 RESEARCH_ICONS = TEX / "UI/Icons/Research"
-for folder in (BUILDINGS, MENU_ICONS, RESEARCH_ICONS, ROOT / "About"):
+GIZMOS = TEX / "UI/Gizmos"
+for folder in (BUILDINGS, MENU_ICONS, RESEARCH_ICONS, GIZMOS, ROOT / "About"):
     folder.mkdir(parents=True, exist_ok=True)
 
 BLUE = (70, 155, 255)
@@ -191,6 +192,42 @@ def research_icon(path: Path, source: Path, accent: tuple[int, int, int],
     print("  research-icon:", path.relative_to(ROOT))
 
 
+def gizmo_icon(path: Path, kind: str, size: int = 64) -> None:
+    """Gizmo-Symbolgrafik: 'plus', 'minus' oder 'fit' (Rumpf-Anpassung)."""
+    accent = {
+        "plus": (110, 225, 255, 255),
+        "minus": (255, 145, 95, 255),
+        "fit": (120, 255, 200, 255),
+    }[kind]
+
+    img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    d.rounded_rectangle((3, 3, size - 4, size - 4), radius=10,
+                        fill=(18, 24, 32, 240), outline=accent, width=2)
+    d.rounded_rectangle((8, 8, size - 9, size - 9), radius=7,
+                        outline=(accent[0], accent[1], accent[2], 90), width=1)
+
+    c = size // 2
+    if kind in ("plus", "minus"):
+        r = 15
+        d.line((c - r, c, c + r, c), fill=accent, width=6)
+        if kind == "plus":
+            d.line((c, c - r, c, c + r), fill=accent, width=6)
+        # Kleine Achs-Markierung unten (W = Breite, H = Hoehe ist am Label zu sehen)
+        d.ellipse((c - 2, size - 14, c + 2, size - 10), fill=accent)
+    else:
+        # Stilisiertes Schiff in einem groesseren Feld-Rahmen.
+        d.rectangle((14, 14, size - 15, size - 15), outline=accent, width=3)
+        d.rectangle((24, 24, size - 25, size - 25),
+                    fill=(accent[0], accent[1], accent[2], 90),
+                    outline=(accent[0], accent[1], accent[2], 200), width=2)
+        for x, y in ((14, 14), (size - 15, 14), (14, size - 15), (size - 15, size - 15)):
+            d.ellipse((x - 3, y - 3, x + 3, y + 3), fill=accent)
+
+    img.save(path)
+    print("  gizmo-icon:", path.relative_to(ROOT))
+
+
 def mod_icon(path: Path, size: int = 64) -> None:
     img = Image.new("RGBA", (size, size), (0, 0, 0, 0))
     d = ImageDraw.Draw(img)
@@ -288,6 +325,11 @@ def main() -> None:
     research_icon(RESEARCH_ICONS / "RectShield_Mk1_Research.png", tier_paths[0], AMBER, "I")
     research_icon(RESEARCH_ICONS / "RectShield_Mk2_Research.png", tier_paths[1], CRIMSON, "II")
     research_icon(RESEARCH_ICONS / "RectShield_Mk3_Research.png", tier_paths[2], ICE, "III")
+
+    # + / - Symbole fuer die Groessen-Gizmos und Rumpf-Anpassung.
+    gizmo_icon(GIZMOS / "RectShield_Plus.png", "plus")
+    gizmo_icon(GIZMOS / "RectShield_Minus.png", "minus")
+    gizmo_icon(GIZMOS / "RectShield_FitHull.png", "fit")
 
     mod_icon(ROOT / "About/ModIcon.png")
     preview(ROOT / "About/Preview.png", tier_paths)

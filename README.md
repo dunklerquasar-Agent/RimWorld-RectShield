@@ -2,14 +2,16 @@
 
 Ein eigenständiger Mod, der **rechteckige Schutzfelder** statt der üblichen kreisförmigen Kuppeln erzeugt. **Drei Ausbaustufen**, jede mit eigener Grafik:
 
-| | **Stufe 1 – Mk I** (Industriell) | **Stufe 2 – Mk II** (Militärisch) | **Stufe 3 – Mk III** (High-Tech) |
+| | **Stufe 1 – Mk I** (Industriell) | **Stufe 2 – Mk II** (Militärisch) | **Stufe 3 – Gravship Shield** (High-Tech) |
 |---|---|---|---|
-| Größen | 3 feste Varianten: **9×7**, **15×11**, **23×15** | frei einstellbar **5…41** pro Achse | frei einstellbar **5…51** pro Achse |
+| Größen | 3 feste **symmetrische** Varianten: **11×11**, **17×17**, **23×23** | frei einstellbar **5…41** pro Achse | frei einstellbar **5…51** pro Achse |
 | Blockt | **nur direkte Schüsse** | Direktfeuer **+ Mörser + Drop Pods, Meteoriten** | wie Mk II, mit mehr Reserve |
 | Versatz / Randmodus | nein | ja | ja |
 | Strombedarf | fix (150 / 250 / 400 W) | **300 W + 3 W/Kachel** | **500 W + 2 W/Kachel** (effizienter ab ~200 Kacheln) |
 | Energie / Regen | 600 / 900 / 1200 · 0,5–0,7 | 1400 · 0,7 | **2400 · 1,2** |
 | Forschung | 900 | 1600 (nach Mk I) | **2600 (nach Mk II)** |
+
+Stufe 3 legt ihr Feld **automatisch um alle Gravschiff-Bodenplatten** (Odyssey-Substructure) auf der Karte. Der Auto-Fit-Modus lässt sich per Gizmo abschalten.
 
 Schüsse **aus dem Schild heraus** bleiben immer möglich – geblockt wird nur beim **Eintritt** in das Rechteck (`!Contains(from) && Contains(to)`).
 
@@ -110,12 +112,13 @@ Wenn du nur **1.6** brauchst, lösche `1.7/` und entferne `<li>1.7</li>` aus `Ab
 
 **Mk I:** Bauen, Strom anschließen, fertig. Das Gizmo zeigt die feste Größe an; das Feld wird bei Auswahl blau umrandet.
 
-**Mk II und Mk III** – identische Gizmos am Gebäude (Mk III erlaubt größere Felder und bietet die Vorlage 51×35 zusätzlich):
+**Mk II und Gravship Shield** – identische Gizmos am Gebäude. Die vier Größen-Buttons haben jetzt eigene **+/−-Symbolgrafiken** (`UI/Gizmos/`), der Gravship Shield zusätzlich einen **Rumpf-Anpassungs-Schalter**:
 
 | Gizmo | Funktion |
 |---|---|
 | `− / Breite N / − / Höhe N` | Feld in 2-Kachel-Schritten vergrößern/verkleinern |
-| `Größen-Vorlagen` | 9×7 … 41×31, bei Mk III zusätzlich 51×35 (Vorlagen über dem Maximum werden ausgeblendet) |
+| `Größen-Vorlagen` | quadratisch 9×9 … 51×51 (Vorlagen über dem Generator-Maximum werden ausgeblendet) |
+| `Rumpf-Anpassung: an/aus` | nur Gravship Shield: Feld folgt automatisch allen Gravschiff-Bodenplatten (alle 3 s neu geprüft) |
 | `Feld verschieben` | Versatz in 4 Himmelsrichtungen |
 | `Modus wechseln` | **Volumen** (ganzes Rechteck) ↔ **Rand** (nur die Wandzellen) |
 | `Feld zurücksetzen` | Standard 13×9, Versatz 0, Volumen |
@@ -123,7 +126,7 @@ Wenn du nur **1.6** brauchst, lösche `1.7/` und entferne `<li>1.7</li>` aus `Ab
 
 **Mod-Einstellungen:** dauerhafte, dezente Umrandung aller Schilde; eigene/neutrale Drop Pods ebenfalls blocken; Strom- und Energiekosten-Multiplikatoren; Debug-Log.
 
-Bei Überlastung (`Energie ≤ 0`) schaltet das Feld ab und startet nach 900–1200 Ticks mit 25 % Energie neu (Mk III: 900 Ticks). EMP-Treffer entziehen überproportional Energie. Standardfeld Mk III: 17×13, Reboot 900 Ticks, Baukosten 450 Stahl / 220 Plasteel / 24 Komponenten / 60 Gold, Baufähigkeit 12.
+Bei Überlastung (`Energie ≤ 0`) schaltet das Feld ab und startet nach 900–1200 Ticks mit 25 % Energie neu (Gravship Shield: 900 Ticks). EMP-Treffer entziehen überproportional Energie. Standardfeld Gravship Shield: 21×21, Reboot 900 Ticks, Baukosten 450 Stahl / 220 Plasteel / 24 Komponenten / 60 Gold, Baufähigkeit 12.
 
 ---
 
@@ -132,23 +135,23 @@ Bei Überlastung (`Energie ≤ 0`) schaltet das Feld ab und startet nach 900–1
 Alle Werte stehen in [`docs/BALANCE.md`](docs/BALANCE.md) und lassen sich in `Common/Defs/ThingDefs_Buildings/Buildings_RectShield.xml` anpassen. Die Kernformeln:
 
 ```
-Mk II :  Strom (W) = 300 + 3 × Breite × Höhe × Einstellungs-Faktor
-Mk III:  Strom (W) = 500 + 2 × Breite × Höhe × Einstellungs-Faktor
+Mk II :         Strom (W) = 300 + 3 × Breite × Höhe × Einstellungs-Faktor
+Gravship:      Strom (W) = 500 + 2 × Breite × Höhe × Einstellungs-Faktor
 ```
 
-Beispiele Mk II: 13×9 → **651 W**, 23×15 → **1335 W**, 41×31 → **4113 W**. Mk III ist ab ~200 Kacheln günstiger (23×15 → 1190 W) und hat mit 2400 statt 1400 Energie deutlich mehr Reserve.
+Beispiele Mk II: 15×15 → **975 W**, 23×23 → **1887 W**, 41×41 → **5343 W**. Der Gravship Shield ist ab ~200 Kacheln günstiger (23×23 → **1558 W**) und hat mit 2400 statt 1400 Energie deutlich mehr Reserve.
 
 ---
 
 ## Grafiken & Forschungsbaum
 
-**Drei Stufen = drei eigene Ingame-Sprites** (je 192×192 RGBA, freigestellt): Stufe 1 **Industriell** (genieteter Stahl, Bernstein-Kern) für alle drei Mk-I-Größen, Stufe 2 **Militärisch** (Panzerung, roter Diamant-Kern) für Mk II, Stufe 3 **High-Tech** (weiße Keramik, türkiser Hexagonal-Kern) für Mk III. Dazu passende 64×64-Baumenü-Icons und drei 128×128-Forschungs-Icons.
+**Drei Stufen = drei eigene Ingame-Sprites** (je 192×192 RGBA, freigestellt): Stufe 1 **Industriell** (genieteter Stahl, Bernstein-Kern) für alle drei Mk-I-Größen, Stufe 2 **Militärisch** (Panzerung, roter Diamant-Kern) für Mk II, Stufe 3 **High-Tech** (weiße Keramik, türkiser Hexagonal-Kern) für den Gravship Shield. Dazu passende 64×64-Baumenü-Icons und drei 128×128-Forschungs-Icons.
 
 Die Grafiken hängen über `<texPath>` und `<uiIconPath>` an den `ThingDef`s. **`uiIconPath` ist zugleich das Icon im Forschungsbaum**: RimWorld 1.6/1.7 haben kein `iconPath`-Feld an `ResearchProjectDef`, sondern zeigen die Icons der freigeschalteten Gebäude (`UnlockedDefs`).
 
-Alle **drei Forschungen** liegen in einem **eigenen Forschungs-Tab „RectShield"** (`ResearchTabDef`): Mk I (1 / 1.4), Mk II (2 / 1.4), Mk III (3 / 1.4). Wer alles im Haupt-Tab möchte, entfernt die drei `<tab>`-Zeilen. Details: [`docs/GRAPHICS.md`](docs/GRAPHICS.md).
+Alle **drei Forschungen** liegen in einem **eigenen Forschungs-Tab „RectShield"** (`ResearchTabDef`): Mk I (1 / 1.4), Mk II (2 / 1.4), Gravship Shield (3 / 1.4). Wer alles im Haupt-Tab möchte, entfernt die drei `<tab>`-Zeilen. Details: [`docs/GRAPHICS.md`](docs/GRAPHICS.md).
 
-`python3 Tools/make_assets.py` erzeugt die Legacy-Platzhalter, Forschungs-Icons, `ModIcon.png` und `Preview.png` neu – die drei Stufen-Sprites bleiben dabei unangetastet (Quelle: `generator_ansichten/prepare_sprites.py` im Workspace).
+`python3 Tools/make_assets.py` erzeugt die Legacy-Platzhalter, Forschungs- und **Gizmo-Icons**, `ModIcon.png` und `Preview.png` neu – die drei Stufen-Sprites bleiben dabei unangetastet (Quelle: `generator_ansichten/prepare_sprites.py` im Workspace).
 
 ---
 

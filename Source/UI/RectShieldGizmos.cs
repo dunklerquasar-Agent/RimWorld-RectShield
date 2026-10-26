@@ -1,22 +1,67 @@
+using System;
 using System.Collections.Generic;
 using RimWorld;
+using UnityEngine;
 using Verse;
 
 namespace RectShield
 {
     /// <summary>
-    /// Mk1: nur ein Info-Gizmo ("feste Groesse").
-    /// Mk2/Mk3: Breite/Hoehe/Versatz/Presets/Randmodus/Overlay.
+    /// Mk I: nur ein Info-Gizmo ("feste Groesse").
+    /// Mk II / Gravship: Breite/Hoehe mit +/- Icons, Versatz/Presets/Randmodus/
+    /// Overlay und zusaetzlich der Auto-Fit-Schalter fuer Gravschiff-Platten.
     /// </summary>
     public static class RectShieldGizmos
     {
         private static readonly int[,] Presets =
         {
-            { 9, 7 }, { 13, 9 }, { 17, 13 }, { 23, 15 }, { 31, 21 }, { 41, 31 }, { 51, 35 }
+            { 9, 9 }, { 15, 15 }, { 21, 21 }, { 31, 31 }, { 41, 41 }, { 51, 51 }
         };
+
+        private static Texture2D iconPlus;
+        private static Texture2D iconMinus;
+        private static Texture2D iconFit;
+        private static bool iconsLoaded;
+
+        private static void EnsureIcons()
+        {
+            if (iconsLoaded)
+            {
+                return;
+            }
+
+            iconsLoaded = true;
+            iconPlus = Load("UI/Gizmos/RectShield_Plus");
+            iconMinus = Load("UI/Gizmos/RectShield_Minus");
+            iconFit = Load("UI/Gizmos/RectShield_FitHull");
+        }
+
+        private static Texture2D Load(string path)
+        {
+            try
+            {
+                return ContentFinder<Texture2D>.Get(path, false);
+            }
+            catch (Exception)
+            {
+                // Fehlende Textur ist kein Fehler: RimWorld zeigt dann nur das Label.
+                return null;
+            }
+        }
 
         public static IEnumerable<Gizmo> Build(CompRectShield comp)
         {
+            EnsureIcons();
+
+            if (comp.Props.autoFitSubstructure)
+            {
+                yield return Action(
+                    RectShieldStrings.GizmoFit(comp.AutoFit),
+                    RectShieldStrings.DescFit,
+                    comp.ToggleAutoFit,
+                    iconFit);
+            }
+
             if (!comp.CanResize)
             {
                 yield return InfoGizmo(comp);
@@ -24,23 +69,24 @@ namespace RectShield
                 yield break;
             }
 
-            yield return Action(RectShieldStrings.GizmoMinus, "−", RectShieldStrings.DescResize,
-                () => comp.Resize(-2, 0));
-            yield return Action(RectShieldStrings.GizmoWidth(comp.Width), "W", RectShieldStrings.DescResize,
-                () => comp.Resize(2, 0));
-            yield return Action(RectShieldStrings.GizmoMinus, "−", RectShieldStrings.DescResize,
-                () => comp.Resize(0, -2));
-            yield return Action(RectShieldStrings.GizmoHeight(comp.Height), "H", RectShieldStrings.DescResize,
-                () => comp.Resize(0, 2));
+            // Vier Groessen-Gizmos mit + / - Symbolgrafiken.
+            yield return Action(RectShieldStrings.GizmoMinus, RectShieldStrings.DescResize,
+                () => comp.Resize(-2, 0), iconMinus);
+            yield return Action(RectShieldStrings.GizmoWidth(comp.Width), RectShieldStrings.DescResize,
+                () => comp.Resize(2, 0), iconPlus);
+            yield return Action(RectShieldStrings.GizmoMinus, RectShieldStrings.DescResize,
+                () => comp.Resize(0, -2), iconMinus);
+            yield return Action(RectShieldStrings.GizmoHeight(comp.Height), RectShieldStrings.DescResize,
+                () => comp.Resize(0, 2), iconPlus);
 
-            yield return Action(RectShieldStrings.GizmoPresets, "▦", RectShieldStrings.DescPresets,
-                () => OpenPresets(comp));
-            yield return Action(RectShieldStrings.GizmoOffset, "↔", RectShieldStrings.DescOffset,
-                () => OpenOffsets(comp));
-            yield return Action(RectShieldStrings.GizmoMode, "◫", RectShieldStrings.DescMode,
-                comp.TogglePerimeter);
-            yield return Action(RectShieldStrings.GizmoReset, "↺", RectShieldStrings.DescReset,
-                comp.ResetShape);
+            yield return Action(RectShieldStrings.GizmoPresets, RectShieldStrings.DescPresets,
+                () => OpenPresets(comp), null);
+            yield return Action(RectShieldStrings.GizmoOffset, RectShieldStrings.DescOffset,
+                () => OpenOffsets(comp), null);
+            yield return Action(RectShieldStrings.GizmoMode, RectShieldStrings.DescMode,
+                comp.TogglePerimeter, null);
+            yield return Action(RectShieldStrings.GizmoReset, RectShieldStrings.DescReset,
+                comp.ResetShape, null);
             yield return OverlayGizmo(comp);
         }
 
@@ -66,12 +112,14 @@ namespace RectShield
             };
         }
 
-        private static Gizmo Action(string label, string shortLabel, string desc, System.Action action)
+        private static Gizmo Action(string label, string desc, System.Action action,
+                                    Texture2D icon = null)
         {
             return new Command_Action
             {
                 defaultLabel = label,
                 defaultDesc = desc,
+                icon = icon,
                 action = action
             };
         }

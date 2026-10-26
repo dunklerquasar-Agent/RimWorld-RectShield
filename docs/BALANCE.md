@@ -1,15 +1,15 @@
-# Balance-Werte (v0.2.1)
+# Balance-Werte (v0.3.0)
 
 Alle Werte stehen in `Common/Defs/ThingDefs_Buildings/Buildings_RectShield.xml` und können dort ohne Neukompilieren geändert werden.
 
 ## Übersicht der drei Stufen
 
-| | **Stufe 1 – Mk I** | **Stufe 2 – Mk II** | **Stufe 3 – Mk III** |
+| | **Stufe 1 – Mk I** | **Stufe 2 – Mk II** | **Stufe 3 – Gravship Shield** |
 |---|---|---|---|
-| Grafik | Industriell | Militärisch | High-Tech |
-| Feld | 3 feste Größen | 5…41 × 5…41 | **5…51 × 5…51** |
-| Standard | – | 13×9 | **17×13** |
-| Blockt | nur direkte Schüsse | + indirektes Feuer, Drop Pods | wie Mk II |
+| Grafik | Industriell | Militärisch | High-Tech (Gravship Shield) |
+| Feld | 3 feste **quadratische** Größen | 5…41 × 5…41 | **5…51 × 5…51** |
+| Standard | – | **15×15** | **21×21** |
+| Blockt | nur direkte Schüsse | + indirektes Feuer, Drop Pods | wie Mk II, Auto-Fit um Rumpfplatten |
 | Energie | 600 / 900 / 1200 | 1400 | **2400** |
 | Regen/Tick | 0,5 / 0,6 / 0,7 | 0,7 | **1,2** |
 | Grundlast | 150 / 250 / 400 W | 300 W | **500 W** |
@@ -22,9 +22,11 @@ Alle Werte stehen in `Common/Defs/ThingDefs_Buildings/Buildings_RectShield.xml` 
 
 | Def | Feld | Fläche | Energie | Regen/Tick | Strom | Kosten |
 |---|---|---|---|---|---|---|
-| `RectShield_Mk1_S` | 9×7 | 63 | 600 | 0,5 | 150 W | 140 Stahl, 30 Plasteel, 6 Komponenten |
-| `RectShield_Mk1_M` | 15×11 | 165 | 900 | 0,6 | 250 W | 220 Stahl, 55 Plasteel, 9 Komponenten |
-| `RectShield_Mk1_L` | 23×15 | 345 | 1200 | 0,7 | 400 W | 320 Stahl, 85 Plasteel, 12 Komponenten |
+| `RectShield_Mk1_S` | **11×11** | 121 | 600 | 0,5 | 150 W | 140 Stahl, 30 Plasteel, 6 Komponenten |
+| `RectShield_Mk1_M` | **17×17** | 289 | 900 | 0,6 | 250 W | 220 Stahl, 55 Plasteel, 9 Komponenten |
+| `RectShield_Mk1_L` | **23×23** | 529 | 1200 | 0,7 | 400 W | 320 Stahl, 85 Plasteel, 12 Komponenten |
+
+Alle drei Felder sind jetzt **quadratisch (symmetrisch)** und in gleichmäßigen 6-Kachel-Schritten abgestuft (11 / 17 / 23). Gegenüber v0.2.x sind die Kanten rund 20–30 % länger; Strom und Energiepuffer blieben absichtlich unverändert.
 
 Gemeinsam: `blocksShots = true`, `blocksIndirectFire = false`, `blocksSkyfallers = false`, Reboot nach 900 Ticks. Mörsergranaten, Drop Pods und Meteoriten **kommen durch** – das ist der gewollte Nachteil gegenüber Stufe 2 und 3. Alle drei Varianten teilen sich das **Industriell**-Sprite.
 
@@ -41,11 +43,11 @@ Gemeinsam: `blocksShots = true`, `blocksIndirectFire = false`, `blocksSkyfallers
 | Reboot | 1200 Ticks, danach 25 % Energie |
 | Kosten | 380 Stahl, 140 Plasteel, 16 Komponenten, 20 Gold |
 
-## Mk III – High-Tech (Stufe 3)
+## Gravship Shield – Stufe 3
 
 | Parameter | Wert |
 |---|---|
-| Feld | **5…51 × 5…51** Kacheln, Standard 17×13 |
+| Feld | **5…51 × 5…51** Kacheln, Standard 21×21 |
 | Energie | **2400** (konstant) |
 | Regen | **1,2 / Tick** |
 | Grundlast | **500 W** |
@@ -56,23 +58,31 @@ Gemeinsam: `blocksShots = true`, `blocksIndirectFire = false`, `blocksSkyfallers
 | Kosten | **450 Stahl, 220 Plasteel, 24 Komponenten, 60 Gold** |
 | Baufähigkeit | **12** |
 
-**Designabsicht:** Mk III ist kein einfaches „Mk II + 10". Der höhere Grundbedarf (500 W) macht ihn auf kleinen Feldern teurer, aber ab ~200 geschützten Kacheln ist er **günstiger** als Mk II. Dazu kommen fast doppelte Energiereserve, ~70 % mehr Regeneration und ein kürzerer Reboot. Der Preis sind hohe Baukosten, Baufähigkeit 12 und 2600 Forschungspunkte.
+**Gravschiff-Modus (Auto-Fit):** Mit `<autoFitSubstructure>true</autoFitSubstructure>`
+scannt der Comp alle 180 Ticks `map.terrainGrid.FoundationAt(cell)` und prüft
+`TerrainDef.HasTag("Substructure")`. Aus der Bounding Box aller gefundenen Platten
+wird das Feld gebildet – mit `substructurePadding = 2` Kacheln Abstand und
+zentriert auf das **Rumpfzentrum** (nicht auf den Generator). Bleibt das
+Odyssey-DLC aus, werden keine Platten gefunden und das manuelle Feld greift.
+Per Gizmo „Rumpf-Anpassung: an/aus" abschaltbar.
+
+**Designabsicht:** Der Gravship Shield ist kein einfaches „Mk II + 10". Der höhere Grundbedarf (500 W) macht ihn auf kleinen Feldern teurer, aber ab ~200 geschützten Kacheln ist er **günstiger** als Mk II. Dazu kommen fast doppelte Energiereserve, ~70 % mehr Regeneration und ein kürzerer Reboot. Der Preis sind hohe Baukosten, Baufähigkeit 12 und 2600 Forschungspunkte.
 
 ### Stromformeln
 
 ```
-Mk II :  Strom (W) = 300 + 3 × (Breite × Höhe) × WattsPerCellMultiplier
-Mk III:  Strom (W) = 500 + 2 × (Breite × Höhe) × WattsPerCellMultiplier
+Mk II :    Strom (W) = 300 + 3 × (Breite × Höhe) × WattsPerCellMultiplier
+Gravship: Strom (W) = 500 + 2 × (Breite × Höhe) × WattsPerCellMultiplier
 ```
 
-| Feld | Fläche | Mk II | Mk III |
+| Feld | Fläche | Mk II | Gravship |
 |---|---|---|---|
 | 5×5 (Minimum) | 25 | 375 W | 550 W |
-| 13×9 (Mk-II-Standard) | 117 | 651 W | 734 W |
-| 17×13 (Mk-III-Standard) | 221 | 963 W | **942 W** |
-| 23×15 | 345 | 1335 W | **1190 W** |
-| 41×31 (Vorlage) | 1271 | 4113 W | **3042 W** |
-| 51×35 (Mk-III-Vorlage) | 1785 | nicht möglich | **4070 W** |
+| 15×15 (Mk-II-Standard) | 225 | 975 W | 950 W |
+| 21×21 (Gravship-Standard) | 441 | 1623 W | **1382 W** |
+| 23×23 | 529 | 1887 W | **1558 W** |
+| 41×41 (Vorlage) | 1681 | 5343 W | **3862 W** |
+| 51×51 (Gravship-Vorlage) | 2601 | nicht möglich | **5702 W** |
 
 Der `WattsPerCellMultiplier` in den Mod-Einstellungen (0,25–3,0) wirkt auf beide Stufen.
 
@@ -90,7 +100,7 @@ Energieverlust = Projektilschaden × energyPerDamage × EnergyPerDamageMultiplie
 |---|---|---|---|
 | `RectShield_Mk1_Research` | 900 | `Electricity` | (1 / 1.4) |
 | `RectShield_Mk2_Research` | 1600 | `RectShield_Mk1_Research` | (2 / 1.4) |
-| `RectShield_Mk3_Research` | 2600 | `RectShield_Mk2_Research` | (3 / 1.4) |
+| `RectShield_Mk3_Research` | 2600 | `RectShield_Mk2_Research` | (3 / 1.4) – „Gravship shielding" |
 
 Alle drei im eigenen Tab `RectShield_ResearchTab`.
 

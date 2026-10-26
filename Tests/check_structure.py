@@ -19,6 +19,7 @@ required = [
     "Source/RectShield.1.7.csproj",
     "Source/Core/CompRectShield.cs",
     "Source/Core/RectShieldShape.cs",
+    "Source/Core/RectShieldSubstructure.cs",
     "Source/Core/RectShieldMapComponent.cs",
     "Source/Patches/HarmonyInit.cs",
     "Common/Defs/ThingDefs_Buildings/Buildings_RectShield.xml",
@@ -61,6 +62,10 @@ graphics = [
     "Common/Textures/UI/Icons/Buildings/RectShield_Gen_Military.png",
     "Common/Textures/UI/Icons/Buildings/RectShield_Gen_HighTech.png",
     "Common/Textures/UI/Icons/Research/RectShield_Mk3_Research.png",
+    # + / - Symbole und Rumpf-Gizmo
+    "Common/Textures/UI/Gizmos/RectShield_Plus.png",
+    "Common/Textures/UI/Gizmos/RectShield_Minus.png",
+    "Common/Textures/UI/Gizmos/RectShield_FitHull.png",
 ]
 required.extend(graphics)
 
@@ -108,6 +113,14 @@ if "<defName>RectShield_MkIII</defName>" not in buildings_text:
     build_issues.append("Buildings_RectShield.xml: Mk3-Def fehlt")
 if "<defName>RectShield_Mk3_Research</defName>" not in research_text:
     build_issues.append("Research_RectShield.xml: Mk3-Forschung fehlt")
+
+# Gravship Shield: Auto-Fit und symmetrische Mk-I-Felder muessen gesetzt sein.
+if "<autoFitSubstructure>true</autoFitSubstructure>" not in buildings_text:
+    build_issues.append("Buildings_RectShield.xml: Gravship Auto-Fit fehlt")
+for fixed in ("<fixedWidth>11</fixedWidth>", "<fixedWidth>17</fixedWidth>",
+              "<fixedWidth>23</fixedWidth>"):
+    if fixed not in buildings_text:
+        build_issues.append(f"Buildings_RectShield.xml: symmetrisches Feld {fixed} fehlt")
 
 print(f"Geprueft: {len(required)} Pflichtpfade, {len(graphics)} Grafiken, "
       f"{len(list((ROOT / 'Source').rglob('*.cs')))} C#-Dateien, 2 csproj.")

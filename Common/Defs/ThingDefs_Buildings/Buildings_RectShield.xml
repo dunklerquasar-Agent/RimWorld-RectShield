@@ -29,7 +29,7 @@
   </ThingDef>
 
   <!-- ===================================================================== -->
-  <!-- Mk I - feste Groessen, blockt NUR direkte Schuesse                     -->
+  <!-- Mk I - feste, SYMMETRISCHE (quadratische) Groessen, nur Schuesse       -->
   <!-- Stufe 1: alle drei Groessen teilen sich das Industriell-Sprite.        -->
   <!-- uiIconPath erscheint auch als Icon im Forschungsbaum.                  -->
   <!-- ===================================================================== -->
@@ -37,7 +37,7 @@
   <ThingDef ParentName="RectShieldBuildingBase">
     <defName>RectShield_Mk1_S</defName>
     <label>RectShield Mk I (small)</label>
-    <description>A small rectangular shield, 9 x 7 tiles. Blocks direct fire only. Fixed size.</description>
+    <description>A small square shield, 11 x 11 tiles. Blocks direct fire only. Fixed size.</description>
     <graphicData>
       <texPath>Things/Building/RectShield/RectShield_Gen_Industrial</texPath>
       <graphicClass>Graphic_Single</graphicClass>
@@ -57,8 +57,8 @@
       <li Class="RectShield.CompProperties_RectShield">
         <tier>Mk1</tier>
         <fixedSize>true</fixedSize>
-        <fixedWidth>9</fixedWidth>
-        <fixedHeight>7</fixedHeight>
+        <fixedWidth>11</fixedWidth>
+        <fixedHeight>11</fixedHeight>
         <maxEnergy>600</maxEnergy>
         <energyPerDamage>1</energyPerDamage>
         <regenPerTick>0.5</regenPerTick>
@@ -75,7 +75,7 @@
   <ThingDef ParentName="RectShieldBuildingBase">
     <defName>RectShield_Mk1_M</defName>
     <label>RectShield Mk I (medium)</label>
-    <description>A medium rectangular shield, 15 x 11 tiles. Blocks direct fire only. Fixed size.</description>
+    <description>A medium square shield, 17 x 17 tiles. Blocks direct fire only. Fixed size.</description>
     <graphicData>
       <texPath>Things/Building/RectShield/RectShield_Gen_Industrial</texPath>
       <graphicClass>Graphic_Single</graphicClass>
@@ -95,8 +95,8 @@
       <li Class="RectShield.CompProperties_RectShield">
         <tier>Mk1</tier>
         <fixedSize>true</fixedSize>
-        <fixedWidth>15</fixedWidth>
-        <fixedHeight>11</fixedHeight>
+        <fixedWidth>17</fixedWidth>
+        <fixedHeight>17</fixedHeight>
         <maxEnergy>900</maxEnergy>
         <energyPerDamage>1</energyPerDamage>
         <regenPerTick>0.6</regenPerTick>
@@ -113,7 +113,7 @@
   <ThingDef ParentName="RectShieldBuildingBase">
     <defName>RectShield_Mk1_L</defName>
     <label>RectShield Mk I (large)</label>
-    <description>A large rectangular shield, 23 x 15 tiles. Blocks direct fire only. Fixed size.</description>
+    <description>A large square shield, 23 x 23 tiles. Blocks direct fire only. Fixed size.</description>
     <graphicData>
       <texPath>Things/Building/RectShield/RectShield_Gen_Industrial</texPath>
       <graphicClass>Graphic_Single</graphicClass>
@@ -134,7 +134,7 @@
         <tier>Mk1</tier>
         <fixedSize>true</fixedSize>
         <fixedWidth>23</fixedWidth>
-        <fixedHeight>15</fixedHeight>
+        <fixedHeight>23</fixedHeight>
         <maxEnergy>1200</maxEnergy>
         <energyPerDamage>1</energyPerDamage>
         <regenPerTick>0.7</regenPerTick>
@@ -182,8 +182,8 @@
       <li Class="RectShield.CompProperties_RectShield">
         <tier>Mk2</tier>
         <fixedSize>false</fixedSize>
-        <defaultWidth>13</defaultWidth>
-        <defaultHeight>9</defaultHeight>
+        <defaultWidth>15</defaultWidth>
+        <defaultHeight>15</defaultHeight>
         <minWidth>5</minWidth>
         <minHeight>5</minHeight>
         <maxWidth>41</maxWidth>
@@ -204,7 +204,8 @@
   </ThingDef>
 
   <!-- ===================================================================== -->
-  <!-- Mk III - High-Tech (Stufe 3)                                            -->
+  <!-- GRAVSHIP SHIELD (Stufe 3)                                               -->
+  <!-- Legt das Feld automatisch um alle Odyssey-Substructure-Platten.        -->
   <!-- Groesser (bis 51x51), mehr Puffer, schnellere Regeneration und          -->
   <!-- effizientere Flaechenlast als Mk II (2 W statt 3 W pro Kachel).         -->
   <!-- Strombedarf = 500 W + 2 W pro geschuetzter Kachel                       -->
@@ -212,8 +213,8 @@
 
   <ThingDef ParentName="RectShieldBuildingBase">
     <defName>RectShield_MkIII</defName>
-    <label>RectShield Mk III (high-tech)</label>
-    <description>An advanced high-tech rectangular shield, configurable up to 51 x 51 tiles. Blocks direct and indirect fire, drop pods and meteorites. Higher energy capacity, faster recharge, shorter reboot and more efficient area power than Mk II.</description>
+    <label>Gravship Shield</label>
+    <description>An advanced shield generator that automatically wraps its field around all gravship substructure (hull) plates on the map. Configurable up to 51 x 51 tiles. Blocks direct and indirect fire, drop pods and meteorites. 2400 energy, fast recharge, short reboot and efficient area power.</description>
     <graphicData>
       <texPath>Things/Building/RectShield/RectShield_Gen_HighTech</texPath>
       <graphicClass>Graphic_Single</graphicClass>
@@ -239,9 +240,13 @@
       <li Class="CompProperties_Breakdownable"><compClass>CompBreakdownable</compClass></li>
       <li Class="RectShield.CompProperties_RectShield">
         <tier>Mk3</tier>
+        <!-- Auto-Fit: Feld folgt den Gravschiff-Bodenplatten (Foundation-Layer) -->
+        <autoFitSubstructure>true</autoFitSubstructure>
+        <substructurePadding>2</substructurePadding>
+        <substructureRefreshTicks>180</substructureRefreshTicks>
         <fixedSize>false</fixedSize>
-        <defaultWidth>17</defaultWidth>
-        <defaultHeight>13</defaultHeight>
+        <defaultWidth>21</defaultWidth>
+        <defaultHeight>21</defaultHeight>
         <minWidth>5</minWidth>
         <minHeight>5</minHeight>
         <maxWidth>51</maxWidth>

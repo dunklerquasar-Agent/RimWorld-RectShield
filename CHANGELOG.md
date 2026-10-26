@@ -1,5 +1,49 @@
 # Changelog
 
+## [0.3.0] - 2026-10-26 - Symmetrische Schilde, +/- Gizmos, Gravship Shield
+
+### Neu / geändert (drei Spieler-Wünsche)
+
+1. **Mk I größer und symmetrisch.** Die drei festen Felder sind jetzt quadratisch
+   und gleichmäßig abgestuft: **11×11**, **17×17**, **23×23** (vorher 9×7, 15×11,
+   23×15). Kantenlängen ~20–30 % größer, ungerade Größen → Feld liegt exakt
+   zentriert um den 2×2-Generator. Strom (150/250/400 W) und Energie
+   (600/900/1200) blieben unverändert; DE/EN-Texte und `docs/BALANCE.md` angepasst.
+
+2. **+/−-Grafiken für die einstellbare Größe.** Drei neue 64×64-RGBA-Icons unter
+   `Common/Textures/UI/Gizmos/`: `RectShield_Plus.png`, `RectShield_Minus.png`
+   und `RectShield_FitHull.png`. `RectShieldGizmos` lädt sie per
+   `ContentFinder<Texture2D>.Get(path, false)` in `Command_Action.icon`
+   (try/catch-Fallback: fehlt eine Textur, bleibt der Text-Button sichtbar).
+   Die vier Breiten-/Höhen-Gizmos zeigen jetzt echte +/−-Symbole. Presets sind
+   ebenfalls symmetrisch: 9×9, 15×15, 21×21, 31×31, 41×41, 51×51.
+
+3. **Stufe 3 heißt jetzt „Gravship Shield" und legt sich um das Schiff.**
+   - Neue Datei `Source/Core/RectShieldSubstructure.cs`: scannt alle Map-Zellen
+     mit `map.terrainGrid.FoundationAt(cell)` und `Def.HasTag("Substructure")`
+     und liefert die Bounding Box der Odyssey-Gravschiff-Bodenplatten.
+   - `RectShieldShape.BuildFromWorldBounds(...)` baut das Feld direkt in
+     Weltkoordinaten, zentriert auf das **Rumpfzentrum** statt auf den Generator.
+   - `CompProperties_RectShield`: `autoFitSubstructure`, `substructurePadding = 2`,
+     `substructureRefreshTicks = 180`. `CompRectShield` scannt alle 3 Sekunden,
+     speichert den Schalter im Savegame und zeigt „Rumpf: N Platten" im Inspect-String.
+   - Neuer Gizmo „Rumpf-Anpassung: an/aus" (DE) / „Fit hull: ON/OFF" (EN) schaltet
+     den Auto-Fit ab; dann gelten wieder die manuellen +/−-Gizmos.
+   - **Bewusst keine harten Odyssey-Typen** im Code (kein `Building_GravEngine`,
+     `ModsConfig.OdysseyActive` oder `TerrainDef.IsSubstructure`). Ohne DLC werden
+     einfach keine Platten gefunden und das manuelle Feld greift. Siehe
+     `docs/API_NOTES.md`.
+   - Umbenannt: Label „Gravship Shield" / „Gravschiff-Schild", Forschung
+     „Gravship shielding" / „Gravschiff-Schilde", `RS_TierMk3` → „Gravship" /
+     „Gravschiff". Der interne defName bleibt **`RectShield_MkIII`**, damit
+     bestehende Spielstände nicht erneut brechen.
+
+### Hinweise
+- Das High-Tech-Sprite bleibt die Grafik der Stufe 3 (passt zum Gravschiff-Thema).
+- C# wurde geändert → die DLLs für 1.6 und 1.7 werden in GitHub Actions neu gebaut.
+- Der Auto-Fit schützt das **Volumen** der Bounding Box, nicht nur den Rand;
+  `GenDraw.DrawFieldEdges` zeichnet die sichtbare Hülle um das Schiff.
+
 ## [0.2.1] - 2026-10-26 - Hotfix: ThingDef-defNames endeten auf einer Ziffer
 
 ### Fix (P0 - Spielstart)

@@ -83,6 +83,32 @@ namespace RectShield
             return result;
         }
 
+        /// <summary>
+        /// Baut das Rechteck direkt aus Weltkoordinaten (Gravschiff-Modus).
+        /// Ignoriert Rotation/Offset des Generators - der Feldmittelpunkt liegt
+        /// stattdessen auf dem Zentrum der gefundenen Bodenplatten.
+        /// </summary>
+        public static RectShieldShape BuildFromWorldBounds(int minX, int minZ,
+                                                           int maxX, int maxZ, Map map)
+        {
+            var result = new RectShieldShape();
+
+            if (map != null)
+            {
+                minX = Math.Max(minX, 0);
+                minZ = Math.Max(minZ, 0);
+                maxX = Math.Min(maxX, map.Size.x - 1);
+                maxZ = Math.Min(maxZ, map.Size.z - 1);
+            }
+
+            result.MinX = minX;
+            result.MinZ = minZ;
+            result.MaxX = maxX;
+            result.MaxZ = maxZ;
+            result.IsEmpty = minX > maxX || minZ > maxZ;
+            return result;
+        }
+
         public bool Contains(IntVec3 cell)
         {
             return !IsEmpty

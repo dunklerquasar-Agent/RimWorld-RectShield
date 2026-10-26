@@ -31,6 +31,12 @@ namespace RectShield
         public float basePowerW = 150f;
         public float wattsPerCell = 0f;        // Mk1: 0 (fix), Mk2: 3.0, Mk3: 2.0
 
+        // --- Gravschiff-Modus (nur Stufe 3) ---
+        // Passt das Feld automatisch an die Odyssey-Substructure-Platten an.
+        public bool autoFitSubstructure = false;
+        public int substructurePadding = 2;       // Kacheln Abstand um die Platten
+        public int substructureRefreshTicks = 180; // 3 Sekunden
+
         // --- Abfangverhalten ---
         public bool blocksShots = true;        // direkte Projektile
         public bool blocksIndirectFire = false;// Moerser / flyOverhead (Mk2/Mk3)

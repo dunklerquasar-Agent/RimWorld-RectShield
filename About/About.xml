@@ -10,9 +10,9 @@
   </supportedVersions>
   <description>Rechteckige Schutzfelder statt Kuppeln - drei Ausbaustufen mit eigenen Grafiken.
 
-Stufe 1 / Mk I - drei feste Groessen (Industriell), blockt nur direkte Schuesse.
+Stufe 1 / Mk I - drei feste, symmetrische Groessen 11x11 / 17x17 / 23x23 (Industriell), blockt nur direkte Schuesse.
 Stufe 2 / Mk II - Militaerisch: Breite, Hoehe, Versatz und Randmodus frei einstellbar; blockt zusaetzlich Moerser, Drop Pods und Meteoriten. Strombedarf steigt mit der Flaeche (3 W/Kachel).
-Stufe 3 / Mk III - High-Tech: groessere Felder (bis 51x51), mehr Energie, schnellere Regeneration und effizientere Flaechenlast (2 W/Kachel).
+Stufe 3 / GRAVSHIP SHIELD - High-Tech: legt das Feld automatisch um alle Gravschiff-Bodenplatten (Substructure) auf der Karte. Bis 51x51, mehr Energie, schnellere Regeneration, 2 W/Kachel. +/- Gizmos fuer manuelle Groesse.
 
 Schuesse von innen nach aussen bleiben immer moeglich. Requires Harmony.</description>
   <modDependencies>

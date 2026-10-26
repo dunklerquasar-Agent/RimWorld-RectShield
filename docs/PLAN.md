@@ -39,7 +39,18 @@ Der Wunsch nach drei eigenen Generator-Ansichten wurde als **echte dritte Stufe*
 | 2 | `RectShield_MkII` | Militärisch | anpassbar, Deckel gegen Skyfaller, 3 W/Kachel |
 | 3 | `RectShield_MkIII` | High-Tech | bis 51×51, 2400 Energie, 1,2 Regen, **2 W/Kachel**, Reboot 900 |
 
-Damit ist `RectShieldTier` dreistufig (`Mk1/Mk2/Mk3`), `CanResize` gilt für alle nicht-fixen Defs, und die Forschung hat einen dritten Knoten bei (3 / 1.4). Die Balance-Begründung (Mk III ist erst ab ~200 Kacheln effizienter als Mk II) steht in `docs/BALANCE.md`. Offen bleibt unverändert: Ingame-Smoke-Test, Workshop-Upload, CE-Kompatibilität.
+Damit ist `RectShieldTier` dreistufig (`Mk1/Mk2/Mk3`), `CanResize` gilt für alle nicht-fixen Defs, und die Forschung hat einen dritten Knoten bei (3 / 1.4). Die Balance-Begründung (der Gravship Shield ist erst ab ~200 Kacheln effizienter als Mk II) steht in `docs/BALANCE.md`. Offen bleibt unverändert: Ingame-Smoke-Test, Workshop-Upload, CE-Kompatibilität.
+
+### Ergänzung 26.10.2026 – v0.3.0 (drei Spieler-Wünsche)
+
+| Wunsch | Umsetzung |
+|---|---|
+| Kleinere Schilde zu klein, +20 %, symmetrisch | Mk I: 9×7 / 15×11 / 23×15 → **11×11 / 17×17 / 23×23**. Quadratisch, gleichmäßige 6er-Schritte, Kanten ~20–30 % länger. Strom/Energie unverändert. |
+| Einstellbare Größe mit + / − Grafiken | Eigene 64×64-RGBA-Icons `UI/Gizmos/RectShield_Plus.png` / `_Minus.png` / `_FitHull.png`, per `ContentFinder<Texture2D>.Get(...)` an `Command_Action.icon`. Presets jetzt quadratisch 9×9 … 51×51. |
+| Stufe 3 → „Gravship Shield", Feld um das Schiff | `RectShieldSubstructure.Scan(map)` nutzt `TerrainGrid.FoundationAt(cell)` + `Def.HasTag("Substructure")`. Bounding Box + 2 Kacheln Padding → `RectShieldShape.BuildFromWorldBounds(...)`. Refresh alle 180 Ticks, per Gizmo abschaltbar. Kein harter Odyssey-Typ im Code → ohne DLC harmlos. |
+
+Der interne defName bleibt `RectShield_MkIII` (Save-Kompatibilität); nur Label, "
+    "Beschreibung, Forschungslabel und `RS_TierMk3` heißen jetzt „Gravship Shield".
 
 ---
 

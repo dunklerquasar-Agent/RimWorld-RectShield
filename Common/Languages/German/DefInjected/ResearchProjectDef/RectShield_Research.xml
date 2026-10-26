@@ -6,6 +6,6 @@
   <RectShield_Mk2_Research.label>Rechteckige Schilde Mk II</RectShield_Mk2_Research.label>
   <RectShield_Mk2_Research.description>Erforscht einen groessenverstellbaren Rechteckschild, der auch indirektes Feuer und Drop Pods abfaengt.</RectShield_Mk2_Research.description>
 
-  <RectShield_Mk3_Research.label>Rechteckige Schilde Mk III</RectShield_Mk3_Research.label>
-  <RectShield_Mk3_Research.description>Erforscht den High-Tech-Schildgenerator: groessere Felder, mehr Energiereserve, schnellere Regeneration und bessere Stromeffizienz pro Kachel.</RectShield_Mk3_Research.description>
+  <RectShield_Mk3_Research.label>Gravschiff-Schilde</RectShield_Mk3_Research.label>
+  <RectShield_Mk3_Research.description>Erforscht den Gravschiff-Schild: Sein Feld legt sich automatisch um alle Gravschiff-Bodenplatten auf der Karte. 2400 Energie, schnelle Regeneration und effizienter Flaechenstrom.</RectShield_Mk3_Research.description>
 </LanguageData>

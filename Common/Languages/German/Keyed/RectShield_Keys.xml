@@ -5,7 +5,7 @@
   <RS_Rebooting>Neustart ({0} Ticks)</RS_Rebooting>
   <RS_TierMk1>Mk I</RS_TierMk1>
   <RS_TierMk2>Mk II</RS_TierMk2>
-  <RS_TierMk3>Mk III</RS_TierMk3>
+  <RS_TierMk3>Gravschiff</RS_TierMk3>
   <RS_ModeVolume>Volumen</RS_ModeVolume>
   <RS_ModePerimeter>Rand</RS_ModePerimeter>
   <RS_Inspect>{0} | Feld {1}x{2} ({3} Kacheln) | Energie {4}/{5} | {6} W | Modus: {7} | {8}</RS_Inspect>
@@ -33,6 +33,11 @@
   <RS_OffsetEast>Nach Osten verschieben</RS_OffsetEast>
   <RS_OffsetWest>Nach Westen verschieben</RS_OffsetWest>
 
+  <RS_GizmoFitOn>Rumpf-Anpassung: an</RS_GizmoFitOn>
+  <RS_GizmoFitOff>Rumpf-Anpassung: aus</RS_GizmoFitOff>
+  <RS_DescFit>Legt das Feld automatisch um alle Gravschiff-Bodenplatten (Substructure) auf der Karte. Ausschalten fuer manuelle Groesse.</RS_DescFit>
+  <RS_InspectFit> | Rumpf: {0} Platten</RS_InspectFit>
+  <RS_FitNoPlates> | Rumpf: keine Platten gefunden</RS_FitNoPlates>
   <RS_SettingsHeader>RectShield-Einstellungen</RS_SettingsHeader>
   <RS_SettingsOverlay>Dezente Umrandung fuer alle aktiven Schilde anzeigen</RS_SettingsOverlay>
   <RS_SettingsFriendlyPods>Mk II/Mk III blocken auch eigene und neutrale Drop Pods</RS_SettingsFriendlyPods>

@@ -4,7 +4,7 @@
   <!-- Hinweis: RimWorld 1.6/1.7 haben KEIN iconPath an ResearchProjectDef.
        Die Icons im Forschungsbaum kommen aus uiIconPath der freigeschalteten
        Gebaeude (UnlockedDefs). Siehe docs/GRAPHICS.md.
-       Drei Stufen: Mk I (Industriell) -> Mk II (Militaerisch) -> Mk III (High-Tech). -->
+       Drei Stufen: Mk I (Industriell) -> Mk II (Militaerisch) -> Gravship Shield.     -->
 
   <ResearchProjectDef>
     <defName>RectShield_Mk1_Research</defName>
@@ -36,8 +36,8 @@
 
   <ResearchProjectDef>
     <defName>RectShield_Mk3_Research</defName>
-    <label>Rectangular shielding Mk III</label>
-    <description>Unlocks the high-tech shield generator: larger fields, more capacity, faster recharge and better area power efficiency.</description>
+    <label>Gravship shielding</label>
+    <description>Unlocks the gravship shield: its field automatically wraps around all gravship substructure plates on the map, with 2400 energy and efficient area power.</description>
     <baseCost>2600</baseCost>
     <techLevel>Spacer</techLevel>
     <tab>RectShield_ResearchTab</tab>

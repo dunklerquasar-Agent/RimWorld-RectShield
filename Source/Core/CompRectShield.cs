@@ -24,6 +24,9 @@ namespace RectShield
         private bool shapeDirty = true;
         private bool initialized;
         private int lastPowerUpdateTick;
+        private bool autoFit;
+        private int autoFitCounter;
+        private RectShieldBounds lastHull;
 
         public CompProperties_RectShield Props => (CompProperties_RectShield)props;
 
@@ -50,6 +53,8 @@ namespace RectShield
 
         public float Energy => energy;
         public bool PerimeterOnly => perimeterOnly;
+        public bool AutoFit => autoFit;
+        public RectShieldBounds LastHull => lastHull;
         public bool ShowOverlay => showOverlay;
         public bool IsRebooting => rebootTicksLeft > 0;
 
@@ -123,6 +128,7 @@ namespace RectShield
             height = p.fixedSize ? p.fixedHeight : p.defaultHeight;
             width = Math.Max(p.minWidth, Math.Min(p.maxWidth, width));
             height = Math.Max(p.minHeight, Math.Min(p.maxHeight, height));
+            autoFit = p.autoFitSubstructure;
             energy = p.maxEnergy;
             shapeDirty = true;
         }
@@ -158,6 +164,7 @@ namespace RectShield
             Scribe_Values.Look(ref showOverlay, "rs_showOverlay", true);
             Scribe_Values.Look(ref energy, "rs_energy", Props.maxEnergy);
             Scribe_Values.Look(ref rebootTicksLeft, "rs_rebootTicksLeft", 0);
+            Scribe_Values.Look(ref autoFit, "rs_autoFit", Props.autoFitSubstructure);
 
             // Alte Saves / XML-Aenderungen: immer auf gueltige Werte clampen.
             width = Math.Max(Props.minWidth, Math.Min(Props.maxWidth, width));
@@ -177,6 +184,36 @@ namespace RectShield
             EnsureInitialized();
 
             var p = Props;
+
+            // Gravschiff-Modus: Feld automatisch um die Substructure-Platten legen.
+            // Der Feldmittelpunkt liegt auf dem Rumpfzentrum, nicht auf dem Generator.
+            if (autoFit && p.autoFitSubstructure)
+            {
+                lastHull = RectShieldSubstructure.Scan(parent.Map);
+                if (lastHull.Found)
+                {
+                    int pad = Math.Max(0, p.substructurePadding);
+                    int fitW = Math.Max(p.minWidth, Math.Min(p.maxWidth, lastHull.Width + pad * 2));
+                    int fitH = Math.Max(p.minHeight, Math.Min(p.maxHeight, lastHull.Height + pad * 2));
+                    int cx = (lastHull.MinX + lastHull.MaxX) / 2;
+                    int cz = (lastHull.MinZ + lastHull.MaxZ) / 2;
+                    int halfW = fitW / 2;
+                    int halfH = fitH / 2;
+
+                    shape = RectShieldShape.BuildFromWorldBounds(
+                        cx - halfW, cz - halfH,
+                        cx + (fitW - 1 - halfW), cz + (fitH - 1 - halfH),
+                        parent.Map);
+                    shapeDirty = false;
+                    UpdatePowerDraw(force: true);
+                    RectShieldLog.Debug("Rumpf-Feld: " + lastHull.Cells + " Platten, "
+                                        + shape.Width + "x" + shape.Height + " Kacheln, "
+                                        + CurrentPowerDrawW + " W");
+                    return;
+                }
+                // Keine Platten gefunden -> auf das manuelle Feld zurueckfallen.
+            }
+
             var offset = new IntVec3(offsetRight, 0, offsetForward);
             shape = RectShieldShape.Build(parent.Position, parent.Rotation, width, height, offset, parent.Map);
             shapeDirty = false;
@@ -217,6 +254,18 @@ namespace RectShield
             try
             {
                 EnsureInitialized();
+
+                // Im Rumpf-Modus periodisch auf neue/entfernte Platten reagieren.
+                if (autoFit && Props.autoFitSubstructure && Props.substructureRefreshTicks > 0)
+                {
+                    autoFitCounter++;
+                    if (autoFitCounter >= Props.substructureRefreshTicks)
+                    {
+                        autoFitCounter = 0;
+                        shapeDirty = true;
+                    }
+                }
+
                 if (shapeDirty)
                 {
                     RebuildShape();
@@ -347,6 +396,8 @@ namespace RectShield
             offsetRight = 0;
             offsetForward = 0;
             perimeterOnly = false;
+            autoFit = Props.autoFitSubstructure;
+            autoFitCounter = 0;
             shapeDirty = true;
         }
 
@@ -358,6 +409,13 @@ namespace RectShield
         public void ToggleOverlay()
         {
             showOverlay = !showOverlay;
+        }
+
+        public void ToggleAutoFit()
+        {
+            autoFit = !autoFit;
+            autoFitCounter = 0;
+            shapeDirty = true;
         }
 
         public override IEnumerable<Gizmo> CompGetGizmosExtra()
@@ -398,9 +456,13 @@ namespace RectShield
                 ? RectShieldStrings.Rebooting(rebootTicksLeft)
                 : (Active ? RectShieldStrings.Online : RectShieldStrings.Offline);
 
+            string fit = autoFit && Props.autoFitSubstructure
+                ? RectShieldStrings.InspectFit(lastHull.Cells, lastHull.Found)
+                : "";
+
             return RectShieldStrings.Inspect(
-                width, height, Shape.Area, (int)energy, (int)Props.maxEnergy,
-                (int)CurrentPowerDrawW, perimeterOnly, Tier, state);
+                Shape.Width, Shape.Height, Shape.Area, (int)energy, (int)Props.maxEnergy,
+                (int)CurrentPowerDrawW, perimeterOnly, Tier, state) + fit;
         }
     }
 }

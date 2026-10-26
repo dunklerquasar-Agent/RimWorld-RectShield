@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LanguageData>
   <RectShield_Mk1_S.label>Rechteckschild Mk I (klein)</RectShield_Mk1_S.label>
-  <RectShield_Mk1_S.description>Ein kleines rechteckiges Schutzfeld, 9 x 7 Kacheln. Blockt nur direkte Schuesse. Feste Groesse.</RectShield_Mk1_S.description>
+  <RectShield_Mk1_S.description>Ein kleines quadratisches Schutzfeld, 11 x 11 Kacheln. Blockt nur direkte Schuesse. Feste Groesse.</RectShield_Mk1_S.description>
 
   <RectShield_Mk1_M.label>Rechteckschild Mk I (mittel)</RectShield_Mk1_M.label>
-  <RectShield_Mk1_M.description>Ein mittleres rechteckiges Schutzfeld, 15 x 11 Kacheln. Blockt nur direkte Schuesse. Feste Groesse.</RectShield_Mk1_M.description>
+  <RectShield_Mk1_M.description>Ein mittleres quadratisches Schutzfeld, 17 x 17 Kacheln. Blockt nur direkte Schuesse. Feste Groesse.</RectShield_Mk1_M.description>
 
   <RectShield_Mk1_L.label>Rechteckschild Mk I (gross)</RectShield_Mk1_L.label>
-  <RectShield_Mk1_L.description>Ein grosses rechteckiges Schutzfeld, 23 x 15 Kacheln. Blockt nur direkte Schuesse. Feste Groesse.</RectShield_Mk1_L.description>
+  <RectShield_Mk1_L.description>Ein grosses quadratisches Schutzfeld, 23 x 23 Kacheln. Blockt nur direkte Schuesse. Feste Groesse.</RectShield_Mk1_L.description>
 
   <RectShield_MkII.label>Rechteckschild Mk II (anpassbar)</RectShield_MkII.label>
   <RectShield_MkII.description>Ein frei konfigurierbares rechteckiges Schutzfeld. Blockt direktes und indirektes Feuer sowie Drop Pods und Meteoriten. Groessere Felder verbrauchen mehr Strom.</RectShield_MkII.description>
 
-  <RectShield_MkIII.label>Rechteckschild Mk III (High-Tech)</RectShield_MkIII.label>
-  <RectShield_MkIII.description>Ein fortschrittlicher High-Tech-Rechteckschild, frei einstellbar bis 51 x 51 Kacheln. Blockt direktes und indirektes Feuer sowie Drop Pods und Meteoriten. Mehr Energiereserve, schnellere Regeneration, kuerzerer Neustart und effizienterer Flaechenstrom als Mk II.</RectShield_MkIII.description>
+  <RectShield_MkIII.label>Gravschiff-Schild</RectShield_MkIII.label>
+  <RectShield_MkIII.description>Ein fortschrittlicher Schildgenerator, der sein Feld automatisch um alle Gravschiff-Bodenplatten (Substructure) auf der Karte legt. Frei einstellbar bis 51 x 51 Kacheln. Blockt direktes und indirektes Feuer sowie Drop Pods und Meteoriten. 2400 Energie, schnelle Regeneration, kurzer Neustart und effizienter Flaechenstrom.</RectShield_MkIII.description>
 </LanguageData>
