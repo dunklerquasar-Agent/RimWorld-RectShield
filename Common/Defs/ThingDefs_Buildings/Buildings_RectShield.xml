@@ -30,7 +30,7 @@
 
   <!-- ===================================================================== -->
   <!-- Mk I - feste Groessen, blockt NUR direkte Schuesse                     -->
-  <!-- Jede Variante hat ein eigenes Ingame-Sprite + eigenes Menue-Icon.      -->
+  <!-- Stufe 1: alle drei Groessen teilen sich das Industriell-Sprite.        -->
   <!-- uiIconPath erscheint auch als Icon im Forschungsbaum.                  -->
   <!-- ===================================================================== -->
 
@@ -39,11 +39,11 @@
     <label>RectShield Mk I (small)</label>
     <description>A small rectangular shield, 9 x 7 tiles. Blocks direct fire only. Fixed size.</description>
     <graphicData>
-      <texPath>Things/Building/RectShield/RectShield_Mk1_S</texPath>
+      <texPath>Things/Building/RectShield/RectShield_Gen_Industrial</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(2,2)</drawSize>
     </graphicData>
-    <uiIconPath>UI/Icons/Buildings/RectShield_Mk1_S</uiIconPath>
+    <uiIconPath>UI/Icons/Buildings/RectShield_Gen_Industrial</uiIconPath>
     <researchPrerequisites><li>RectShield_Mk1_Research</li></researchPrerequisites>
     <costList>
       <Steel>140</Steel>
@@ -77,11 +77,11 @@
     <label>RectShield Mk I (medium)</label>
     <description>A medium rectangular shield, 15 x 11 tiles. Blocks direct fire only. Fixed size.</description>
     <graphicData>
-      <texPath>Things/Building/RectShield/RectShield_Mk1_M</texPath>
+      <texPath>Things/Building/RectShield/RectShield_Gen_Industrial</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(2,2)</drawSize>
     </graphicData>
-    <uiIconPath>UI/Icons/Buildings/RectShield_Mk1_M</uiIconPath>
+    <uiIconPath>UI/Icons/Buildings/RectShield_Gen_Industrial</uiIconPath>
     <researchPrerequisites><li>RectShield_Mk1_Research</li></researchPrerequisites>
     <costList>
       <Steel>220</Steel>
@@ -115,11 +115,11 @@
     <label>RectShield Mk I (large)</label>
     <description>A large rectangular shield, 23 x 15 tiles. Blocks direct fire only. Fixed size.</description>
     <graphicData>
-      <texPath>Things/Building/RectShield/RectShield_Mk1_L</texPath>
+      <texPath>Things/Building/RectShield/RectShield_Gen_Industrial</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(2,2)</drawSize>
     </graphicData>
-    <uiIconPath>UI/Icons/Buildings/RectShield_Mk1_L</uiIconPath>
+    <uiIconPath>UI/Icons/Buildings/RectShield_Gen_Industrial</uiIconPath>
     <researchPrerequisites><li>RectShield_Mk1_Research</li></researchPrerequisites>
     <costList>
       <Steel>320</Steel>
@@ -149,7 +149,7 @@
   </ThingDef>
 
   <!-- ===================================================================== -->
-  <!-- Mk II - anpassbar, blockt auch Drop Pods                               -->
+  <!-- Mk II - anpassbar, blockt auch Drop Pods (Stufe 2: Militaerisch)       -->
   <!-- Strombedarf = 300 W + 3 W pro geschuetzter Kachel                      -->
   <!-- ===================================================================== -->
 
@@ -158,11 +158,11 @@
     <label>RectShield Mk II (adjustable)</label>
     <description>A freely configurable rectangular shield. Blocks direct fire, indirect fire, drop pods and meteorites. Larger fields consume more power.</description>
     <graphicData>
-      <texPath>Things/Building/RectShield/RectShield_Mk2</texPath>
+      <texPath>Things/Building/RectShield/RectShield_Gen_Military</texPath>
       <graphicClass>Graphic_Single</graphicClass>
       <drawSize>(2,2)</drawSize>
     </graphicData>
-    <uiIconPath>UI/Icons/Buildings/RectShield_Mk2</uiIconPath>
+    <uiIconPath>UI/Icons/Buildings/RectShield_Gen_Military</uiIconPath>
     <researchPrerequisites><li>RectShield_Mk2_Research</li></researchPrerequisites>
     <costList>
       <Steel>380</Steel>
@@ -199,6 +199,64 @@
         <blocksSkyfallers>true</blocksSkyfallers>
         <blocksExplosions>false</blocksExplosions>
         <rebootTicks>1200</rebootTicks>
+      </li>
+    </comps>
+  </ThingDef>
+
+  <!-- ===================================================================== -->
+  <!-- Mk III - High-Tech (Stufe 3)                                            -->
+  <!-- Groesser (bis 51x51), mehr Puffer, schnellere Regeneration und          -->
+  <!-- effizientere Flaechenlast als Mk II (2 W statt 3 W pro Kachel).         -->
+  <!-- Strombedarf = 500 W + 2 W pro geschuetzter Kachel                       -->
+  <!-- ===================================================================== -->
+
+  <ThingDef ParentName="RectShieldBuildingBase">
+    <defName>RectShield_Mk3</defName>
+    <label>RectShield Mk III (high-tech)</label>
+    <description>An advanced high-tech rectangular shield, configurable up to 51 x 51 tiles. Blocks direct and indirect fire, drop pods and meteorites. Higher energy capacity, faster recharge, shorter reboot and more efficient area power than Mk II.</description>
+    <graphicData>
+      <texPath>Things/Building/RectShield/RectShield_Gen_HighTech</texPath>
+      <graphicClass>Graphic_Single</graphicClass>
+      <drawSize>(2,2)</drawSize>
+    </graphicData>
+    <uiIconPath>UI/Icons/Buildings/RectShield_Gen_HighTech</uiIconPath>
+    <researchPrerequisites><li>RectShield_Mk3_Research</li></researchPrerequisites>
+    <constructionSkillPrerequisite>12</constructionSkillPrerequisite>
+    <costList>
+      <Steel>450</Steel>
+      <Plasteel>220</Plasteel>
+      <ComponentIndustrial>24</ComponentIndustrial>
+      <Gold>60</Gold>
+    </costList>
+    <statBases>
+      <MaxHitPoints>800</MaxHitPoints>
+      <WorkToBuild>7600</WorkToBuild>
+      <Flammability>0.2</Flammability>
+    </statBases>
+    <comps>
+      <li Class="CompProperties_Power"><compClass>CompPowerTrader</compClass><basePowerConsumption>500</basePowerConsumption></li>
+      <li Class="CompProperties_Flickable"><compClass>CompFlickable</compClass></li>
+      <li Class="CompProperties_Breakdownable"><compClass>CompBreakdownable</compClass></li>
+      <li Class="RectShield.CompProperties_RectShield">
+        <tier>Mk3</tier>
+        <fixedSize>false</fixedSize>
+        <defaultWidth>17</defaultWidth>
+        <defaultHeight>13</defaultHeight>
+        <minWidth>5</minWidth>
+        <minHeight>5</minHeight>
+        <maxWidth>51</maxWidth>
+        <maxHeight>51</maxHeight>
+        <maxEnergy>2400</maxEnergy>
+        <energyPerDamage>1</energyPerDamage>
+        <regenPerTick>1.2</regenPerTick>
+        <skyfallerEnergyCost>120</skyfallerEnergyCost>
+        <basePowerW>500</basePowerW>
+        <wattsPerCell>2</wattsPerCell>
+        <blocksShots>true</blocksShots>
+        <blocksIndirectFire>true</blocksIndirectFire>
+        <blocksSkyfallers>true</blocksSkyfallers>
+        <blocksExplosions>false</blocksExplosions>
+        <rebootTicks>900</rebootTicks>
       </li>
     </comps>
   </ThingDef>

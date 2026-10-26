@@ -5,8 +5,8 @@ using Verse;
 namespace RectShield
 {
     /// <summary>
-    /// Postfix auf RimWorld.Skyfaller.Tick. Greift nur bei Mk2
-    /// (blocksSkyfallers = true). Mk1 laesst Drop Pods absichtlich durch.
+    /// Postfix auf RimWorld.Skyfaller.Tick. Greift nur bei Stufen mit
+    /// blocksSkyfallers = true (Mk2/Mk3). Mk1 laesst Drop Pods absichtlich durch.
     /// </summary>
     public static class Patch_Skyfaller_Tick
     {

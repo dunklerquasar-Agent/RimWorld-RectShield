@@ -1,6 +1,22 @@
-# Balance-Werte (v0.1)
+# Balance-Werte (v0.2.0)
 
 Alle Werte stehen in `Common/Defs/ThingDefs_Buildings/Buildings_RectShield.xml` und können dort ohne Neukompilieren geändert werden.
+
+## Übersicht der drei Stufen
+
+| | **Stufe 1 – Mk I** | **Stufe 2 – Mk II** | **Stufe 3 – Mk III** |
+|---|---|---|---|
+| Grafik | Industriell | Militärisch | High-Tech |
+| Feld | 3 feste Größen | 5…41 × 5…41 | **5…51 × 5…51** |
+| Standard | – | 13×9 | **17×13** |
+| Blockt | nur direkte Schüsse | + indirektes Feuer, Drop Pods | wie Mk II |
+| Energie | 600 / 900 / 1200 | 1400 | **2400** |
+| Regen/Tick | 0,5 / 0,6 / 0,7 | 0,7 | **1,2** |
+| Grundlast | 150 / 250 / 400 W | 300 W | **500 W** |
+| Flächenlast | 0 W/Kachel | 3 W/Kachel | **2 W/Kachel** |
+| Drop-Pod-Kosten | – | 180 | **120** |
+| Reboot | 900 Ticks | 1200 Ticks | **900 Ticks** |
+| Forschung | 900 | 1600 | **2600** |
 
 ## Mk I – feste Größen
 
@@ -10,14 +26,14 @@ Alle Werte stehen in `Common/Defs/ThingDefs_Buildings/Buildings_RectShield.xml` 
 | `RectShield_Mk1_M` | 15×11 | 165 | 900 | 0,6 | 250 W | 220 Stahl, 55 Plasteel, 9 Komponenten |
 | `RectShield_Mk1_L` | 23×15 | 345 | 1200 | 0,7 | 400 W | 320 Stahl, 85 Plasteel, 12 Komponenten |
 
-Gemeinsam: `blocksShots = true`, `blocksIndirectFire = false`, `blocksSkyfallers = false`, Reboot nach 900 Ticks. Mörsergranaten, Drop Pods und Meteoriten **kommen durch** – das ist der gewollte Nachteil gegenüber Mk II.
+Gemeinsam: `blocksShots = true`, `blocksIndirectFire = false`, `blocksSkyfallers = false`, Reboot nach 900 Ticks. Mörsergranaten, Drop Pods und Meteoriten **kommen durch** – das ist der gewollte Nachteil gegenüber Stufe 2 und 3. Alle drei Varianten teilen sich das **Industriell**-Sprite.
 
-## Mk II – anpassbar
+## Mk II – anpassbar (Stufe 2)
 
 | Parameter | Wert |
 |---|---|
 | Feld | 5…41 × 5…41 Kacheln, Standard 13×9 |
-| Energie | 1400 (konstant!) |
+| Energie | 1400 (konstant) |
 | Regen | 0,7 / Tick |
 | Grundlast | 300 W |
 | Flächenlast | **3 W pro Kachel** |
@@ -25,21 +41,40 @@ Gemeinsam: `blocksShots = true`, `blocksIndirectFire = false`, `blocksSkyfallers
 | Reboot | 1200 Ticks, danach 25 % Energie |
 | Kosten | 380 Stahl, 140 Plasteel, 16 Komponenten, 20 Gold |
 
-### Stromformel
+## Mk III – High-Tech (Stufe 3)
+
+| Parameter | Wert |
+|---|---|
+| Feld | **5…51 × 5…51** Kacheln, Standard 17×13 |
+| Energie | **2400** (konstant) |
+| Regen | **1,2 / Tick** |
+| Grundlast | **500 W** |
+| Flächenlast | **2 W pro Kachel** |
+| Drop-Pod-Kosten | **120** Energie pro Pod |
+| Reboot | **900 Ticks** |
+| `MaxHitPoints` / `WorkToBuild` | 800 / 7600 |
+| Kosten | **450 Stahl, 220 Plasteel, 24 Komponenten, 60 Gold** |
+| Baufähigkeit | **12** |
+
+**Designabsicht:** Mk III ist kein einfaches „Mk II + 10". Der höhere Grundbedarf (500 W) macht ihn auf kleinen Feldern teurer, aber ab ~200 geschützten Kacheln ist er **günstiger** als Mk II. Dazu kommen fast doppelte Energiereserve, ~70 % mehr Regeneration und ein kürzerer Reboot. Der Preis sind hohe Baukosten, Baufähigkeit 12 und 2600 Forschungspunkte.
+
+### Stromformeln
 
 ```
-Strom (W) = 300 + 3 × (Breite × Höhe) × WattsPerCellMultiplier
+Mk II :  Strom (W) = 300 + 3 × (Breite × Höhe) × WattsPerCellMultiplier
+Mk III:  Strom (W) = 500 + 2 × (Breite × Höhe) × WattsPerCellMultiplier
 ```
 
-| Feld | Fläche | Strom |
-|---|---|---|
-| 5×5 (Minimum) | 25 | 375 W |
-| 13×9 (Standard) | 117 | 651 W |
-| 23×15 | 345 | 1335 W |
-| 31×21 | 651 | 2253 W |
-| 41×31 (Vorlage) | 1271 | 4113 W |
+| Feld | Fläche | Mk II | Mk III |
+|---|---|---|---|
+| 5×5 (Minimum) | 25 | 375 W | 550 W |
+| 13×9 (Mk-II-Standard) | 117 | 651 W | 734 W |
+| 17×13 (Mk-III-Standard) | 221 | 963 W | **942 W** |
+| 23×15 | 345 | 1335 W | **1190 W** |
+| 41×31 (Vorlage) | 1271 | 4113 W | **3042 W** |
+| 51×35 (Mk-III-Vorlage) | 1785 | nicht möglich | **4070 W** |
 
-**Designabsicht:** Der Energie-*Puffer* bleibt bei 1400, egal wie groß das Feld ist. Wer das Feld vergrößert, zahlt mehr Strom, hat aber nicht mehr Reserve – große Felder sind dadurch anfälliger für konzentrierte Angriffe. Der `WattsPerCellMultiplier` in den Mod-Einstellungen (0,25–3,0) erlaubt es, das an den eigenen Modpack anzupassen.
+Der `WattsPerCellMultiplier` in den Mod-Einstellungen (0,25–3,0) wirkt auf beide Stufen.
 
 ## Schadensmodell
 
@@ -51,13 +86,17 @@ Energieverlust = Projektilschaden × energyPerDamage × EnergyPerDamageMultiplie
 
 ## Forschungsbaum
 
-| Projekt | Kosten | Voraussetzung |
-|---|---|---|
-| `RectShield_Mk1_Research` | 900 | `Electricity` |
-| `RectShield_Mk2_Research` | 1600 | `RectShield_Mk1_Research` |
+| Projekt | Kosten | Voraussetzung | Position |
+|---|---|---|---|
+| `RectShield_Mk1_Research` | 900 | `Electricity` | (1 / 1.4) |
+| `RectShield_Mk2_Research` | 1600 | `RectShield_Mk1_Research` | (2 / 1.4) |
+| `RectShield_Mk3_Research` | 2600 | `RectShield_Mk2_Research` | (3 / 1.4) |
 
-## Bekannte Stellschrauben für v0.2
+Alle drei im eigenen Tab `RectShield_ResearchTab`.
+
+## Bekannte Stellschrauben für v0.3
 
 - EMP: derzeit nur über den normalen Schadenspfad. Ein eigener EMP-Multiplikator ist in `CompProperties_RectShield` vorbereitet (Feld ergänzen).
 - `blocksExplosions` ist im Comp bereits vorhanden, aber noch nicht mit einem Explosion-Patch verdrahtet.
 - Skyfaller-Kosten (`skyfallerEnergyCost`) gelten pauschal pro Pod, unabhängig vom Inhalt.
+- `RectShieldSettings.MaxSizeCap` ist derzeit nur ein gespeicherter Wert ohne Wirkung; die Obergrenze kommt aus `maxWidth`/`maxHeight` der Defs.

@@ -15,7 +15,9 @@ namespace RectShield
                                      int power, bool perimeterOnly, RectShieldTier tier, string state)
         {
             string mode = perimeterOnly ? T("RS_ModePerimeter") : T("RS_ModeVolume");
-            string tierName = tier == RectShieldTier.Mk2 ? T("RS_TierMk2") : T("RS_TierMk1");
+            string tierName = tier == RectShieldTier.Mk3 ? T("RS_TierMk3")
+                           : tier == RectShieldTier.Mk2 ? T("RS_TierMk2")
+                           : T("RS_TierMk1");
 
             return string.Format(T("RS_Inspect"),
                 tierName, width, height, area, energy, maxEnergy, power, mode, state);

@@ -5,4 +5,7 @@
 
   <RectShield_Mk2_Research.label>Rechteckige Schilde Mk II</RectShield_Mk2_Research.label>
   <RectShield_Mk2_Research.description>Erforscht einen groessenverstellbaren Rechteckschild, der auch indirektes Feuer und Drop Pods abfaengt.</RectShield_Mk2_Research.description>
+
+  <RectShield_Mk3_Research.label>Rechteckige Schilde Mk III</RectShield_Mk3_Research.label>
+  <RectShield_Mk3_Research.description>Erforscht den High-Tech-Schildgenerator: groessere Felder, mehr Energiereserve, schnellere Regeneration und bessere Stromeffizienz pro Kachel.</RectShield_Mk3_Research.description>
 </LanguageData>

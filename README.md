@@ -1,14 +1,15 @@
 # RectShield – Rechteckige Schilde für RimWorld
 
-Ein eigenständiger Mod, der **rechteckige Schutzfelder** statt der üblichen kreisförmigen Kuppeln erzeugt. Zwei Geräteklassen:
+Ein eigenständiger Mod, der **rechteckige Schutzfelder** statt der üblichen kreisförmigen Kuppeln erzeugt. **Drei Ausbaustufen**, jede mit eigener Grafik:
 
-| | **Mk I** | **Mk II** |
-|---|---|---|
-| Größen | 3 feste Varianten: **9×7**, **15×11**, **23×15** | frei einstellbar **5…41** pro Achse |
-| Blockt | **nur direkte Schüsse** | direkte Schüsse **+ Mörser/indirektes Feuer + Drop Pods, Meteoriten, Trümmer** |
-| Versatz / Randmodus | nein | ja |
-| Strombedarf | fix (150 / 250 / 400 W) | **300 W + 3 W pro geschützter Kachel** – steigt mit der Fläche |
-| Energie | 600 / 900 / 1200 | 1400 |
+| | **Stufe 1 – Mk I** (Industriell) | **Stufe 2 – Mk II** (Militärisch) | **Stufe 3 – Mk III** (High-Tech) |
+|---|---|---|---|
+| Größen | 3 feste Varianten: **9×7**, **15×11**, **23×15** | frei einstellbar **5…41** pro Achse | frei einstellbar **5…51** pro Achse |
+| Blockt | **nur direkte Schüsse** | Direktfeuer **+ Mörser + Drop Pods, Meteoriten** | wie Mk II, mit mehr Reserve |
+| Versatz / Randmodus | nein | ja | ja |
+| Strombedarf | fix (150 / 250 / 400 W) | **300 W + 3 W/Kachel** | **500 W + 2 W/Kachel** (effizienter ab ~200 Kacheln) |
+| Energie / Regen | 600 / 900 / 1200 · 0,5–0,7 | 1400 · 0,7 | **2400 · 1,2** |
+| Forschung | 900 | 1600 (nach Mk I) | **2600 (nach Mk II)** |
 
 Schüsse **aus dem Schild heraus** bleiben immer möglich – geblockt wird nur beim **Eintritt** in das Rechteck (`!Contains(from) && Contains(to)`).
 
@@ -22,7 +23,7 @@ Zielversionen: **RimWorld 1.6** (stabil) und **1.7 Waylith Beta**. Sprache: Deut
 About/                     Mod-Metadaten, Preview.png
 Common/Defs/               ThingDefs, Forschungsprojekte
 Common/Languages/          EN + DE Keyed-Strings und DefInjected
-Common/Textures/           Platzhalter-Sprites (austauschbar)
+Common/Textures/           3 Stufen-Sprites + Legacy-Platzhalter
 1.6/Assemblies/            hierhin kompiliert die net472-DLL
 1.7/Assemblies/            hierhin kompiliert die net10.0-DLL
 Source/                    C#-Quellcode + zwei csproj + Stubs
@@ -31,7 +32,7 @@ docs/                      Plan, API-Notizen, Balance
 .github/workflows/         GitHub Actions
 ```
 
-> ⚠️ **Wichtig:** Die kompilierten `RectShield.dll`-Dateien sind **nicht** im Repository. RimWorlds `Assembly-CSharp.dll` darf aus Lizenzgründen nicht mitgeliefert werden. Du musst die Mod einmal lokal gegen dein Spiel bauen (siehe unten). Alles andere – Defs, Grafiken, Texte, CI – ist fertig.
+> ✅ **Fertig zum Installieren:** Beide `RectShield.dll`-Dateien (1.6 / 1.7) sind im Repo und wurden in GitHub Actions gegen öffentliche Referenz-Assemblies gebaut. Es werden **keine** Spiel- oder Harmony-DLLs mitgeliefert – Harmony muss separat installiert sein.
 
 ---
 
@@ -109,12 +110,12 @@ Wenn du nur **1.6** brauchst, lösche `1.7/` und entferne `<li>1.7</li>` aus `Ab
 
 **Mk I:** Bauen, Strom anschließen, fertig. Das Gizmo zeigt die feste Größe an; das Feld wird bei Auswahl blau umrandet.
 
-**Mk II** – Gizmos am Gebäude:
+**Mk II und Mk III** – identische Gizmos am Gebäude (Mk III erlaubt größere Felder und bietet die Vorlage 51×35 zusätzlich):
 
 | Gizmo | Funktion |
 |---|---|
 | `− / Breite N / − / Höhe N` | Feld in 2-Kachel-Schritten vergrößern/verkleinern |
-| `Größen-Vorlagen` | 9×7, 13×9, 17×13, 23×15, 31×21, 41×31 |
+| `Größen-Vorlagen` | 9×7 … 41×31, bei Mk III zusätzlich 51×35 (Vorlagen über dem Maximum werden ausgeblendet) |
 | `Feld verschieben` | Versatz in 4 Himmelsrichtungen |
 | `Modus wechseln` | **Volumen** (ganzes Rechteck) ↔ **Rand** (nur die Wandzellen) |
 | `Feld zurücksetzen` | Standard 13×9, Versatz 0, Volumen |
@@ -122,31 +123,32 @@ Wenn du nur **1.6** brauchst, lösche `1.7/` und entferne `<li>1.7</li>` aus `Ab
 
 **Mod-Einstellungen:** dauerhafte, dezente Umrandung aller Schilde; eigene/neutrale Drop Pods ebenfalls blocken; Strom- und Energiekosten-Multiplikatoren; Debug-Log.
 
-Bei Überlastung (`Energie ≤ 0`) schaltet das Feld ab und startet nach 900–1200 Ticks mit 25 % Energie neu. EMP-Treffer entziehen überproportional Energie.
+Bei Überlastung (`Energie ≤ 0`) schaltet das Feld ab und startet nach 900–1200 Ticks mit 25 % Energie neu (Mk III: 900 Ticks). EMP-Treffer entziehen überproportional Energie. Standardfeld Mk III: 17×13, Reboot 900 Ticks, Baukosten 450 Stahl / 220 Plasteel / 24 Komponenten / 60 Gold, Baufähigkeit 12.
 
 ---
 
 ## Balance
 
-Alle Werte stehen in [`docs/BALANCE.md`](docs/BALANCE.md) und lassen sich in `Common/Defs/ThingDefs_Buildings/Buildings_RectShield.xml` anpassen. Die Kernformel für Mk II:
+Alle Werte stehen in [`docs/BALANCE.md`](docs/BALANCE.md) und lassen sich in `Common/Defs/ThingDefs_Buildings/Buildings_RectShield.xml` anpassen. Die Kernformeln:
 
 ```
-Strom (W) = 300 + 3 × Breite × Höhe × Einstellungs-Faktor
+Mk II :  Strom (W) = 300 + 3 × Breite × Höhe × Einstellungs-Faktor
+Mk III:  Strom (W) = 500 + 2 × Breite × Höhe × Einstellungs-Faktor
 ```
 
-Beispiele: 13×9 → **651 W**, 23×15 → **1335 W**, 41×31 → **4113 W**. Die maximale Schildenergie bleibt konstant – große Felder sind damit deutlich verwundbarer.
+Beispiele Mk II: 13×9 → **651 W**, 23×15 → **1335 W**, 41×31 → **4113 W**. Mk III ist ab ~200 Kacheln günstiger (23×15 → 1190 W) und hat mit 2400 statt 1400 Energie deutlich mehr Reserve.
 
 ---
 
 ## Grafiken & Forschungsbaum
 
-Jede Generator-Variante hat ein **eigenes Ingame-Sprite** (Mk I klein/mittel/groß mit 1/2/3 Emitter-Spulen, Mk II mit türkisfarbenem Kern und goldenen Verstell-Armen) sowie ein eigenes Icon für das Baumenü. Dazu kommen `About/ModIcon.png` für Ladebildschirm/Mod-Einstellungen und `About/Preview.png` für den Workshop.
+**Drei Stufen = drei eigene Ingame-Sprites** (je 192×192 RGBA, freigestellt): Stufe 1 **Industriell** (genieteter Stahl, Bernstein-Kern) für alle drei Mk-I-Größen, Stufe 2 **Militärisch** (Panzerung, roter Diamant-Kern) für Mk II, Stufe 3 **High-Tech** (weiße Keramik, türkiser Hexagonal-Kern) für Mk III. Dazu passende 64×64-Baumenü-Icons und drei 128×128-Forschungs-Icons.
 
-Die Grafiken hängen über `<texPath>` und `<uiIconPath>` an den `ThingDef`s. **`uiIconPath` ist zugleich das Icon im Forschungsbaum**: RimWorld 1.6/1.7 haben kein `iconPath`-Feld an `ResearchProjectDef`, sondern zeigen die Icons der freigeschalteten Gebäude (`UnlockedDefs`). Deshalb war das der korrekte Einbindungsweg.
+Die Grafiken hängen über `<texPath>` und `<uiIconPath>` an den `ThingDef`s. **`uiIconPath` ist zugleich das Icon im Forschungsbaum**: RimWorld 1.6/1.7 haben kein `iconPath`-Feld an `ResearchProjectDef`, sondern zeigen die Icons der freigeschalteten Gebäude (`UnlockedDefs`).
 
-Beide Forschungen liegen in einem **eigenen Forschungs-Tab „RectShield"** (`ResearchTabDef`), Mk I bei Position (1 / 1.4), Mk II bei (2 / 1.4). Das vermeidet Kollisionen mit Vanilla-Koordinaten; die Y-Achse läuft in 0,7er-Schritten. Wer alles im Haupt-Tab möchte, entfernt die beiden `<tab>`-Zeilen. Alle Details, Pfade und Größen: [`docs/GRAPHICS.md`](docs/GRAPHICS.md).
+Alle **drei Forschungen** liegen in einem **eigenen Forschungs-Tab „RectShield"** (`ResearchTabDef`): Mk I (1 / 1.4), Mk II (2 / 1.4), Mk III (3 / 1.4). Wer alles im Haupt-Tab möchte, entfernt die drei `<tab>`-Zeilen. Details: [`docs/GRAPHICS.md`](docs/GRAPHICS.md).
 
-Neue Grafiken erzeugen oder ersetzen: `python3 Tools/make_assets.py` – danach `python3 Tests/validate_xml.py`, das alle `texPath`/`uiIconPath`-Referenzen gegen die vorhandenen PNGs prüft.
+`python3 Tools/make_assets.py` erzeugt die Legacy-Platzhalter, Forschungs-Icons, `ModIcon.png` und `Preview.png` neu – die drei Stufen-Sprites bleiben dabei unangetastet (Quelle: `generator_ansichten/prepare_sprites.py` im Workspace).
 
 ---
 
@@ -208,7 +210,7 @@ python3 Tests/check_structure.py   # Pflichtpfade
 python3 Tools/make_assets.py       # Grafiken neu erzeugen (Pillow)
 ```
 
-`.github/workflows/validate.yml` führt diese Checks bei jedem Push aus. Der optionale `game-build`-Job kompiliert gegen echte Spiel-DLLs, sobald das Repository-Secret `RW17_MANAGED` gesetzt ist.
+`.github/workflows/build.yml` führt diese Checks bei jedem Push aus und kompiliert danach beide DLLs in GitHub Actions.
 
 Bekannte Limitierungen und die Roadmap stehen in [`CHANGELOG.md`](CHANGELOG.md) und [`docs/PLAN.md`](docs/PLAN.md).
 

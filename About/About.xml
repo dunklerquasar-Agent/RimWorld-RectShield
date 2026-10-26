@@ -2,16 +2,17 @@
 <ModMetaData>
   <packageId>rectshield.rectangularshields</packageId>
   <name>RectShield - Rectangular Shield Generator</name>
-  <author>rectshield</author>
-  <url>https://github.com/rectshield/RimWorld-RectShield</url>
+  <author>dunklerquasar-Agent</author>
+  <url>https://github.com/dunklerquasar-Agent/RimWorld-RectShield</url>
   <supportedVersions>
     <li>1.6</li>
     <li>1.7</li>
   </supportedVersions>
-  <description>Rechteckige Schutzfelder statt Kuppeln.
+  <description>Rechteckige Schutzfelder statt Kuppeln - drei Ausbaustufen mit eigenen Grafiken.
 
-Mk I - drei feste Groessen, blockt nur direkte Schuesse.
-Mk II - Breite, Hoehe, Versatz und Randmodus frei einstellbar; blockt zusaetzlich Moerser, Drop Pods und Meteoriten. Der Strombedarf steigt mit der geschuetzten Flaeche.
+Stufe 1 / Mk I - drei feste Groessen (Industriell), blockt nur direkte Schuesse.
+Stufe 2 / Mk II - Militaerisch: Breite, Hoehe, Versatz und Randmodus frei einstellbar; blockt zusaetzlich Moerser, Drop Pods und Meteoriten. Strombedarf steigt mit der Flaeche (3 W/Kachel).
+Stufe 3 / Mk III - High-Tech: groessere Felder (bis 51x51), mehr Energie, schnellere Regeneration und effizientere Flaechenlast (2 W/Kachel).
 
 Schuesse von innen nach aussen bleiben immer moeglich. Requires Harmony.</description>
   <modDependencies>

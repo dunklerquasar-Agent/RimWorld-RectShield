@@ -2,7 +2,7 @@
 <Defs>
 
   <!-- Eigener Forschungs-Tab: verhindert Kollisionen mit Vanilla-Koordinaten
-       und zeigt beide Schild-Forschungen mit ihren Gebaeude-Icons.
+       und zeigt alle drei Schild-Forschungen mit ihren Gebaeude-Icons.
        Wer alles im Haupt-Tab haben will: die <tab>-Zeilen in
        Research_RectShield.xml entfernen (dann researchViewX/Y anpassen). -->
   <ResearchTabDef>

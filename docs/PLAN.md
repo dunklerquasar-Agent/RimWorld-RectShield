@@ -29,6 +29,18 @@ Der ursprüngliche Plan unten beschreibt die allgemeine Architektur. Folgende Fe
 
 Die Meilensteine M0–M2 sind damit abgeschlossen (API-Checkliste, Projekt-Setup, Geometrie + Abfanglogik + Vorschau). M3–M6 (Gizmos/Energie sind bereits weitgehend enthalten, Deckel/CE-Patches, QA/Release) bleiben offen.
 
+### Ergänzung 26.10.2026 – dritte Ausbaustufe (v0.2.0)
+
+Der Wunsch nach drei eigenen Generator-Ansichten wurde als **echte dritte Stufe** umgesetzt, nicht nur als Grafiktausch:
+
+| Stufe | Def | Grafik | Neuerung gegenüber Vorgänger |
+|---|---|---|---|
+| 1 | `RectShield_Mk1_S/M/L` | Industriell | feste Größen, nur Direktfeuer |
+| 2 | `RectShield_Mk2` | Militärisch | anpassbar, Deckel gegen Skyfaller, 3 W/Kachel |
+| 3 | `RectShield_Mk3` | High-Tech | bis 51×51, 2400 Energie, 1,2 Regen, **2 W/Kachel**, Reboot 900 |
+
+Damit ist `RectShieldTier` dreistufig (`Mk1/Mk2/Mk3`), `CanResize` gilt für alle nicht-fixen Defs, und die Forschung hat einen dritten Knoten bei (3 / 1.4). Die Balance-Begründung (Mk III ist erst ab ~200 Kacheln effizienter als Mk II) steht in `docs/BALANCE.md`. Offen bleibt unverändert: Ingame-Smoke-Test, Workshop-Upload, CE-Kompatibilität.
+
 ---
 
 ## 1. Zielstellung

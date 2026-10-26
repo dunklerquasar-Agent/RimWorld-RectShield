@@ -10,6 +10,7 @@ namespace RectShield
     {
         public static readonly Color ShieldColorMk1 = new Color(0.30f, 0.65f, 1.00f, 0.85f);
         public static readonly Color ShieldColorMk2 = new Color(0.35f, 1.00f, 0.85f, 0.85f);
+        public static readonly Color ShieldColorMk3 = new Color(0.60f, 0.95f, 1.00f, 0.85f);
         public static readonly Color ShieldColorDown = new Color(1.00f, 0.35f, 0.30f, 0.85f);
 
         public static Color ColorFor(RectShieldTier tier, bool active)
@@ -17,6 +18,11 @@ namespace RectShield
             if (!active)
             {
                 return ShieldColorDown;
+            }
+
+            if (tier == RectShieldTier.Mk3)
+            {
+                return ShieldColorMk3;
             }
 
             return tier == RectShieldTier.Mk2 ? ShieldColorMk2 : ShieldColorMk1;
@@ -33,7 +39,7 @@ namespace RectShield
 
         /// <summary>
         /// Indirektes Feuer (Moerser) hat in Vanilla flyOverhead = true.
-        /// Mk1 laesst das durch, Mk2 nicht.
+        /// Mk1 laesst das durch, Mk2 und Mk3 nicht.
         /// </summary>
         public static bool IsIndirectFire(Projectile projectile)
         {

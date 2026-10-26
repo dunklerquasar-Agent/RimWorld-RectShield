@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-"""Erzeugt alle Ingame-Grafiken des Mods (nur Pillow benoetigt).
+"""Erzeugt die Legacy-Platzhalter, Forschungs-Icons und das Vorschaubild.
 
     python3 Tools/make_assets.py
 
-Erzeugt:
-  - 4 Gebaeude-Sprites (Mk I klein/mittel/gross, Mk II)
-  - 4 Bau-Menue-Icons (uiIconPath)
-  - 2 Forschungsbaum-Icons (ResearchProjectDef.iconPath)
-  - About/ModIcon.png (Ladebildschirm / Mod-Einstellungen)
-  - About/Preview.png (Workshop-Vorschau)
+WICHTIG: Die drei eigentlichen Stufen-Sprites werden hier NICHT erzeugt.
+Sie sind KI-generierte, freigestellte Grafiken und liegen bereits im Repo:
 
-Alle Grafiken sind RGBA mit transparentem Hintergrund und koennen durch
-richtige RimWorld-Sprites ersetzt werden - einfach Dateinamen beibehalten.
+  RectShield_Gen_Industrial.png  -> Stufe 1 / Mk I  (alle drei Groessen)
+  RectShield_Gen_Military.png    -> Stufe 2 / Mk II
+  RectShield_Gen_HighTech.png    -> Stufe 3 / Mk III
+
+Quelle/Pipeline: /home/user/generator_ansichten/prepare_sprites.py
+(Nicht loeschen oder ueberschreiben - dieses Skript erzeugt nur die alten
+Platzhalter, die 3 Forschungs-Icons, ModIcon und Preview neu.)
 """
 from __future__ import annotations
 
@@ -29,6 +30,9 @@ for folder in (BUILDINGS, MENU_ICONS, RESEARCH_ICONS, ROOT / "About"):
 
 BLUE = (70, 155, 255)
 CYAN = (70, 240, 205)
+AMBER = (245, 170, 55)     # Stufe 1 - Industriell
+CRIMSON = (235, 85, 75)    # Stufe 2 - Militaerisch
+ICE = (105, 225, 255)      # Stufe 3 - High-Tech
 STEEL = (54, 63, 74)
 STEEL_LIGHT = (108, 122, 138)
 DARK = (22, 27, 34)
@@ -199,7 +203,8 @@ def mod_icon(path: Path, size: int = 64) -> None:
     print("  mod-icon:", path.relative_to(ROOT))
 
 
-def preview(path: Path, sources: list[Path]) -> None:
+def preview(path: Path, tier_sources: list[Path]) -> None:
+    """Vorschaubild: Kreis vs. Rechteck + die drei Stufen-Designs."""
     size = 512
     img = Image.new("RGB", (size, size), (18, 22, 28))
     d = ImageDraw.Draw(img)
@@ -207,40 +212,46 @@ def preview(path: Path, sources: list[Path]) -> None:
         d.line((i, 0, i, size), fill=(28, 34, 42), width=1)
         d.line((0, i, size, i), fill=(28, 34, 42), width=1)
 
-    f_big, f_small, f_label = font(40), font(18), font(14)
+    f_big, f_small, f_label, f_tier = font(40), font(18), font(14), font(17)
 
-    d.text((256, 56), "RectShield", font=f_big, fill=(235, 245, 255), anchor="mm")
-    d.text((256, 96), "Rectangular shields for RimWorld", font=f_small,
+    d.text((256, 52), "RectShield", font=f_big, fill=(235, 245, 255), anchor="mm")
+    d.text((256, 92), "Rectangular shields for RimWorld", font=f_small,
            fill=(140, 165, 185), anchor="mm")
 
     # Alte Kuppel (durchgestrichen)
-    d.ellipse((28, 150, 148, 270), outline=(105, 116, 130), width=4)
-    d.ellipse((52, 174, 124, 246), outline=(55, 63, 73), width=2)
-    d.line((36, 258, 140, 162), fill=(215, 70, 70), width=6)
-    d.line((36, 162, 140, 258), fill=(215, 70, 70), width=6)
-    d.text((88, 292), "circle / dome", font=f_label,
+    d.ellipse((28, 140, 148, 260), outline=(105, 116, 130), width=4)
+    d.ellipse((52, 164, 124, 236), outline=(55, 63, 73), width=2)
+    d.line((36, 248, 140, 152), fill=(215, 70, 70), width=6)
+    d.line((36, 152, 140, 248), fill=(215, 70, 70), width=6)
+    d.text((88, 282), "circle / dome", font=f_label,
            fill=(150, 160, 172), anchor="mm")
 
     # Neues Rechteck
-    d.rectangle((188, 158, 330, 262), outline=(70, 220, 255), width=4)
-    d.rectangle((198, 168, 320, 252), outline=(40, 90, 110), width=2)
-    d.text((259, 292), "rectangle", font=f_label,
+    d.rectangle((188, 148, 330, 252), outline=(70, 220, 255), width=4)
+    d.rectangle((198, 158, 320, 242), outline=(40, 90, 110), width=2)
+    d.text((259, 282), "rectangle", font=f_label,
            fill=(70, 220, 255), anchor="mm")
 
-    # Die vier Gebaeude-Sprites
-    labels = ["Mk I S", "Mk I M", "Mk I L", "Mk II"]
-    for index, source in enumerate(sources):
+    # Die drei Stufen-Sprites
+    tiers = [
+        ("STAGE 1", "Mk I  -  Industrial", AMBER),
+        ("STAGE 2", "Mk II  -  Military", CRIMSON),
+        ("STAGE 3", "Mk III  -  High-Tech", ICE),
+    ]
+    for index, source in enumerate(tier_sources):
         sprite = Image.open(source).convert("RGBA")
-        sprite.thumbnail((76, 76), Image.Resampling.LANCZOS)
-        x = 40 + index * 118
-        img.paste(sprite, (x, 330), sprite)
-        d.text((x + 38, 412), labels[index], font=f_label,
-               fill=(200, 215, 230), anchor="mm")
+        sprite.thumbnail((112, 112), Image.Resampling.LANCZOS)
+        cx = 85 + index * 171
+        x = cx - sprite.width // 2
+        img.paste(sprite, (x, 306), sprite)
+        d.rectangle((cx - 70, 302, cx + 70, 414), outline=(48, 58, 70), width=1)
+        d.text((cx, 432), tiers[index][0], font=f_tier,
+               fill=tiers[index][2], anchor="mm")
+        d.text((cx, 454), tiers[index][1], font=f_label,
+               fill=(180, 198, 215), anchor="mm")
 
-    d.text((256, 452), "Mk I  fixed sizes  |  Mk II  adjustable", font=f_small,
-           fill=(190, 205, 220), anchor="mm")
-    d.text((256, 482), "RimWorld 1.6  +  1.7 Waylith", font=f_label,
-           fill=(120, 140, 158), anchor="mm")
+    d.text((256, 482), "RimWorld 1.6  +  1.7 Waylith   |   three upgrade tiers",
+           font=f_label, fill=(120, 140, 158), anchor="mm")
     img.save(path)
     print("  preview:", path.relative_to(ROOT))
 
@@ -260,13 +271,26 @@ def main() -> None:
         building_paths.append(building)
         menu_icon(MENU_ICONS / f"{name}.png", accent, gold=gold)
 
-    research_icon(RESEARCH_ICONS / "RectShield_Mk1_Research.png",
-                  building_paths[1], BLUE, "I")
-    research_icon(RESEARCH_ICONS / "RectShield_Mk2_Research.png",
-                  building_paths[3], CYAN, "II")
+    # Die drei Stufen-Sprites sind KI-generiert und werden hier NICHT ueberschrieben.
+    tier_paths = [
+        BUILDINGS / "RectShield_Gen_Industrial.png",
+        BUILDINGS / "RectShield_Gen_Military.png",
+        BUILDINGS / "RectShield_Gen_HighTech.png",
+    ]
+    for p in tier_paths:
+        if not p.exists():
+            raise SystemExit(
+                f"Fehlt: {p}\n"
+                "  -> sprites/ aus /home/user/generator_ansichten/ nach "
+                "Common/Textures/Things/Building/RectShield/ kopieren."
+            )
+
+    research_icon(RESEARCH_ICONS / "RectShield_Mk1_Research.png", tier_paths[0], AMBER, "I")
+    research_icon(RESEARCH_ICONS / "RectShield_Mk2_Research.png", tier_paths[1], CRIMSON, "II")
+    research_icon(RESEARCH_ICONS / "RectShield_Mk3_Research.png", tier_paths[2], ICE, "III")
 
     mod_icon(ROOT / "About/ModIcon.png")
-    preview(ROOT / "About/Preview.png", building_paths)
+    preview(ROOT / "About/Preview.png", tier_paths)
 
     legacy = BUILDINGS / "RectShield_Mk1.png"
     if legacy.exists():

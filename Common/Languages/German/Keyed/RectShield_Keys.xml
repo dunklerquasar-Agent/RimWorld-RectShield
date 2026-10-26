@@ -5,6 +5,7 @@
   <RS_Rebooting>Neustart ({0} Ticks)</RS_Rebooting>
   <RS_TierMk1>Mk I</RS_TierMk1>
   <RS_TierMk2>Mk II</RS_TierMk2>
+  <RS_TierMk3>Mk III</RS_TierMk3>
   <RS_ModeVolume>Volumen</RS_ModeVolume>
   <RS_ModePerimeter>Rand</RS_ModePerimeter>
   <RS_Inspect>{0} | Feld {1}x{2} ({3} Kacheln) | Energie {4}/{5} | {6} W | Modus: {7} | {8}</RS_Inspect>
@@ -24,7 +25,7 @@
   <RS_DescMode>Zwischen Schutz des ganzen Bereichs und reiner Randwand umschalten.</RS_DescMode>
   <RS_DescReset>Groesse, Versatz und Modus auf Standard zuruecksetzen.</RS_DescReset>
   <RS_DescOverlay>Die Umrandung des Feldes ein- oder ausblenden.</RS_DescOverlay>
-  <RS_DescFixedSize>Dieser Mk-I-Generator hat eine feste Feldgroesse. Fuer anpassbare Felder Mk II nutzen.</RS_DescFixedSize>
+  <RS_DescFixedSize>Dieser Mk-I-Generator hat eine feste Feldgroesse. Fuer anpassbare Felder Mk II oder Mk III nutzen.</RS_DescFixedSize>
   <RS_Preset>{0}x{1} Kacheln</RS_Preset>
 
   <RS_OffsetNorth>Nach Norden verschieben</RS_OffsetNorth>
@@ -34,9 +35,9 @@
 
   <RS_SettingsHeader>RectShield-Einstellungen</RS_SettingsHeader>
   <RS_SettingsOverlay>Dezente Umrandung fuer alle aktiven Schilde anzeigen</RS_SettingsOverlay>
-  <RS_SettingsFriendlyPods>Mk II blockt auch eigene und neutrale Drop Pods</RS_SettingsFriendlyPods>
+  <RS_SettingsFriendlyPods>Mk II/Mk III blocken auch eigene und neutrale Drop Pods</RS_SettingsFriendlyPods>
   <RS_SettingsDebug>Debug-Meldungen ins Log schreiben</RS_SettingsDebug>
-  <RS_SettingsPower>Mk-II-Strom pro Kachel, Faktor: {0}</RS_SettingsPower>
+  <RS_SettingsPower>Mk-II-/Mk-III-Strom pro Kachel, Faktor: {0}</RS_SettingsPower>
   <RS_SettingsEnergy>Energiekosten pro Schaden, Faktor: {0}</RS_SettingsEnergy>
   <RS_SettingsHint>Aenderungen am Stromfaktor wirken innerhalb einer Sekunde. Die maximale Feldgroesse ist pro Generator definiert.</RS_SettingsHint>
 </LanguageData>

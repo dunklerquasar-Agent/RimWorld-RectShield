@@ -11,4 +11,7 @@
 
   <RectShield_Mk2.label>Rechteckschild Mk II (anpassbar)</RectShield_Mk2.label>
   <RectShield_Mk2.description>Ein frei konfigurierbares rechteckiges Schutzfeld. Blockt direktes und indirektes Feuer sowie Drop Pods und Meteoriten. Groessere Felder verbrauchen mehr Strom.</RectShield_Mk2.description>
+
+  <RectShield_Mk3.label>Rechteckschild Mk III (High-Tech)</RectShield_Mk3.label>
+  <RectShield_Mk3.description>Ein fortschrittlicher High-Tech-Rechteckschild, frei einstellbar bis 51 x 51 Kacheln. Blockt direktes und indirektes Feuer sowie Drop Pods und Meteoriten. Mehr Energiereserve, schnellere Regeneration, kuerzerer Neustart und effizienterer Flaechenstrom als Mk II.</RectShield_Mk3.description>
 </LanguageData>

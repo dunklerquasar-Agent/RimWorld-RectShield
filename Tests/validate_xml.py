@@ -82,8 +82,8 @@ for def_file in (ROOT / "Common" / "Defs").rglob("*.xml"):
 research = ROOT / "Common/Defs/ResearchProjectDefs/Research_RectShield.xml"
 if research.exists():
     tabs = [e.text.strip() for e in ET.parse(research).getroot().iter("tab") if e.text]
-    if tabs != ["RectShield_ResearchTab", "RectShield_ResearchTab"]:
-        errors.append(f"Research_RectShield.xml: unerwartete Tab-Zuordnung: {tabs}")
+    if len(tabs) != 3 or any(t != "RectShield_ResearchTab" for t in tabs):
+        errors.append(f"Research_RectShield.xml: erwartet 3 Forschungen im eigenen Tab, gefunden: {tabs}")
 else:
     errors.append("Research_RectShield.xml fehlt")
 
@@ -99,6 +99,12 @@ for missing in sorted(en - de):
     errors.append(f"Deutsche Uebersetzung fehlt fuer Key: {missing}")
 for extra in sorted(de - en):
     errors.append(f"Deutscher Key ohne englisches Pendant: {extra}")
+
+for required_def in ("RectShield_Mk1_S", "RectShield_Mk2", "RectShield_Mk3",
+                     "RectShield_Mk1_Research", "RectShield_Mk2_Research",
+                     "RectShield_Mk3_Research"):
+    if required_def not in seen_defnames:
+        errors.append(f"Pflicht-defName fehlt: {required_def}")
 
 print(f"Geprueft: {len(xml_files)} XML-Dateien, {len(seen_defnames)} eindeutige defNames, "
       f"{len(en)} Sprach-Keys.")

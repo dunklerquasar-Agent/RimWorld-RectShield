@@ -7,7 +7,7 @@ namespace RectShield
 {
     /// <summary>
     /// Der eigentliche Schild: Zustand, Energie, Geometrie, Persistenz, UI.
-    /// Ein Comp, zwei Auspraegungen (Mk1 fest / Mk2 konfigurierbar) - gesteuert ueber CompProperties.
+    /// Ein Comp, drei Stufen (Mk1 fest / Mk2+Mk3 konfigurierbar) - gesteuert ueber CompProperties.
     /// </summary>
     public class CompRectShield : ThingComp
     {
@@ -53,7 +53,7 @@ namespace RectShield
         public bool ShowOverlay => showOverlay;
         public bool IsRebooting => rebootTicksLeft > 0;
 
-        /// <summary>Strombedarf in Watt. Mk2: linear mit der geschuetzten Flaeche.</summary>
+        /// <summary>Strombedarf in Watt. Mk2/Mk3: linear mit der geschuetzten Flaeche.</summary>
         public float CurrentPowerDrawW
         {
             get
@@ -293,9 +293,9 @@ namespace RectShield
             }
         }
 
-        // --- Konfiguration (nur Mk2) ---
+        // --- Konfiguration (Mk2 + Mk3; Mk1 ist fix) ---
 
-        public bool CanResize => !Props.fixedSize && Tier == RectShieldTier.Mk2;
+        public bool CanResize => !Props.fixedSize;
 
         public void Resize(int deltaW, int deltaH)
         {

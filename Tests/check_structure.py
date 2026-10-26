@@ -53,6 +53,14 @@ graphics = [
     "Common/Textures/UI/Icons/Buildings/RectShield_Mk2.png",
     "Common/Textures/UI/Icons/Research/RectShield_Mk1_Research.png",
     "Common/Textures/UI/Icons/Research/RectShield_Mk2_Research.png",
+    # Drei Stufen-Sprites (KI-generiert, freigestellt)
+    "Common/Textures/Things/Building/RectShield/RectShield_Gen_Industrial.png",
+    "Common/Textures/Things/Building/RectShield/RectShield_Gen_Military.png",
+    "Common/Textures/Things/Building/RectShield/RectShield_Gen_HighTech.png",
+    "Common/Textures/UI/Icons/Buildings/RectShield_Gen_Industrial.png",
+    "Common/Textures/UI/Icons/Buildings/RectShield_Gen_Military.png",
+    "Common/Textures/UI/Icons/Buildings/RectShield_Gen_HighTech.png",
+    "Common/Textures/UI/Icons/Research/RectShield_Mk3_Research.png",
 ]
 required.extend(graphics)
 
@@ -89,6 +97,17 @@ if "ManagedPath" in c17:
     build_issues.append("1.7.csproj: enthaelt noch ManagedPath (1.7 hat keinen Managed-Ordner)")
 if "net10.0" not in c17:
     build_issues.append("1.7.csproj: net10.0 fehlt")
+
+# Dritte Stufe muss in Enum, Defs und Forschung vorhanden sein.
+tier_file = (ROOT / "Source/Core/RectShieldTier.cs").read_text(encoding="utf-8")
+buildings_text = (ROOT / "Common/Defs/ThingDefs_Buildings/Buildings_RectShield.xml").read_text(encoding="utf-8")
+research_text = (ROOT / "Common/Defs/ResearchProjectDefs/Research_RectShield.xml").read_text(encoding="utf-8")
+if "Mk3 = 2" not in tier_file:
+    build_issues.append("RectShieldTier.cs: Mk3 fehlt")
+if "<defName>RectShield_Mk3</defName>" not in buildings_text:
+    build_issues.append("Buildings_RectShield.xml: Mk3-Def fehlt")
+if "<defName>RectShield_Mk3_Research</defName>" not in research_text:
+    build_issues.append("Research_RectShield.xml: Mk3-Forschung fehlt")
 
 print(f"Geprueft: {len(required)} Pflichtpfade, {len(graphics)} Grafiken, "
       f"{len(list((ROOT / 'Source').rglob('*.cs')))} C#-Dateien, 2 csproj.")

@@ -1,5 +1,32 @@
 # Changelog
 
+## [0.2.0] - 2026-10-26 - Drei Ausbaustufen mit Mk III High-Tech
+
+### Neu
+- **Dritte Stufe `RectShield_Mk3`** (High-Tech-Schild) als echter neuer Gebäude-Def:
+  frei einstellbar bis **51×51** Kacheln (Standard 17×13), **2400** Energie,
+  **1,2** Regen/Tick, **900** Ticks Reboot, 120 Energie pro Drop Pod.
+  Blockt wie Mk II direktes/indirektes Feuer und Skyfaller.
+  Stromformel **500 W + 2 W pro Kachel** – effizienter als Mk II ab ~200 Kacheln.
+  Baukosten 450 Stahl / 220 Plasteel / 24 Komponenten / 60 Gold, Baufähigkeit 12.
+- **Neue Forschung `RectShield_Mk3_Research`** (2600 Forschungspunkte, nach Mk II)
+  im eigenen Tab bei Position (3 / 1.4); deutsche DefInjected-Texte.
+- **Drei KI-generierte Stufen-Sprites** (je 192×192 RGBA, freigestellt) plus passende
+  64×64-Baumenü-Icons: Stufe 1 **Industriell** (Mk I, alle drei Größen),
+  Stufe 2 **Militärisch** (Mk II), Stufe 3 **High-Tech** (Mk III).
+  Dazu drei 128×128-Forschungs-Icons und ein überarbeitetes `About/Preview.png`.
+- `RectShieldTier` um `Mk3` erweitert; eigenes helles Cyan-Overlay; Inspect-String
+  zeigt „Mk III"; Preset-Liste um 51×35 erweitert (Vorlagen über dem
+  Generator-Maximum werden automatisch ausgeblendet).
+- `CanResize` gilt jetzt für alle nicht-fixen Stufen (`!Props.fixedSize`),
+  damit Mk III dieselben Gizmos wie Mk II bekommt.
+- `About.xml`: `author`/`url` auf das echte Repo gesetzt, Beschreibung auf drei Stufen.
+- Tests prüfen Mk-III-Def, -Forschung, -Enum und alle neuen Grafikpfade.
+
+### Hinweis
+Die DLLs müssen wegen der C#-Änderungen neu gebaut werden (GitHub Actions).
+Ein echter RimWorld-Spielstart-/Ingame-Test steht weiterhin aus.
+
 ## [0.1.3] - 2026-10-25 - Kompilierung in GitHub Actions
 
 - **Neuer Workflow `.github/workflows/build.yml`** kompiliert `RectShield.dll` für

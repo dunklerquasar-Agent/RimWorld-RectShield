@@ -6,13 +6,13 @@ namespace RectShield
 {
     /// <summary>
     /// Mk1: nur ein Info-Gizmo ("feste Groesse").
-    /// Mk2: Breite/Hoehe/Versatz/Presets/Randmodus/Overlay.
+    /// Mk2/Mk3: Breite/Hoehe/Versatz/Presets/Randmodus/Overlay.
     /// </summary>
     public static class RectShieldGizmos
     {
         private static readonly int[,] Presets =
         {
-            { 9, 7 }, { 13, 9 }, { 17, 13 }, { 23, 15 }, { 31, 21 }, { 41, 31 }
+            { 9, 7 }, { 13, 9 }, { 17, 13 }, { 23, 15 }, { 31, 21 }, { 41, 31 }, { 51, 35 }
         };
 
         public static IEnumerable<Gizmo> Build(CompRectShield comp)
@@ -83,6 +83,12 @@ namespace RectShield
             {
                 int w = Presets[i, 0];
                 int h = Presets[i, 1];
+                // Nur Vorlagen anbieten, die der Generator auch abdecken kann.
+                if (w > comp.Props.maxWidth || h > comp.Props.maxHeight)
+                {
+                    continue;
+                }
+
                 options.Add(new FloatMenuOption(
                     RectShieldStrings.PresetLabel(w, h),
                     () => comp.SetSize(w, h)));

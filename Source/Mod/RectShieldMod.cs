@@ -12,7 +12,7 @@ namespace RectShield
         public bool DebugLogging = false;
         public float WattsPerCellMultiplier = 1f;
         public float EnergyPerDamageMultiplier = 1f;
-        public int MaxSizeCap = 41;
+        public int MaxSizeCap = 51;
 
         public override void ExposeData()
         {
@@ -22,7 +22,7 @@ namespace RectShield
             Scribe_Values.Look(ref DebugLogging, "rs_debugLogging", false);
             Scribe_Values.Look(ref WattsPerCellMultiplier, "rs_wattsPerCellMultiplier", 1f);
             Scribe_Values.Look(ref EnergyPerDamageMultiplier, "rs_energyPerDamageMultiplier", 1f);
-            Scribe_Values.Look(ref MaxSizeCap, "rs_maxSizeCap", 41);
+            Scribe_Values.Look(ref MaxSizeCap, "rs_maxSizeCap", 51);
         }
     }
 
