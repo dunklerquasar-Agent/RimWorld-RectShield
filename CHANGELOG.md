@@ -1,5 +1,45 @@
 # Changelog
 
+## [0.3.1] - 2026-10-26 - Fix: Gravship-Feld lag asymmetrisch am Rumpf
+
+### Fehlerbild (aus einem echten Spielstand gemeldet)
+Das Feld schloss im **Osten** buendig mit den Bodenplatten ab, lag aber im
+**Sueden/Norden 1 Kachel** und im **Westen 2 Kacheln** weiter aussen. Im Osten
+stand eine Holzwand eines anderen Gebaeudes direkt an den Platten.
+
+### Ursache
+`RebuildShape()` berechnete das Feld ueber einen Integer-Mittelpunkt:
+
+```csharp
+int cx = (lastHull.MinX + lastHull.MaxX) / 2;   // bei gerader Breite 0,5 zu weit westlich
+int halfW = fitW / 2;
+minX = cx - halfW;
+maxX = cx + (fitW - 1 - halfW);
+```
+
+Bei geraden Plattenbreiten rutscht `cx` um eine halbe Zelle nach Westen.
+Zusammen mit der Integer-Division bei `halfW/halfH` und dem Padding ergab das
+eine Verschiebung von **1–2 Kacheln** nach Westen bzw. Norden/Sueden.
+Simulation (gerade x gerade): Raender **W=3, O=1, S=3, N=1**.
+
+### Fix
+- Feldgrenzen werden **direkt** aus den Plattengrenzen gebildet:
+  `minX = MinX - pad`, `maxX = MaxX + pad` (analog Z). Kein Mittelpunkt,
+  keine halben Breiten mehr.
+- `minWidth`/`maxWidth`-Clamp arbeitet jetzt **symmetrisch von beiden Seiten**
+  (`excess / 2` links, Rest rechts), damit keine Seite staerker beschnitten wird.
+- Standard-`substructurePadding` von **2 auf 0** gesenkt: Das Feld liegt damit
+  buendig auf den aeussersten Rumpfplatten – genau wie im Osten beobachtet.
+  Es ragt nicht mehr in angrenzende fremde Gebaeude (Holzwand).
+- Neuer Gizmo **„Rand: N Kacheln" / „Margin: N tiles"** zyklet 0–4 Kacheln Abstand.
+  Der Wert wird in `rs_hullPadding` gespeichert und ist im Inspect-String sichtbar
+  („Rumpf: N Platten, Rand M"). `ResetShape()` stellt den XML-Standard wieder her.
+- Mathematisch geprueft fuer gerade/ungerade Breiten und jeden Rand 0–4:
+  alle vier Raender sind exakt gleich. Nur bei Schiffen > 51 Kacheln greift der
+  symmetrische Max-Clamp (Rest-Asymmetrie von maximal 1 Zelle).
+
+### Hinweis
+C# geaendert -> DLLs fuer 1.6/1.7 in GitHub Actions neu gebaut.
 ## [0.3.0] - 2026-10-26 - Symmetrische Schilde, +/- Gizmos, Gravship Shield
 
 ### Neu / geändert (drei Spieler-Wünsche)

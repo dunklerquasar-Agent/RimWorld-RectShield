@@ -117,6 +117,10 @@ if "<defName>RectShield_Mk3_Research</defName>" not in research_text:
 # Gravship Shield: Auto-Fit und symmetrische Mk-I-Felder muessen gesetzt sein.
 if "<autoFitSubstructure>true</autoFitSubstructure>" not in buildings_text:
     build_issues.append("Buildings_RectShield.xml: Gravship Auto-Fit fehlt")
+if "<substructurePadding>0</substructurePadding>" not in buildings_text:
+    build_issues.append("Buildings_RectShield.xml: buendiger Standard-Rand (0) fehlt")
+if "CycleHullPadding" not in (ROOT / "Source/Core/CompRectShield.cs").read_text(encoding="utf-8"):
+    build_issues.append("CompRectShield.cs: Rand-Gizmo fehlt")
 for fixed in ("<fixedWidth>11</fixedWidth>", "<fixedWidth>17</fixedWidth>",
               "<fixedWidth>23</fixedWidth>"):
     if fixed not in buildings_text:

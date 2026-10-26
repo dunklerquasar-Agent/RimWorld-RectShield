@@ -147,6 +147,13 @@ Geprüft gegen das 1.6-Dekompilat ([Dyyrlysh/RimworldDecompile](https://github.c
 | `Verse.Def.HasTag(string)` | Stabile Basis-API; in `RectShieldSubstructure` bewusst **statt** `IsSubstructure` verwendet, um keine Odyssey-Abhängigkeit zu kompilieren. |
 | `RimWorld.GravshipUtility.GetConnectedSubstructure(Building_GravEngine, HashSet<IntVec3>, int, bool)` | Vanilla-Floodfill ab dem Grav-Engine. **Nicht verwendet**, weil es einen Odyssey-Typ voraussetzt und nur *verbundene* Platten liefert. Unser Scan nimmt alle Platten auf der Map. |
 
+**Geometrie-Falle (v0.3.1):** Ein Feld aus einem Integer-Mittelpunkt
+`(MinX+MaxX)/2` plus `halfW = width/2` zu bauen, verschiebt sich bei **geraden**
+Breiten um eine halbe Zelle Richtung Westen. Sichtbar wurde das als 1–2 Kacheln
+zu grosser Rand im Westen/Norden. Korrekt ist immer: Grenzen direkt aus den
+Quell-Grenzen ableiten (`MinX-pad`, `MaxX+pad`) und einen Max-Clamp symmetrisch
+auf beide Seiten verteilen.
+
 `Command_Action.icon` (geerbt von `Verse.Command`) ist ein öffentliches `UnityEngine.Texture2D`-Feld;
 `ContentFinder<Texture2D>.Get(string path, bool reportFailure)` lädt Texturen aus `Textures/<path>.png`.
 Beides wird in `RectShieldGizmos` mit einem try/catch-Fallback verwendet, damit eine fehlende

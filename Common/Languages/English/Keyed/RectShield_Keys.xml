@@ -36,7 +36,9 @@
   <RS_GizmoFitOn>Fit hull: ON</RS_GizmoFitOn>
   <RS_GizmoFitOff>Fit hull: OFF</RS_GizmoFitOff>
   <RS_DescFit>Automatically wrap the field around all gravship substructure (hull) plates on the map. Turn off to size the field manually.</RS_DescFit>
-  <RS_InspectFit> | hull fit: {0} plates</RS_InspectFit>
+  <RS_InspectFit> | hull fit: {0} plates, margin {1}</RS_InspectFit>
+  <RS_GizmoPadding>Margin: {0} tiles</RS_GizmoPadding>
+  <RS_DescPadding>Extra tiles around the outermost hull plates. 0 = the field sits exactly on the plates. Click to cycle 0-4.</RS_DescPadding>
   <RS_FitNoPlates> | hull fit: no plates found</RS_FitNoPlates>
   <RS_SettingsHeader>RectShield settings</RS_SettingsHeader>
   <RS_SettingsOverlay>Show a faint outline for all active shields</RS_SettingsOverlay>

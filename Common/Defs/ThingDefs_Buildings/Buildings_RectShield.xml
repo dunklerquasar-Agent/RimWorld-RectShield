@@ -242,7 +242,9 @@
         <tier>Mk3</tier>
         <!-- Auto-Fit: Feld folgt den Gravschiff-Bodenplatten (Foundation-Layer) -->
         <autoFitSubstructure>true</autoFitSubstructure>
-        <substructurePadding>2</substructurePadding>
+        <!-- 0 = Feld liegt buendig auf den aeussersten Rumpfplatten.         -->
+        <!-- Per Gizmo auf 1..4 erweiterbar, asymmetriccher Versatz behoben.  -->
+        <substructurePadding>0</substructurePadding>
         <substructureRefreshTicks>180</substructureRefreshTicks>
         <fixedSize>false</fixedSize>
         <defaultWidth>21</defaultWidth>

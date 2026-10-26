@@ -119,6 +119,7 @@ Wenn du nur **1.6** brauchst, lösche `1.7/` und entferne `<li>1.7</li>` aus `Ab
 | `− / Breite N / − / Höhe N` | Feld in 2-Kachel-Schritten vergrößern/verkleinern |
 | `Größen-Vorlagen` | quadratisch 9×9 … 51×51 (Vorlagen über dem Generator-Maximum werden ausgeblendet) |
 | `Rumpf-Anpassung: an/aus` | nur Gravship Shield: Feld folgt automatisch allen Gravschiff-Bodenplatten (alle 3 s neu geprüft) |
+| `Rand: N Kacheln` | Abstand des Feldes zu den äußersten Rumpfplatten, 0–4 (Standard **0** = bündig, symmetrisch in alle vier Richtungen) |
 | `Feld verschieben` | Versatz in 4 Himmelsrichtungen |
 | `Modus wechseln` | **Volumen** (ganzes Rechteck) ↔ **Rand** (nur die Wandzellen) |
 | `Feld zurücksetzen` | Standard 13×9, Versatz 0, Volumen |

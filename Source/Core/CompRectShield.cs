@@ -26,6 +26,7 @@ namespace RectShield
         private int lastPowerUpdateTick;
         private bool autoFit;
         private int autoFitCounter;
+        private int hullPadding;
         private RectShieldBounds lastHull;
 
         public CompProperties_RectShield Props => (CompProperties_RectShield)props;
@@ -54,6 +55,7 @@ namespace RectShield
         public float Energy => energy;
         public bool PerimeterOnly => perimeterOnly;
         public bool AutoFit => autoFit;
+        public int HullPadding => hullPadding;
         public RectShieldBounds LastHull => lastHull;
         public bool ShowOverlay => showOverlay;
         public bool IsRebooting => rebootTicksLeft > 0;
@@ -129,6 +131,7 @@ namespace RectShield
             width = Math.Max(p.minWidth, Math.Min(p.maxWidth, width));
             height = Math.Max(p.minHeight, Math.Min(p.maxHeight, height));
             autoFit = p.autoFitSubstructure;
+            hullPadding = Math.Max(0, Math.Min(4, p.substructurePadding));
             energy = p.maxEnergy;
             shapeDirty = true;
         }
@@ -165,6 +168,9 @@ namespace RectShield
             Scribe_Values.Look(ref energy, "rs_energy", Props.maxEnergy);
             Scribe_Values.Look(ref rebootTicksLeft, "rs_rebootTicksLeft", 0);
             Scribe_Values.Look(ref autoFit, "rs_autoFit", Props.autoFitSubstructure);
+            Scribe_Values.Look(ref hullPadding, "rs_hullPadding",
+                Math.Max(0, Math.Min(4, Props.substructurePadding)));
+            hullPadding = Math.Max(0, Math.Min(4, hullPadding));
 
             // Alte Saves / XML-Aenderungen: immer auf gueltige Werte clampen.
             width = Math.Max(Props.minWidth, Math.Min(Props.maxWidth, width));
@@ -186,24 +192,51 @@ namespace RectShield
             var p = Props;
 
             // Gravschiff-Modus: Feld automatisch um die Substructure-Platten legen.
-            // Der Feldmittelpunkt liegt auf dem Rumpfzentrum, nicht auf dem Generator.
+            // WICHTIG: Grenzen DIREKT aus den Plattengrenzen ableiten. Ein
+            // Integer-Mittelpunkt (MinX+MaxX)/2 waere bei geraden Breiten eine
+            // halbe Zelle zu weit westlich -> 1-2 Kacheln Versatz (Bug v0.3.0).
             if (autoFit && p.autoFitSubstructure)
             {
                 lastHull = RectShieldSubstructure.Scan(parent.Map);
                 if (lastHull.Found)
                 {
-                    int pad = Math.Max(0, p.substructurePadding);
-                    int fitW = Math.Max(p.minWidth, Math.Min(p.maxWidth, lastHull.Width + pad * 2));
-                    int fitH = Math.Max(p.minHeight, Math.Min(p.maxHeight, lastHull.Height + pad * 2));
-                    int cx = (lastHull.MinX + lastHull.MaxX) / 2;
-                    int cz = (lastHull.MinZ + lastHull.MaxZ) / 2;
-                    int halfW = fitW / 2;
-                    int halfH = fitH / 2;
+                    int pad = Math.Max(0, Math.Min(8, hullPadding));
+                    int minX = lastHull.MinX - pad;
+                    int maxX = lastHull.MaxX + pad;
+                    int minZ = lastHull.MinZ - pad;
+                    int maxZ = lastHull.MaxZ + pad;
 
-                    shape = RectShieldShape.BuildFromWorldBounds(
-                        cx - halfW, cz - halfH,
-                        cx + (fitW - 1 - halfW), cz + (fitH - 1 - halfH),
-                        parent.Map);
+                    // Symmetrisch auf min/max Feldgroesse bringen (beide Seiten
+                    // gleichmaessig), damit nie eine Seite weiter ragt.
+                    int wantedW = maxX - minX + 1;
+                    if (wantedW > p.maxWidth)
+                    {
+                        int excess = wantedW - p.maxWidth;
+                        minX += excess / 2;
+                        maxX -= excess - excess / 2;
+                    }
+                    else if (wantedW < p.minWidth)
+                    {
+                        int missing = p.minWidth - wantedW;
+                        minX -= missing / 2;
+                        maxX += missing - missing / 2;
+                    }
+
+                    int wantedH = maxZ - minZ + 1;
+                    if (wantedH > p.maxHeight)
+                    {
+                        int excess = wantedH - p.maxHeight;
+                        minZ += excess / 2;
+                        maxZ -= excess - excess / 2;
+                    }
+                    else if (wantedH < p.minHeight)
+                    {
+                        int missing = p.minHeight - wantedH;
+                        minZ -= missing / 2;
+                        maxZ += missing - missing / 2;
+                    }
+
+                    shape = RectShieldShape.BuildFromWorldBounds(minX, minZ, maxX, maxZ, parent.Map);
                     shapeDirty = false;
                     UpdatePowerDraw(force: true);
                     RectShieldLog.Debug("Rumpf-Feld: " + lastHull.Cells + " Platten, "
@@ -397,6 +430,7 @@ namespace RectShield
             offsetForward = 0;
             perimeterOnly = false;
             autoFit = Props.autoFitSubstructure;
+            hullPadding = Math.Max(0, Math.Min(4, Props.substructurePadding));
             autoFitCounter = 0;
             shapeDirty = true;
         }
@@ -415,6 +449,13 @@ namespace RectShield
         {
             autoFit = !autoFit;
             autoFitCounter = 0;
+            shapeDirty = true;
+        }
+
+        /// <summary>Rand um die aeussersten Rumpfplatten: 0..4 Kacheln, zyklisch.</summary>
+        public void CycleHullPadding()
+        {
+            hullPadding = (hullPadding + 1) % 5;
             shapeDirty = true;
         }
 
@@ -457,7 +498,7 @@ namespace RectShield
                 : (Active ? RectShieldStrings.Online : RectShieldStrings.Offline);
 
             string fit = autoFit && Props.autoFitSubstructure
-                ? RectShieldStrings.InspectFit(lastHull.Cells, lastHull.Found)
+                ? RectShieldStrings.InspectFit(lastHull.Cells, hullPadding, lastHull.Found)
                 : "";
 
             return RectShieldStrings.Inspect(

@@ -60,6 +60,13 @@ namespace RectShield
                     RectShieldStrings.DescFit,
                     comp.ToggleAutoFit,
                     iconFit);
+
+                // Rand um die aeussersten Platten: 0 = buendig, 1..4 = Abstand.
+                yield return Action(
+                    RectShieldStrings.GizmoPadding(comp.HullPadding),
+                    RectShieldStrings.DescPadding,
+                    comp.CycleHullPadding,
+                    iconPlus);
             }
 
             if (!comp.CanResize)

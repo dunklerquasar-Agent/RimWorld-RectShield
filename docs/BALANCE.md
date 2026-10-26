@@ -1,4 +1,4 @@
-# Balance-Werte (v0.3.0)
+# Balance-Werte (v0.3.1)
 
 Alle Werte stehen in `Common/Defs/ThingDefs_Buildings/Buildings_RectShield.xml` und können dort ohne Neukompilieren geändert werden.
 
@@ -61,10 +61,12 @@ Gemeinsam: `blocksShots = true`, `blocksIndirectFire = false`, `blocksSkyfallers
 **Gravschiff-Modus (Auto-Fit):** Mit `<autoFitSubstructure>true</autoFitSubstructure>`
 scannt der Comp alle 180 Ticks `map.terrainGrid.FoundationAt(cell)` und prüft
 `TerrainDef.HasTag("Substructure")`. Aus der Bounding Box aller gefundenen Platten
-wird das Feld gebildet – mit `substructurePadding = 2` Kacheln Abstand und
-zentriert auf das **Rumpfzentrum** (nicht auf den Generator). Bleibt das
-Odyssey-DLC aus, werden keine Platten gefunden und das manuelle Feld greift.
-Per Gizmo „Rumpf-Anpassung: an/aus" abschaltbar.
+wird das Feld gebildet – **direkt aus den Plattengrenzen** (`MinX-pad` … `MaxX+pad`),
+also zwingend symmetrisch. Standard ist `substructurePadding = 0`: das Feld liegt
+**buendig** auf den aeussersten Platten. Der Gizmo „Rand: N Kacheln" stellt 0–4
+Kacheln Abstand ein (im Savegame gespeichert). Bleibt das Odyssey-DLC aus, werden
+keine Platten gefunden und das manuelle Feld greift. Per Gizmo
+„Rumpf-Anpassung: an/aus" abschaltbar.
 
 **Designabsicht:** Der Gravship Shield ist kein einfaches „Mk II + 10". Der höhere Grundbedarf (500 W) macht ihn auf kleinen Feldern teurer, aber ab ~200 geschützten Kacheln ist er **günstiger** als Mk II. Dazu kommen fast doppelte Energiereserve, ~70 % mehr Regeneration und ein kürzerer Reboot. Der Preis sind hohe Baukosten, Baufähigkeit 12 und 2600 Forschungspunkte.
 
