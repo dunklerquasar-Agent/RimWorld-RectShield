@@ -154,7 +154,7 @@
   <!-- ===================================================================== -->
 
   <ThingDef ParentName="RectShieldBuildingBase">
-    <defName>RectShield_Mk2</defName>
+    <defName>RectShield_MkII</defName>
     <label>RectShield Mk II (adjustable)</label>
     <description>A freely configurable rectangular shield. Blocks direct fire, indirect fire, drop pods and meteorites. Larger fields consume more power.</description>
     <graphicData>
@@ -211,7 +211,7 @@
   <!-- ===================================================================== -->
 
   <ThingDef ParentName="RectShieldBuildingBase">
-    <defName>RectShield_Mk3</defName>
+    <defName>RectShield_MkIII</defName>
     <label>RectShield Mk III (high-tech)</label>
     <description>An advanced high-tech rectangular shield, configurable up to 51 x 51 tiles. Blocks direct and indirect fire, drop pods and meteorites. Higher energy capacity, faster recharge, shorter reboot and more efficient area power than Mk II.</description>
     <graphicData>

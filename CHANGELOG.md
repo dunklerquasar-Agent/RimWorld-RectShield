@@ -1,9 +1,52 @@
 # Changelog
 
+## [0.2.1] - 2026-10-26 - Hotfix: ThingDef-defNames endeten auf einer Ziffer
+
+### Fix (P0 - Spielstart)
+RimWorld 1.6 meldete beim Laden für **fünf Defs** einen Config-Fehler:
+
+```
+Config error in RectShield_Mk2: ends with a numerical digit, which is not allowed on ThingDefs.
+Config error in RectShield_Mk3: ends with a numerical digit, which is not allowed on ThingDefs.
+Config error in Blueprint_RectShield_Mk2 / Frame_RectShield_Mk2 / ...
+```
+
+Ursache: `ThingDef.ConfigErrors()` verbietet defNames, deren letztes Zeichen eine
+Ziffer ist. Die drei `Blueprint_`/`Frame_/`Blueprint_Install_`-Meldungen pro Stufe
+sind **Folgefehler** derselben Ursache, weil RimWorld diese Defs automatisch aus
+dem Gebäude-defName ableitet.
+
+Geändert (nur die Gebäude-defNames und ihre direkten Referenzen):
+
+| Alt | Neu |
+|---|---|
+| `RectShield_Mk2` | **`RectShield_MkII`** |
+| `RectShield_Mk3` | **`RectShield_MkIII`** |
+
+Angepasst: `Buildings_RectShield.xml`, deutsche DefInjected-Keys (`ThingDef`),
+`Tests/validate_xml.py`, `Tests/check_structure.py`, `docs/PLAN.md`,
+`docs/GRAPHICS.md`. **Nicht** geändert: Forschungs-defNames
+(`ResearchProjectDef` hat diese Regel nicht), die Enum-Werte
+`<tier>Mk2</tier>` / `<tier>Mk3</tier>`, Sprite-Dateinamen und alle Labels.
+Die DLLs sind deshalb byte-identisch zu v0.2.0.
+
+`Tests/validate_xml.py` prüft jetzt zusätzlich, dass **kein** ThingDef-defName
+auf eine Ziffer endet, damit der Fehler nicht wiederkommt.
+
+> ⚠️ **Save-Hinweis:** Wer mit v0.2.0 bereits Mk-II- oder Mk-III-Generatoren in
+> einem Spielstand platziert hat, findet diese nach dem Update nicht wieder
+> (defName geändert). Bei einem frischen Test-Save ist das irrelevant.
+
+### Fund im echten Spiel-Log
+Gemeldet unter RimWorld `1.6.4871 rev591` mit Harmony 2.4.3. Alle übrigen
+Meldungen im Log (Workshop-Ordner fehlen, VWE-SoundDefs, VEF-StatDefs,
+KCSG-Symbole, Tastenkonflikt `Z`, 105 deutsche Übersetzungsfehler) stammen von
+anderen Mods und haben nichts mit RectShield zu tun.
+
 ## [0.2.0] - 2026-10-26 - Drei Ausbaustufen mit Mk III High-Tech
 
 ### Neu
-- **Dritte Stufe `RectShield_Mk3`** (High-Tech-Schild) als echter neuer Gebäude-Def:
+- **Dritte Stufe `RectShield_MkIII`** (High-Tech-Schild) als echter neuer Gebäude-Def:
   frei einstellbar bis **51×51** Kacheln (Standard 17×13), **2400** Energie,
   **1,2** Regen/Tick, **900** Ticks Reboot, 120 Energie pro Drop Pod.
   Blockt wie Mk II direktes/indirektes Feuer und Skyfaller.

@@ -100,3 +100,33 @@ Konsequenz: Ein `<iconPath>` im ResearchProjectDef erzeugt einen XML-Ladefehler.
 - `CompShield.CompAllowVerbCast`: KI schießt ggf. noch auf eigene Schilde.
 - `GenDraw.DrawRadiusRing`: Vanilla-Radiusringe anderer Mods bleiben unverändert.
 - `PlaceWorker.DrawGhost(...)`: Vorschau **beim Platzieren** (die Umrandung erscheint erst nach dem Bau).
+
+---
+
+## Ergänzung 26.10.2026 – ThingDef-defNames dürfen nicht auf Ziffern enden
+
+Beim ersten echten Spielstart (RimWorld `1.6.4871 rev591`) meldete
+`Verse.DefDatabase<ThingDef>.ErrorCheckAllDefs()`:
+
+```
+Config error in RectShield_Mk2: ends with a numerical digit, which is not allowed on ThingDefs.
+Config error in RectShield_Mk3: ends with a numerical digit, which is not allowed on ThingDefs.
+Config error in Blueprint_RectShield_Mk2 / Frame_RectShield_Mk2 / Blueprint_Install_RectShield_Mk2 ...
+```
+
+**Regel:** `ThingDef.ConfigErrors()` prüft `char.IsDigit(defName.Last())` und
+lehnt Ziffern am Ende ab. RimWorld generiert aus jedem Gebäude-defName
+automatisch `Blueprint_<name>`, `Frame_<name>` und `Blueprint_Install_<name>` –
+deshalb erscheint der Fehler **mehrfach** pro betroffenem Def.
+
+**Fix (v0.2.1):** `RectShield_Mk2` → `RectShield_MkII`,
+`RectShield_Mk3` → `RectShield_MkIII` (römische Ziffern, enden auf Buchstaben).
+`RectShield_Mk1_S/M/L` waren nie betroffen, weil sie auf `S`/`M`/`L` enden.
+
+**Nicht betroffen:** `ResearchProjectDef`-defNames (z. B.
+`RectShield_Mk2_Research`) – die Regel gilt nur für `ThingDef`. Auch die
+Enum-Werte `<tier>Mk2</tier>` / `<tier>Mk3</tier>` in den Comp-Properties
+bleiben unverändert; das sind C#-Enum-Namen, keine defNames.
+
+`Tests/validate_xml.py` enthält seit v0.2.1 einen Regressionstest, der alle
+`ThingDef`-defNames im `Common/Defs/`-Baum auf ein numerisches Endzeichen prüft.

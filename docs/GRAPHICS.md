@@ -7,8 +7,8 @@ Seit v0.2.0 hat jede **Ausbaustufe** ein eigenes, KI-generiertes Top-Down-Sprite
 | Stufe | Def(s) | Sprite (192×192 RGBA) | Icon (64×64) | Eindruck |
 |---|---|---|---|---|
 | **1 – Industriell** | `RectShield_Mk1_S/M/L` | `RectShield_Gen_Industrial.png` | `UI/Icons/Buildings/RectShield_Gen_Industrial.png` | Genieteter Stahl, vier Emitterspulen, orangener Warnstreifen, glühender Bernstein-Kern |
-| **2 – Militärisch** | `RectShield_Mk2` | `RectShield_Gen_Military.png` | `UI/Icons/Buildings/RectShield_Gen_Military.png` | Kantige Panzerung mit Eckbastionen, rote Energieleitungen, rubinroter Diamant-Kern |
-| **3 – High-Tech** | `RectShield_Mk3` | `RectShield_Gen_HighTech.png` | `UI/Icons/Buildings/RectShield_Gen_HighTech.png` | Weiße Keramikpanzerung, cyan Leiterbahnen, türkiser Hexagonal-Kern, Satelliten-Emitter |
+| **2 – Militärisch** | `RectShield_MkII` | `RectShield_Gen_Military.png` | `UI/Icons/Buildings/RectShield_Gen_Military.png` | Kantige Panzerung mit Eckbastionen, rote Energieleitungen, rubinroter Diamant-Kern |
+| **3 – High-Tech** | `RectShield_MkIII` | `RectShield_Gen_HighTech.png` | `UI/Icons/Buildings/RectShield_Gen_HighTech.png` | Weiße Keramikpanzerung, cyan Leiterbahnen, türkiser Hexagonal-Kern, Satelliten-Emitter |
 
 Alle drei Mk-I-Größen teilen sich bewusst dasselbe Industriell-Sprite: die Stufe ist der visuelle Anker, die Feldgröße unterscheidet sich über das Overlay und den Inspect-String. Wer will, kann S/M/L durch drei Varianten desselben Designs ersetzen.
 

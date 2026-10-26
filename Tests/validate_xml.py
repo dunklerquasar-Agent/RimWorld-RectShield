@@ -39,6 +39,18 @@ for path in xml_files:
             errors.append(f"{rel}: doppelter defName '{name}' (auch in {seen_defnames[name]})")
         seen_defnames[name] = path
 
+# ThingDef.ConfigErrors(): defName darf nicht auf eine Ziffer enden, sonst
+# erzeugt RimWorld Fehler fuer das ThingDef UND die automatisch generierten
+# Blueprint_/Frame_/Blueprint_Install_-Defs (v0.2.1 Hotfix).
+for def_file in (ROOT / "Common" / "Defs").rglob("*.xml"):
+    def_root = ET.parse(def_file).getroot()
+    for thing in def_root.findall("ThingDef"):
+        name = thing.findtext("defName")
+        if name and name[-1].isdigit():
+            errors.append(
+                f"{def_file.relative_to(ROOT)}: ThingDef '{name}' endet auf eine Ziffer "
+                "- in RimWorld nicht erlaubt")
+
 # About.xml: beide Zielversionen + Harmony-Dependency
 about = ROOT / "About" / "About.xml"
 if about.exists():
@@ -78,7 +90,23 @@ for def_file in (ROOT / "Common" / "Defs").rglob("*.xml"):
             if not (textures_root / f"{rel_path}.png").exists():
                 errors.append(f"{def_file.relative_to(ROOT)}: {tag} fehlt: {rel_path}.png")
 
-# Forschungs-Tab muss von beiden Projekten referenziert werden.
+# DefInjected-Keys muessen zu einem existierenden defName passen, sonst zaehlt
+# RimWorld das als deutscher Uebersetzungsfehler ("Translation data ... has N errors").
+all_defnames = set(seen_defnames.keys())
+di_root = ROOT / "Common" / "Languages" / "German" / "DefInjected"
+for di_file in sorted(di_root.rglob("*.xml")):
+    di = ET.parse(di_file).getroot()
+    for child in di:
+        key = child.tag
+        if "." not in key:
+            continue
+        defname = key.split(".", 1)[0]
+        if defname not in all_defnames:
+            errors.append(
+                f"{di_file.relative_to(ROOT)}: Key '{key}' verweist auf "
+                f"unbekannten defName '{defname}'")
+
+# Forschungs-Tab muss von allen drei Projekten referenziert werden.
 research = ROOT / "Common/Defs/ResearchProjectDefs/Research_RectShield.xml"
 if research.exists():
     tabs = [e.text.strip() for e in ET.parse(research).getroot().iter("tab") if e.text]
@@ -100,7 +128,7 @@ for missing in sorted(en - de):
 for extra in sorted(de - en):
     errors.append(f"Deutscher Key ohne englisches Pendant: {extra}")
 
-for required_def in ("RectShield_Mk1_S", "RectShield_Mk2", "RectShield_Mk3",
+for required_def in ("RectShield_Mk1_S", "RectShield_MkII", "RectShield_MkIII",
                      "RectShield_Mk1_Research", "RectShield_Mk2_Research",
                      "RectShield_Mk3_Research"):
     if required_def not in seen_defnames:

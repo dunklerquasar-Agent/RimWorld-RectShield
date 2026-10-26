@@ -1,4 +1,4 @@
-# Balance-Werte (v0.2.0)
+# Balance-Werte (v0.2.1)
 
 Alle Werte stehen in `Common/Defs/ThingDefs_Buildings/Buildings_RectShield.xml` und können dort ohne Neukompilieren geändert werden.
 

@@ -36,8 +36,8 @@ Der Wunsch nach drei eigenen Generator-Ansichten wurde als **echte dritte Stufe*
 | Stufe | Def | Grafik | Neuerung gegenüber Vorgänger |
 |---|---|---|---|
 | 1 | `RectShield_Mk1_S/M/L` | Industriell | feste Größen, nur Direktfeuer |
-| 2 | `RectShield_Mk2` | Militärisch | anpassbar, Deckel gegen Skyfaller, 3 W/Kachel |
-| 3 | `RectShield_Mk3` | High-Tech | bis 51×51, 2400 Energie, 1,2 Regen, **2 W/Kachel**, Reboot 900 |
+| 2 | `RectShield_MkII` | Militärisch | anpassbar, Deckel gegen Skyfaller, 3 W/Kachel |
+| 3 | `RectShield_MkIII` | High-Tech | bis 51×51, 2400 Energie, 1,2 Regen, **2 W/Kachel**, Reboot 900 |
 
 Damit ist `RectShieldTier` dreistufig (`Mk1/Mk2/Mk3`), `CanResize` gilt für alle nicht-fixen Defs, und die Forschung hat einen dritten Knoten bei (3 / 1.4). Die Balance-Begründung (Mk III ist erst ab ~200 Kacheln effizienter als Mk II) steht in `docs/BALANCE.md`. Offen bleibt unverändert: Ingame-Smoke-Test, Workshop-Upload, CE-Kompatibilität.
 

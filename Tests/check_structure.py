@@ -104,7 +104,7 @@ buildings_text = (ROOT / "Common/Defs/ThingDefs_Buildings/Buildings_RectShield.x
 research_text = (ROOT / "Common/Defs/ResearchProjectDefs/Research_RectShield.xml").read_text(encoding="utf-8")
 if "Mk3 = 2" not in tier_file:
     build_issues.append("RectShieldTier.cs: Mk3 fehlt")
-if "<defName>RectShield_Mk3</defName>" not in buildings_text:
+if "<defName>RectShield_MkIII</defName>" not in buildings_text:
     build_issues.append("Buildings_RectShield.xml: Mk3-Def fehlt")
 if "<defName>RectShield_Mk3_Research</defName>" not in research_text:
     build_issues.append("Research_RectShield.xml: Mk3-Forschung fehlt")
