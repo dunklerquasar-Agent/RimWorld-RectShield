@@ -21,8 +21,15 @@ namespace RectShield
 
         private HashSet<IntVec3> customCells;
         private List<IntVec3> edgeCache;
+        private List<IntVec3> diagonalLinks;
 
         public bool HasCustomCells => customCells != null && customCells.Count > 0;
+
+        /// <summary>
+        /// Paarweise Zellmittelpunkte von Schildteilen, die sich nur diagonal
+        /// beruehren. Werden als zusaetzliche Linien gezeichnet (Wand-Link-Prinzip).
+        /// </summary>
+        public IReadOnlyList<IntVec3> DiagonalLinks => diagonalLinks;
 
         public int Width => IsEmpty ? 0 : MaxX - MinX + 1;
         public int Height => IsEmpty ? 0 : MaxZ - MinZ + 1;
@@ -119,6 +126,7 @@ namespace RectShield
             {
                 result.IsEmpty = true;
                 result.edgeCache = new List<IntVec3>();
+                result.diagonalLinks = new List<IntVec3>();
                 return result;
             }
 
@@ -127,6 +135,7 @@ namespace RectShield
             int maxX = int.MinValue;
             int maxZ = int.MinValue;
             var edges = new List<IntVec3>();
+            var diagonals = new List<IntVec3>();
 
             foreach (IntVec3 c in set)
             {
@@ -143,6 +152,27 @@ namespace RectShield
                 {
                     edges.Add(c);
                 }
+
+                // Diagonale Verbindung (Wand-Link-Prinzip):
+                // Muster A: c und c+NE drin, c+E und c+N draussen.
+                var ne = new IntVec3(c.x + 1, 0, c.z + 1);
+                if (set.Contains(ne) &&
+                    !set.Contains(new IntVec3(c.x + 1, 0, c.z)) &&
+                    !set.Contains(new IntVec3(c.x, 0, c.z + 1)))
+                {
+                    diagonals.Add(c);
+                    diagonals.Add(ne);
+                }
+
+                // Muster B: c und c+SE drin, c+E und c+S draussen.
+                var se = new IntVec3(c.x + 1, 0, c.z - 1);
+                if (set.Contains(se) &&
+                    !set.Contains(new IntVec3(c.x + 1, 0, c.z)) &&
+                    !set.Contains(new IntVec3(c.x, 0, c.z - 1)))
+                {
+                    diagonals.Add(c);
+                    diagonals.Add(se);
+                }
             }
 
             result.MinX = minX;
@@ -151,6 +181,7 @@ namespace RectShield
             result.MaxZ = maxZ;
             result.IsEmpty = false;
             result.edgeCache = edges;
+            result.diagonalLinks = diagonals;
             return result;
         }
 

@@ -40,6 +40,7 @@
   <RS_GizmoPadding>Rand: {0} Kacheln</RS_GizmoPadding>
   <RS_DescPadding>Erweitert die Rumpfform um N Kacheln in alle Richtungen (Form bleibt erhalten). 0 = genau die Platten. Klicken fuer 0-4.</RS_DescPadding>
   <RS_FitNoPlates> | Rumpf: keine Platten gefunden</RS_FitNoPlates>
+  <RS_SettingsHitFlash>Bei Treffer das ganze Schildfeld kurz aufleuchten lassen</RS_SettingsHitFlash>
   <RS_SettingsHeader>RectShield-Einstellungen</RS_SettingsHeader>
   <RS_SettingsOverlay>Dezente Umrandung fuer alle aktiven Schilde anzeigen</RS_SettingsOverlay>
   <RS_SettingsFriendlyPods>Mk II/Mk III blocken auch eigene und neutrale Drop Pods</RS_SettingsFriendlyPods>

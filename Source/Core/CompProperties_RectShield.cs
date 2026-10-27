@@ -31,6 +31,13 @@ namespace RectShield
         public float basePowerW = 150f;
         public float wattsPerCell = 0f;        // Mk1: 0 (fix), Mk2: 3.0, Mk3: 2.0
 
+        // --- Visuelle Effekte ---
+        // Bei einem Treffer leuchtet das GANZE Feld kurz leicht durchscheinend auf.
+        public int flashTicks = 18;            // Dauer des Aufleuchtens in Ticks
+        public float flashAlpha = 0.30f;       // maximale Deckkraft (0..1)
+        // Diagonale Ecken der Rumpfform wie verlinkte Waende verbinden.
+        public bool diagonalLinks = true;
+
         // --- Gravschiff-Modus (nur Stufe 3) ---
         // Passt das Feld automatisch an die Odyssey-Substructure-Platten an.
         public bool autoFitSubstructure = false;

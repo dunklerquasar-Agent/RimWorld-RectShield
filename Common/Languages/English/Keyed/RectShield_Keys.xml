@@ -40,6 +40,7 @@
   <RS_GizmoPadding>Margin: {0} tiles</RS_GizmoPadding>
   <RS_DescPadding>Expands the hull shape outwards by N tiles in every direction (shape is preserved). 0 = exactly the plates. Click to cycle 0-4.</RS_DescPadding>
   <RS_FitNoPlates> | hull fit: no plates found</RS_FitNoPlates>
+  <RS_SettingsHitFlash>Flash the whole shield field briefly when hit</RS_SettingsHitFlash>
   <RS_SettingsHeader>RectShield settings</RS_SettingsHeader>
   <RS_SettingsOverlay>Show a faint outline for all active shields</RS_SettingsOverlay>
   <RS_SettingsFriendlyPods>Mk II/Mk III also block friendly and neutral drop pods</RS_SettingsFriendlyPods>

@@ -20,6 +20,7 @@ required = [
     "Source/Core/CompRectShield.cs",
     "Source/Core/RectShieldShape.cs",
     "Source/Core/RectShieldSubstructure.cs",
+    "Source/UI/RectShieldDraw.cs",
     "Source/Core/RectShieldMapComponent.cs",
     "Source/Patches/HarmonyInit.cs",
     "Common/Defs/ThingDefs_Buildings/Buildings_RectShield.xml",
@@ -126,6 +127,9 @@ if "BuildFromCells" not in shape_src or "HasCustomCells" not in shape_src:
     build_issues.append("RectShieldShape.cs: exakte Rumpfform (Zellmenge) fehlt")
 if "Dilate" not in (ROOT / "Source/Core/RectShieldSubstructure.cs").read_text(encoding="utf-8"):
     build_issues.append("RectShieldSubstructure.cs: Dilatation fehlt")
+draw_src = (ROOT / "Source/UI/RectShieldDraw.cs").read_text(encoding="utf-8")
+if "DrawFilledCells" not in draw_src or "DrawDiagonalLinks" not in draw_src:
+    build_issues.append("RectShieldDraw.cs: Flash oder Diagonallinien fehlen")
 for fixed in ("<fixedWidth>11</fixedWidth>", "<fixedWidth>17</fixedWidth>",
               "<fixedWidth>23</fixedWidth>"):
     if fixed not in buildings_text:

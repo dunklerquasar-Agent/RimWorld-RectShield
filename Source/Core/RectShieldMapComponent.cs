@@ -213,7 +213,33 @@ namespace RectShield
                     Color color = RectShieldUtil.ColorFor(shield.Tier, true);
                     color.a = 0.25f;
                     GenDraw.DrawFieldEdges(RectShieldUtil.ToList(shield.Shape.EdgeCells()), color);
+
+                    // Dauerhafte diagonale Verbindungslinien im Rumpf-Modus.
+                    if (shield.Props.diagonalLinks && shield.Shape.HasCustomCells)
+                    {
+                        RectShieldDraw.DrawDiagonalLinks(shield.Shape.DiagonalLinks, color);
+                    }
+
                     drawn++;
+                }
+
+                // Treffer-Flash: ganzes Feld kurz durchscheinend, auch ohne Auswahl.
+                if (RectShieldMod.Settings != null && RectShieldMod.Settings.ShowHitFlash)
+                {
+                    int flashes = 0;
+                    for (int i = 0; i < shields.Count && flashes < 8; i++)
+                    {
+                        CompRectShield shield = shields[i];
+                        if (shield == null || !shield.IsFlashing || shield.Shape.IsEmpty)
+                        {
+                            continue;
+                        }
+
+                        Color flash = RectShieldUtil.ColorFor(shield.Tier, true);
+                        flash.a = shield.Props.flashAlpha * shield.FlashFactor;
+                        RectShieldDraw.DrawFilledCells(shield.Shape.AllCells(), flash);
+                        flashes++;
+                    }
                 }
             }
             catch (Exception e)

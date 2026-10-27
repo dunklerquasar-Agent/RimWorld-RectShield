@@ -125,7 +125,9 @@ Wenn du nur **1.6** brauchst, lösche `1.7/` und entferne `<li>1.7</li>` aus `Ab
 | `Feld zurücksetzen` | Standard 13×9, Versatz 0, Volumen |
 | `Anzeige umschalten` | Umrandung ein/aus |
 
-**Mod-Einstellungen:** dauerhafte, dezente Umrandung aller Schilde; eigene/neutrale Drop Pods ebenfalls blocken; Strom- und Energiekosten-Multiplikatoren; Debug-Log.
+**Mod-Einstellungen:** dauerhafte, dezente Umrandung aller Schilde; **ganzflächiges Aufleuchten bei Treffern** (Standard an); eigene/neutrale Drop Pods ebenfalls blocken; Strom- und Energiekosten-Multiplikatoren; Debug-Log.
+
+**Visuelle Effekte:** Die Schildkanten verbinden sich an diagonalen Ecken wie Vanilla-Wände. Bei jedem abgewehrten Schuss oder Drop Pod leuchtet das **komplette Feld** kurz leicht durchscheinend auf (18 Ticks, weich ausblendend) – auch ohne Auswahl des Gebäudes.
 
 Bei Überlastung (`Energie ≤ 0`) schaltet das Feld ab und startet nach 900–1200 Ticks mit 25 % Energie neu (Gravship Shield: 900 Ticks). EMP-Treffer entziehen überproportional Energie. Standardfeld Gravship Shield: 21×21, Reboot 900 Ticks, Baukosten 450 Stahl / 220 Plasteel / 24 Komponenten / 60 Gold, Baufähigkeit 12.
 

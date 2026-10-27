@@ -1,5 +1,61 @@
 # Changelog
 
+## [0.5.0] - 2026-10-27 - Diagonale Schildkanten + ganzflaechiger Treffer-Flash
+
+Zwei visuelle Wünsche aus dem Spieltest.
+
+### 1. Diagonale Ecken verbinden (Wand-Link-Prinzip)
+Wenn sich zwei Schildteile nur **ueber eine Ecke** beruehren, wurde bisher nur
+ein Kreuz aus achsenparallelen Kanten gezeichnet. Jetzt wird dort eine
+**diagonale Linie** zwischen den beiden Zellmittelpunkten gezeichnet – analog
+zu diagonal verlinkten Waenden in RimWorld.
+
+- `RectShieldShape` berechnet beim Aufbau einer Zellmenge die Paare
+  `c` / `c+NE` bzw. `c` / `c+SE` (jeweils nur wenn die beiden orthogonalen
+  Nachbarn fehlen) und cacht sie in `DiagonalLinks`.
+- `RectShieldDraw.DrawDiagonalLinks(...)` zeichnet sie mit
+  `GenDraw.DrawLineBetween(A, B, Material, 0.16f)`.
+- Getestet: zwei diagonale Einzelzellen (NE und SE) → je 1 Verbindung;
+  3 getrennte diagonal liegende Plateaus → 3 Verbindungen; L-Form, Ring und
+  volles Quadrat → 0 Verbindungen (keine False Positives).
+- Gilt fuer Auswahl-Overlay **und** dauerhaftes Overlay; abschaltbar ueber
+  `<diagonalLinks>false</diagonalLinks>` im Comp.
+
+### 2. Ganzes Feld leuchtet bei einem Treffer auf
+Bisher gab es bei einem Einschlag nur Funken am Trefferpunkt und die
+dauerhaft 1 Kachel breite Randlinie. Jetzt wird bei **jedem** abgewehrten
+Projektil und jedem geblockten Skyfaller das **komplette Schildfeld** kurz
+leicht durchscheinend ueberzogen (Standard 18 Ticks, maximale Deckkraft 0.30,
+weich ausblendend).
+
+- `CompRectShield` haelt `flashTicksLeft` / `IsFlashing` / `FlashFactor`.
+  `Notify_Impact` und `Notify_SkyfallerBlocked` starten den Flash; `CompTick`
+  zaehlt ihn auch waehrend Reboot/Offline herunter.
+- `RectShieldDraw.DrawFilledCells(...)` legt mit
+  `Graphics.DrawMeshInstanced(MeshPool.plane10, ...)` halbtransparente Quads
+  ueber alle Zellen – in Batches von 512, damit auch ein 2000-Platten-Schiff
+  funktioniert (Unity-Limit: 1023 Instanzen pro Aufruf).
+- Gezeichnet in `MapComponentDraw`, also **auch ohne Auswahl** des Gebäudes.
+  Maximal 8 gleichzeitige Flashes.
+- Neue Mod-Einstellung **„Bei Treffer das ganze Schildfeld kurz aufleuchten
+  lassen"** (DE) / „Flash the whole shield field briefly when hit" (EN),
+  gespeichert in `rs_showHitFlash`, Standard **an**.
+- Parameter pro ThingDef: `flashTicks`, `flashAlpha`, `diagonalLinks`.
+
+### Technische Hinweise
+Alle Zeichenaufrufe sind in try/catch mit `ErrorOnce` gekapselt – faellt eine
+Unity-API in einer anderen RimWorld-Version weg, bleibt das Spiel spielbar und
+es gibt genau eine Log-Meldung statt eines Dauerfehlers. Materialien werden
+einmalig erzeugt und pro Frame nur umgefaerbt (kein `MaterialPool`-Leak durch
+staendig wechselnde Farben).
+
+### Verifikation
+API-Recherche gegen das 1.6-Dekompilat (`Verse/CellRenderer.cs`,
+`Verse/GenDraw.cs`, `Verse/ShaderDatabase.cs`):
+`ShaderDatabase.Transparent`, `BaseContent.WhiteTex`, `MeshPool.plane10`,
+`AltitudeLayer.MetaOverlays`, `GenDraw.DrawLineBetween` und
+`MaterialPool.MatFrom` sind vorhanden. C# geaendert -> DLLs fuer 1.6/1.7
+in GitHub Actions neu gebaut.
 ## [0.4.1] - 2026-10-27 - Klarstellung + Robustheit fuer beliebige Rumpfformen
 
 Die L-Form aus v0.4.0 war nur ein **Beispiel**. Der Schild soll **jede Form**

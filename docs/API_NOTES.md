@@ -147,6 +147,25 @@ Geprüft gegen das 1.6-Dekompilat ([Dyyrlysh/RimworldDecompile](https://github.c
 | `Verse.Def.HasTag(string)` | Stabile Basis-API; in `RectShieldSubstructure` bewusst **statt** `IsSubstructure` verwendet, um keine Odyssey-Abhängigkeit zu kompilieren. |
 | `RimWorld.GravshipUtility.GetConnectedSubstructure(Building_GravEngine, HashSet<IntVec3>, int, bool)` | Vanilla-Floodfill ab dem Grav-Engine. **Nicht verwendet**, weil es einen Odyssey-Typ voraussetzt und nur *verbundene* Platten liefert. Unser Scan nimmt alle Platten auf der Map. |
 
+**Zeichen-APIs (v0.5.0)** – geprueft gegen das 1.6-Dekompilat
+`Verse/CellRenderer.cs`, `Verse/GenDraw.cs`, `Verse/ShaderDatabase.cs`:
+
+| API | Signatur / Nutzung |
+|---|---|
+| `Verse.ShaderDatabase.Transparent` | `Shader` fuer halbtransparente Map-Overlays. |
+| `Verse.BaseContent.WhiteTex` | 1x1-Textur als `mainTexture` fuer eigene Materialien. |
+| `Verse.MeshPool.plane10` | Einheits-Quad; wird von `Graphics.DrawMeshInstanced` genutzt. |
+| `Verse.GenDraw.DrawLineBetween(Vector3 A, Vector3 B, Material mat, float lineWidth)` | Zeichnet Linien in **beliebiger** Richtung (auch 45°); setzt intern `A.y = B.y`. |
+| `Verse.GenDraw.DrawFieldEdges(List<IntVec3>, Color, float?, HashSet<IntVec3>, int)` | Zeichnet nur achsenparallele Zellkanten – deshalb die eigenen Diagonallinien. |
+| `Verse.CellRenderer.RenderCell(IntVec3, Material)` | Alternative Einzelzell-Quad; **nicht verwendet**, weil es pro Zelle einen Draw Call erzeugt. |
+| `UnityEngine.Graphics.DrawMeshInstanced(Mesh, int, Material, List<Matrix4x4>)` | Max. **1023** Instanzen pro Aufruf -> Batches zu 512. |
+| `IntVec3.ToVector3ShiftedWithAltitude(AltitudeLayer.MetaOverlays)` | Position auf der Overlay-Ebene. |
+
+Wichtig: `MaterialPool.MatFrom(texture, shader, color, queue)` cacht Materialien
+nach Farbe. Wuerde man die Farbe pro Frame aendern (Fade-out), wuerde der Cache
+mit Materialien geflutet. Deshalb ein eigenes, einmalig erzeugtes `Material`,
+dessen `.color` pro Frame gesetzt wird.
+
 **Beliebige Formen (v0.4.1):** Es gibt keine Form-Annahme im Code – die
 `HashSet<IntVec3>` nimmt jede Anordnung auf. Getestet: L, U, T, Kreuz, Ring mit
 Innenhof, 3 getrennte Plateaus, organische Zufallsform und 2000 Platten.

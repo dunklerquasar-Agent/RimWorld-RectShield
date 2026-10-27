@@ -55,6 +55,7 @@ namespace RectShield
         public static string SettingsOverlay => T("RS_SettingsOverlay");
         public static string SettingsFriendlyPods => T("RS_SettingsFriendlyPods");
         public static string SettingsDebug => T("RS_SettingsDebug");
+        public static string SettingsHitFlash => T("RS_SettingsHitFlash");
         public static string SettingsHint => T("RS_SettingsHint");
         public static string SettingsPower(float value) => string.Format(T("RS_SettingsPower"), value.ToString("0.00"));
         public static string SettingsEnergy(float value) => string.Format(T("RS_SettingsEnergy"), value.ToString("0.00"));

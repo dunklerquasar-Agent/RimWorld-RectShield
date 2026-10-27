@@ -10,7 +10,18 @@ Seit v0.2.0 hat jede **Ausbaustufe** ein eigenes, KI-generiertes Top-Down-Sprite
 | **2 – Militärisch** | `RectShield_MkII` | `RectShield_Gen_Military.png` | `UI/Icons/Buildings/RectShield_Gen_Military.png` | Kantige Panzerung mit Eckbastionen, rote Energieleitungen, rubinroter Diamant-Kern |
 | **3 – Gravship Shield** | `RectShield_MkIII` | `RectShield_Gen_HighTech.png` | `UI/Icons/Buildings/RectShield_Gen_HighTech.png` | Weiße Keramikpanzerung, cyan Leiterbahnen, türkiser Hexagonal-Kern, Satelliten-Emitter |
 
-Alle drei Mk-I-Größen teilen sich bewusst dasselbe Industriell-Sprite: die Stufe ist der visuelle Anker, die Feldgröße unterscheidet sich über das Overlay und den Inspect-String. Seit v0.3.0 sind die drei festen Felder **quadratisch** (11×11 / 17×17 / 23×23), damit sie symmetrisch um den Generator liegen. Die Größen-Gizmos zeigen jetzt echte +/−-Grafiken, und Stufe 3 heißt „Gravship Shield". Seit v0.3.1 liegt dessen Feld **symmetrisch bündig** an den Rumpfplatten; der Rand ist per Gizmo auf 0–4 Kacheln einstellbar. Seit v0.4.0 zeichnet `DrawFieldEdges` die **echte Außenkontur beliebiger Formen** (L, U, T, Ringe, getrennte Plateaus) statt einer Box. Wer will, kann S/M/L durch drei Varianten desselben Designs ersetzen.
+Alle drei Mk-I-Größen teilen sich bewusst dasselbe Industriell-Sprite: die Stufe ist der visuelle Anker, die Feldgröße unterscheidet sich über das Overlay und den Inspect-String. Seit v0.3.0 sind die drei festen Felder **quadratisch** (11×11 / 17×17 / 23×23), damit sie symmetrisch um den Generator liegen. Die Größen-Gizmos zeigen jetzt echte +/−-Grafiken, und Stufe 3 heißt „Gravship Shield". Seit v0.3.1 liegt dessen Feld **symmetrisch bündig** an den Rumpfplatten; der Rand ist per Gizmo auf 0–4 Kacheln einstellbar. Seit v0.4.0 zeichnet `DrawFieldEdges` die **echte Außenkontur beliebiger Formen** (L, U, T, Ringe, getrennte Plateaus) statt einer Box.
+
+Seit v0.5.0 kommen zwei Effekte dazu:
+
+| Effekt | Datei | Beschreibung |
+|---|---|---|
+| Diagonale Ecken | `UI/RectShieldDraw.cs` | Wo sich zwei Schildteile nur ueber eine Ecke beruehren, wird eine 45°-Linie gezogen (Wand-Link-Prinzip). Paare werden in `RectShieldShape.DiagonalLinks` gecacht. |
+| Treffer-Flash | `UI/RectShieldDraw.cs` | Bei jedem geblockten Projektil/Skyfaller wird das **ganze Feld** 18 Ticks lang leicht durchscheinend ueberzogen (`DrawMeshInstanced`, Batches zu 512). Farbe = Stufenfarbe, Deckkraft faellt weich ab. |
+| Mod-Einstellung | `Mod/RectShieldMod.cs` | „Bei Treffer das ganze Schildfeld kurz aufleuchten lassen" (Standard an). |
+
+Beide Effekte funktionieren **auch ohne Auswahl** des Gebäudes und sind in
+try/catch gekapselt. Parameter: `flashTicks`, `flashAlpha`, `diagonalLinks`. Wer will, kann S/M/L durch drei Varianten desselben Designs ersetzen.
 
 **Quelle der Grafiken:** Im Workspace unter `/home/user/generator_ansichten/` (Rohbilder 1024×1024, `prepare_sprites.py` für Freistellung/Zuschnitt, `hd/` in 512×512, `vorschau.html` als Übersicht). Die Dateien sind freigestellt (transparenter Hintergrund) und als `Graphic_Single` mit `drawSize (2,2)` eingebunden.
 

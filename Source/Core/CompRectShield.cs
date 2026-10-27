@@ -27,6 +27,7 @@ namespace RectShield
         private bool autoFit;
         private int autoFitCounter;
         private int hullPadding;
+        private int flashTicksLeft;
         private RectShieldHull lastHull = new RectShieldHull();
 
         public CompProperties_RectShield Props => (CompProperties_RectShield)props;
@@ -57,6 +58,10 @@ namespace RectShield
         public bool AutoFit => autoFit;
         public int HullPadding => hullPadding;
         public RectShieldHull LastHull => lastHull;
+        public bool IsFlashing => flashTicksLeft > 0;
+        public float FlashFactor => Props.flashTicks > 0
+            ? (float)flashTicksLeft / Props.flashTicks
+            : 0f;
         public bool ShowOverlay => showOverlay;
         public bool IsRebooting => rebootTicksLeft > 0;
 
@@ -264,6 +269,12 @@ namespace RectShield
             {
                 EnsureInitialized();
 
+                // Treffer-Flash laeuft auch waehrend Reboot/Offline aus.
+                if (flashTicksLeft > 0)
+                {
+                    flashTicksLeft--;
+                }
+
                 // Im Rumpf-Modus periodisch auf neue/entfernte Platten reagieren.
                 // Nur bei echter Aenderung neu bauen: beliebig grosse und beliebig
                 // geformte Schiffe sollen nicht alle 3 s neu dilatiert werden.
@@ -331,6 +342,7 @@ namespace RectShield
                              : 1f);
             energy -= cost;
 
+            flashTicksLeft = Math.Max(1, Props.flashTicks);
             RectShieldUtil.SpawnHitEffect(parent.Map, hitCell);
 
             if (energy <= 0f)
@@ -349,6 +361,7 @@ namespace RectShield
             }
 
             energy -= Props.skyfallerEnergyCost;
+            flashTicksLeft = Math.Max(1, Props.flashTicks);
             RectShieldUtil.SpawnHitEffect(parent.Map, cell);
 
             if (energy <= 0f)
@@ -462,9 +475,24 @@ namespace RectShield
                     return;
                 }
 
+                Color edgeColor = RectShieldUtil.ColorFor(Tier, Active);
                 var cells = perimeterOnly ? Shape.EdgeCells() : Shape.AllCells();
-                GenDraw.DrawFieldEdges(RectShieldUtil.ToList(cells),
-                    RectShieldUtil.ColorFor(Tier, Active));
+                GenDraw.DrawFieldEdges(RectShieldUtil.ToList(cells), edgeColor);
+
+                // Diagonale Ecken wie bei verlinkten Waenden verbinden.
+                if (Props.diagonalLinks && Shape.HasCustomCells)
+                {
+                    RectShieldDraw.DrawDiagonalLinks(Shape.DiagonalLinks, edgeColor);
+                }
+
+                // Bei einem Treffer das GANZE Feld leicht durchscheinend legen.
+                if (IsFlashing && RectShieldMod.Settings != null
+                    && RectShieldMod.Settings.ShowHitFlash)
+                {
+                    Color flash = edgeColor;
+                    flash.a = Props.flashAlpha * FlashFactor;
+                    RectShieldDraw.DrawFilledCells(Shape.AllCells(), flash);
+                }
             }
             catch (Exception e)
             {

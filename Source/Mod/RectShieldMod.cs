@@ -10,6 +10,7 @@ namespace RectShield
         public bool ShowPersistentOverlay = true;
         public bool BlockFriendlyPods = false;
         public bool DebugLogging = false;
+        public bool ShowHitFlash = true;
         public float WattsPerCellMultiplier = 1f;
         public float EnergyPerDamageMultiplier = 1f;
         public int MaxSizeCap = 51;
@@ -20,6 +21,7 @@ namespace RectShield
             Scribe_Values.Look(ref ShowPersistentOverlay, "rs_showPersistentOverlay", true);
             Scribe_Values.Look(ref BlockFriendlyPods, "rs_blockFriendlyPods", false);
             Scribe_Values.Look(ref DebugLogging, "rs_debugLogging", false);
+            Scribe_Values.Look(ref ShowHitFlash, "rs_showHitFlash", true);
             Scribe_Values.Look(ref WattsPerCellMultiplier, "rs_wattsPerCellMultiplier", 1f);
             Scribe_Values.Look(ref EnergyPerDamageMultiplier, "rs_energyPerDamageMultiplier", 1f);
             Scribe_Values.Look(ref MaxSizeCap, "rs_maxSizeCap", 51);
@@ -49,6 +51,7 @@ namespace RectShield
                 list.CheckboxLabeled(RectShieldStrings.SettingsOverlay, ref Settings.ShowPersistentOverlay);
                 list.CheckboxLabeled(RectShieldStrings.SettingsFriendlyPods, ref Settings.BlockFriendlyPods);
                 list.CheckboxLabeled(RectShieldStrings.SettingsDebug, ref Settings.DebugLogging);
+                list.CheckboxLabeled(RectShieldStrings.SettingsHitFlash, ref Settings.ShowHitFlash);
 
                 list.Gap(8f);
                 list.Label(RectShieldStrings.SettingsPower(Settings.WattsPerCellMultiplier));
