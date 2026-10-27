@@ -27,7 +27,7 @@ namespace RectShield
         private bool autoFit;
         private int autoFitCounter;
         private int hullPadding;
-        private RectShieldBounds lastHull;
+        private RectShieldHull lastHull = new RectShieldHull();
 
         public CompProperties_RectShield Props => (CompProperties_RectShield)props;
 
@@ -56,7 +56,7 @@ namespace RectShield
         public bool PerimeterOnly => perimeterOnly;
         public bool AutoFit => autoFit;
         public int HullPadding => hullPadding;
-        public RectShieldBounds LastHull => lastHull;
+        public RectShieldHull LastHull => lastHull;
         public bool ShowOverlay => showOverlay;
         public bool IsRebooting => rebootTicksLeft > 0;
 
@@ -200,48 +200,18 @@ namespace RectShield
                 lastHull = RectShieldSubstructure.Scan(parent.Map);
                 if (lastHull.Found)
                 {
+                    // Exakte Rumpfform: nur echte Plattenzellen (+ Rand) werden
+                    // geschuetzt. Eine L-Form bleibt eine L-Form - die leere
+                    // Aussparung der Bounding Box wird NICHT aufgefuellt.
                     int pad = Math.Max(0, Math.Min(8, hullPadding));
-                    int minX = lastHull.MinX - pad;
-                    int maxX = lastHull.MaxX + pad;
-                    int minZ = lastHull.MinZ - pad;
-                    int maxZ = lastHull.MaxZ + pad;
-
-                    // Symmetrisch auf min/max Feldgroesse bringen (beide Seiten
-                    // gleichmaessig), damit nie eine Seite weiter ragt.
-                    int wantedW = maxX - minX + 1;
-                    if (wantedW > p.maxWidth)
-                    {
-                        int excess = wantedW - p.maxWidth;
-                        minX += excess / 2;
-                        maxX -= excess - excess / 2;
-                    }
-                    else if (wantedW < p.minWidth)
-                    {
-                        int missing = p.minWidth - wantedW;
-                        minX -= missing / 2;
-                        maxX += missing - missing / 2;
-                    }
-
-                    int wantedH = maxZ - minZ + 1;
-                    if (wantedH > p.maxHeight)
-                    {
-                        int excess = wantedH - p.maxHeight;
-                        minZ += excess / 2;
-                        maxZ -= excess - excess / 2;
-                    }
-                    else if (wantedH < p.minHeight)
-                    {
-                        int missing = p.minHeight - wantedH;
-                        minZ -= missing / 2;
-                        maxZ += missing - missing / 2;
-                    }
-
-                    shape = RectShieldShape.BuildFromWorldBounds(minX, minZ, maxX, maxZ, parent.Map);
+                    var cells = RectShieldSubstructure.Dilate(lastHull.Cells, pad);
+                    shape = RectShieldShape.BuildFromCells(cells, parent.Map);
                     shapeDirty = false;
                     UpdatePowerDraw(force: true);
-                    RectShieldLog.Debug("Rumpf-Feld: " + lastHull.Cells + " Platten, "
-                                        + shape.Width + "x" + shape.Height + " Kacheln, "
-                                        + CurrentPowerDrawW + " W");
+                    RectShieldLog.Debug("Rumpf-Feld: " + lastHull.Count + " Platten, "
+                                        + shape.Area + " Schildzellen (Bounding "
+                                        + shape.Width + "x" + shape.Height + "), Rand "
+                                        + pad + ", " + CurrentPowerDrawW + " W");
                     return;
                 }
                 // Keine Platten gefunden -> auf das manuelle Feld zurueckfallen.
@@ -498,7 +468,7 @@ namespace RectShield
                 : (Active ? RectShieldStrings.Online : RectShieldStrings.Offline);
 
             string fit = autoFit && Props.autoFitSubstructure
-                ? RectShieldStrings.InspectFit(lastHull.Cells, hullPadding, lastHull.Found)
+                ? RectShieldStrings.InspectFit(lastHull.Count, shape.Area, hullPadding, lastHull.Found)
                 : "";
 
             return RectShieldStrings.Inspect(

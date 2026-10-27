@@ -35,10 +35,10 @@
 
   <RS_GizmoFitOn>Rumpf-Anpassung: an</RS_GizmoFitOn>
   <RS_GizmoFitOff>Rumpf-Anpassung: aus</RS_GizmoFitOff>
-  <RS_DescFit>Legt das Feld automatisch um alle Gravschiff-Bodenplatten (Substructure) auf der Karte. Ausschalten fuer manuelle Groesse.</RS_DescFit>
-  <RS_InspectFit> | Rumpf: {0} Platten, Rand {1}</RS_InspectFit>
+  <RS_DescFit>Folgt der exakten Form aller Gravschiff-Bodenplatten (L-Formen bleiben L-foermig). Ausschalten fuer manuelle Groesse.</RS_DescFit>
+  <RS_InspectFit> | Rumpf: {0} Platten -> {1} Feldzellen, Rand {2}</RS_InspectFit>
   <RS_GizmoPadding>Rand: {0} Kacheln</RS_GizmoPadding>
-  <RS_DescPadding>Zusaetzliche Kacheln um die aeussersten Rumpfplatten. 0 = Feld liegt buendig auf den Platten. Klicken fuer 0-4.</RS_DescPadding>
+  <RS_DescPadding>Erweitert die Rumpfform um N Kacheln in alle Richtungen (Form bleibt erhalten). 0 = genau die Platten. Klicken fuer 0-4.</RS_DescPadding>
   <RS_FitNoPlates> | Rumpf: keine Platten gefunden</RS_FitNoPlates>
   <RS_SettingsHeader>RectShield-Einstellungen</RS_SettingsHeader>
   <RS_SettingsOverlay>Dezente Umrandung fuer alle aktiven Schilde anzeigen</RS_SettingsOverlay>

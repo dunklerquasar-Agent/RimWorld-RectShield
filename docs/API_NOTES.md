@@ -147,6 +147,14 @@ Geprüft gegen das 1.6-Dekompilat ([Dyyrlysh/RimworldDecompile](https://github.c
 | `Verse.Def.HasTag(string)` | Stabile Basis-API; in `RectShieldSubstructure` bewusst **statt** `IsSubstructure` verwendet, um keine Odyssey-Abhängigkeit zu kompilieren. |
 | `RimWorld.GravshipUtility.GetConnectedSubstructure(Building_GravEngine, HashSet<IntVec3>, int, bool)` | Vanilla-Floodfill ab dem Grav-Engine. **Nicht verwendet**, weil es einen Odyssey-Typ voraussetzt und nur *verbundene* Platten liefert. Unser Scan nimmt alle Platten auf der Map. |
 
+**Zellmenge statt Bounding Box (v0.4.0):** `GenDraw.DrawFieldEdges` zeichnet
+die Kanten zwischen uebergebenen Zellen und ihren Nachbarn ausserhalb der Liste.
+Uebergibt man `Shape.AllCells()` statt einer Box, entsteht automatisch die
+Aussenkontur einer beliebigen Form (L, U, T, ...). `HashSet<IntVec3>` funktioniert
+direkt, weil `Verse.IntVec3` Value-Equality und `GetHashCode` implementiert.
+`Shape.EdgeCells()` wird beim Aufbau einmalig gecacht, damit das persistente
+Overlay nicht pro Frame O(n) Nachbarlookups macht.
+
 **Geometrie-Falle (v0.3.1):** Ein Feld aus einem Integer-Mittelpunkt
 `(MinX+MaxX)/2` plus `halfW = width/2` zu bauen, verschiebt sich bei **geraden**
 Breiten um eine halbe Zelle Richtung Westen. Sichtbar wurde das als 1–2 Kacheln

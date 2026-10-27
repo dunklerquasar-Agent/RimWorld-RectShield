@@ -121,6 +121,11 @@ if "<substructurePadding>0</substructurePadding>" not in buildings_text:
     build_issues.append("Buildings_RectShield.xml: buendiger Standard-Rand (0) fehlt")
 if "CycleHullPadding" not in (ROOT / "Source/Core/CompRectShield.cs").read_text(encoding="utf-8"):
     build_issues.append("CompRectShield.cs: Rand-Gizmo fehlt")
+shape_src = (ROOT / "Source/Core/RectShieldShape.cs").read_text(encoding="utf-8")
+if "BuildFromCells" not in shape_src or "HasCustomCells" not in shape_src:
+    build_issues.append("RectShieldShape.cs: exakte Rumpfform (Zellmenge) fehlt")
+if "Dilate" not in (ROOT / "Source/Core/RectShieldSubstructure.cs").read_text(encoding="utf-8"):
+    build_issues.append("RectShieldSubstructure.cs: Dilatation fehlt")
 for fixed in ("<fixedWidth>11</fixedWidth>", "<fixedWidth>17</fixedWidth>",
               "<fixedWidth>23</fixedWidth>"):
     if fixed not in buildings_text:

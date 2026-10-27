@@ -5,9 +5,11 @@ using Verse;
 namespace RectShield
 {
     /// <summary>
-    /// Reine Geometrie des Schildes. Achsenparalleles Rechteck in Welt-Koordinaten.
-    /// Bewusst ohne Abhaengigkeit von Vanilla-Methoden implementiert (nur IntVec3/Rot4),
-    /// damit Clipping und Rotation exakt kontrollierbar und unit-testbar sind.
+    /// Geometrie des Schildes. Zwei Modi:
+    ///  - Klassisch: ein achsenparalleles Rechteck (Mk I / Mk II / manueller Modus).
+    ///  - Rumpf-Modus: eine exakte Zellmenge, die jeder Gravschiff-Bodenplatte folgt.
+    ///    Eine L-Form bleibt dabei eine L-Form - die Aussparung bleibt ungeschuetzt.
+    /// Bewusst ohne Abhaengigkeit von Vanilla-Geometrieklassen implementiert.
     /// </summary>
     public sealed class RectShieldShape
     {
@@ -17,16 +19,23 @@ namespace RectShield
         public int MaxZ { get; private set; }
         public bool IsEmpty { get; private set; }
 
+        private HashSet<IntVec3> customCells;
+        private List<IntVec3> edgeCache;
+
+        public bool HasCustomCells => customCells != null && customCells.Count > 0;
+
         public int Width => IsEmpty ? 0 : MaxX - MinX + 1;
         public int Height => IsEmpty ? 0 : MaxZ - MinZ + 1;
-        public int Area => Width * Height;
+
+        /// <summary>Echte geschuetzte Zellenzahl (bei Rumpfform ohne Aussparungen).</summary>
+        public int Area => HasCustomCells ? customCells.Count : (IsEmpty ? 0 : Width * Height);
 
         private RectShieldShape()
         {
         }
 
         /// <summary>
-        /// Baut das Rechteck um den Generator (standardmaessig zentriert).
+        /// Baut das klassische Rechteck um den Generator (standardmaessig zentriert).
         /// width  = Ausdehnung entlang der Rechts-Achse des Gebaeudes
         /// height = Ausdehnung entlang der Vorwaerts-Achse des Gebaeudes
         /// offset = Verschiebung in lokalen Koordinaten (rechts, vorwaerts)
@@ -65,34 +74,88 @@ namespace RectShield
             int minZ = centerZ - halfH;
             int maxZ = centerZ + (height - 1 - halfH);
 
-            // An den Kartenrand clippen (eigene Logik statt CellRect.ClipInsideMap,
-            // dessen Signatur sich zwischen Versionen unterscheidet).
-            if (map != null)
-            {
-                minX = Math.Max(minX, 0);
-                minZ = Math.Max(minZ, 0);
-                maxX = Math.Min(maxX, map.Size.x - 1);
-                maxZ = Math.Min(maxZ, map.Size.z - 1);
-            }
-
-            result.MinX = minX;
-            result.MinZ = minZ;
-            result.MaxX = maxX;
-            result.MaxZ = maxZ;
-            result.IsEmpty = minX > maxX || minZ > maxZ;
+            result.AssignBounds(minX, minZ, maxX, maxZ, map);
             return result;
         }
 
         /// <summary>
-        /// Baut das Rechteck direkt aus Weltkoordinaten (Gravschiff-Modus).
-        /// Ignoriert Rotation/Offset des Generators - der Feldmittelpunkt liegt
-        /// stattdessen auf dem Zentrum der gefundenen Bodenplatten.
+        /// Klassisches Rechteck direkt aus Weltkoordinaten (Fallback).
         /// </summary>
         public static RectShieldShape BuildFromWorldBounds(int minX, int minZ,
                                                            int maxX, int maxZ, Map map)
         {
             var result = new RectShieldShape();
+            result.AssignBounds(minX, minZ, maxX, maxZ, map);
+            return result;
+        }
 
+        /// <summary>
+        /// Baut das Schild aus einer exakten Zellmenge (Gravschiff-Rumpfform).
+        /// Zellen ausserhalb der Karte werden verworfen; die Bounds dienen nur
+        /// noch Inspect-Anzeige und Kamera-Clipping.
+        /// </summary>
+        public static RectShieldShape BuildFromCells(HashSet<IntVec3> source, Map map)
+        {
+            var result = new RectShieldShape();
+            var set = new HashSet<IntVec3>();
+
+            if (source != null)
+            {
+                foreach (IntVec3 raw in source)
+                {
+                    var c = new IntVec3(raw.x, 0, raw.z);
+                    if (map != null &&
+                        (c.x < 0 || c.z < 0 || c.x >= map.Size.x || c.z >= map.Size.z))
+                    {
+                        continue;
+                    }
+
+                    set.Add(c);
+                }
+            }
+
+            result.customCells = set;
+            if (set.Count == 0)
+            {
+                result.IsEmpty = true;
+                result.edgeCache = new List<IntVec3>();
+                return result;
+            }
+
+            int minX = int.MaxValue;
+            int minZ = int.MaxValue;
+            int maxX = int.MinValue;
+            int maxZ = int.MinValue;
+            var edges = new List<IntVec3>();
+
+            foreach (IntVec3 c in set)
+            {
+                if (c.x < minX) minX = c.x;
+                if (c.z < minZ) minZ = c.z;
+                if (c.x > maxX) maxX = c.x;
+                if (c.z > maxZ) maxZ = c.z;
+
+                // Randzelle = mindestens ein 4er-Nachbar fehlt.
+                if (!set.Contains(new IntVec3(c.x + 1, 0, c.z)) ||
+                    !set.Contains(new IntVec3(c.x - 1, 0, c.z)) ||
+                    !set.Contains(new IntVec3(c.x, 0, c.z + 1)) ||
+                    !set.Contains(new IntVec3(c.x, 0, c.z - 1)))
+                {
+                    edges.Add(c);
+                }
+            }
+
+            result.MinX = minX;
+            result.MinZ = minZ;
+            result.MaxX = maxX;
+            result.MaxZ = maxZ;
+            result.IsEmpty = false;
+            result.edgeCache = edges;
+            return result;
+        }
+
+        private void AssignBounds(int minX, int minZ, int maxX, int maxZ, Map map)
+        {
             if (map != null)
             {
                 minX = Math.Max(minX, 0);
@@ -101,16 +164,20 @@ namespace RectShield
                 maxZ = Math.Min(maxZ, map.Size.z - 1);
             }
 
-            result.MinX = minX;
-            result.MinZ = minZ;
-            result.MaxX = maxX;
-            result.MaxZ = maxZ;
-            result.IsEmpty = minX > maxX || minZ > maxZ;
-            return result;
+            MinX = minX;
+            MinZ = minZ;
+            MaxX = maxX;
+            MaxZ = maxZ;
+            IsEmpty = minX > maxX || minZ > maxZ;
         }
 
         public bool Contains(IntVec3 cell)
         {
+            if (!IsEmpty && HasCustomCells)
+            {
+                return customCells.Contains(new IntVec3(cell.x, 0, cell.z));
+            }
+
             return !IsEmpty
                    && cell.x >= MinX && cell.x <= MaxX
                    && cell.z >= MinZ && cell.z <= MaxZ;
@@ -118,8 +185,20 @@ namespace RectShield
 
         public bool IsEdge(IntVec3 cell)
         {
-            return Contains(cell)
-                   && (cell.x == MinX || cell.x == MaxX || cell.z == MinZ || cell.z == MaxZ);
+            if (!Contains(cell))
+            {
+                return false;
+            }
+
+            if (HasCustomCells)
+            {
+                return !Contains(new IntVec3(cell.x + 1, 0, cell.z))
+                       || !Contains(new IntVec3(cell.x - 1, 0, cell.z))
+                       || !Contains(new IntVec3(cell.x, 0, cell.z + 1))
+                       || !Contains(new IntVec3(cell.x, 0, cell.z - 1));
+            }
+
+            return cell.x == MinX || cell.x == MaxX || cell.z == MinZ || cell.z == MaxZ;
         }
 
         /// <summary>
@@ -144,6 +223,16 @@ namespace RectShield
         /// <summary>Alle geschuetzten Zellen (fuer DrawFieldEdges im Volumen-Modus).</summary>
         public IEnumerable<IntVec3> AllCells()
         {
+            if (HasCustomCells)
+            {
+                foreach (IntVec3 c in customCells)
+                {
+                    yield return c;
+                }
+
+                yield break;
+            }
+
             if (IsEmpty)
             {
                 yield break;
@@ -161,6 +250,19 @@ namespace RectShield
         /// <summary>Nur die Randzellen (fuer Randmodus und das persistente Overlay).</summary>
         public IEnumerable<IntVec3> EdgeCells()
         {
+            if (HasCustomCells)
+            {
+                if (edgeCache != null)
+                {
+                    foreach (IntVec3 c in edgeCache)
+                    {
+                        yield return c;
+                    }
+                }
+
+                yield break;
+            }
+
             if (IsEmpty)
             {
                 yield break;

@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;
 using Verse;
 
 namespace RectShield
 {
-    /// <summary>Bounding Box der gefundenen Gravschiff-Bodenplatten.</summary>
+    /// <summary>Bounding Box der gefundenen Gravschiff-Bodenplatten (nur Info/Clipping).</summary>
     public struct RectShieldBounds
     {
         public int MinX;
@@ -15,13 +16,19 @@ namespace RectShield
         public bool Found => Cells > 0;
         public int Width => Found ? MaxX - MinX + 1 : 0;
         public int Height => Found ? MaxZ - MinZ + 1 : 0;
+    }
 
-        public bool SameAs(RectShieldBounds other)
-        {
-            return MinX == other.MinX && MinZ == other.MinZ
-                   && MaxX == other.MaxX && MaxZ == other.MaxZ
-                   && Cells == other.Cells;
-        }
+    /// <summary>
+    /// Alle tatsaechlich gefundenen Rumpfzellen. Eine L-Form bleibt damit eine
+    /// L-Form - es wird NICHT die leere Aussparung der Bounding Box aufgefuellt.
+    /// </summary>
+    public sealed class RectShieldHull
+    {
+        public RectShieldBounds Bounds;
+        public readonly HashSet<IntVec3> Cells = new HashSet<IntVec3>();
+
+        public int Count => Cells.Count;
+        public bool Found => Cells.Count > 0;
     }
 
     /// <summary>
@@ -40,12 +47,12 @@ namespace RectShield
     {
         public const string SubstructureTag = "Substructure";
 
-        public static RectShieldBounds Scan(Map map)
+        public static RectShieldHull Scan(Map map)
         {
-            var result = new RectShieldBounds();
+            var hull = new RectShieldHull();
             if (map == null)
             {
-                return result;
+                return hull;
             }
 
             try
@@ -54,7 +61,6 @@ namespace RectShield
                 int minZ = int.MaxValue;
                 int maxX = int.MinValue;
                 int maxZ = int.MinValue;
-                int count = 0;
 
                 foreach (IntVec3 cell in map.AllCells)
                 {
@@ -64,31 +70,69 @@ namespace RectShield
                         continue;
                     }
 
-                    if (cell.x < minX) minX = cell.x;
-                    if (cell.z < minZ) minZ = cell.z;
-                    if (cell.x > maxX) maxX = cell.x;
-                    if (cell.z > maxZ) maxZ = cell.z;
-                    count++;
+                    var c = new IntVec3(cell.x, 0, cell.z);
+                    hull.Cells.Add(c);
+
+                    if (c.x < minX) minX = c.x;
+                    if (c.z < minZ) minZ = c.z;
+                    if (c.x > maxX) maxX = c.x;
+                    if (c.z > maxZ) maxZ = c.z;
                 }
 
-                if (count == 0)
+                if (hull.Count == 0)
                 {
-                    return result;
+                    return hull;
                 }
 
-                result.MinX = minX;
-                result.MinZ = minZ;
-                result.MaxX = maxX;
-                result.MaxZ = maxZ;
-                result.Cells = count;
+                hull.Bounds = new RectShieldBounds
+                {
+                    MinX = minX,
+                    MinZ = minZ,
+                    MaxX = maxX,
+                    MaxZ = maxZ,
+                    Cells = hull.Count
+                };
             }
             catch (Exception e)
             {
                 // Z.B. wenn eine Version FoundationAt nicht mehr anbietet.
                 // Dann einfach keine Platten melden statt das Spiel zu crashen.
-                RectShieldLog.ErrorOnce("substructure", 
+                RectShieldLog.ErrorOnce("substructure",
                     "Gravschiff-Platten-Scan fehlgeschlagen: " + e.GetType().Name + ": " + e.Message);
-                return new RectShieldBounds();
+                return new RectShieldHull();
+            }
+
+            return hull;
+        }
+
+        /// <summary>
+        /// Erweitert die Rumpfform um 'pad' Kacheln in alle Richtungen
+        /// (Chebyshev-Dilatation, 8er-Nachbarschaft). Die Form bleibt erhalten:
+        /// eine L-Form wird zu einer groesseren L-Form, nicht zu einem Quadrat.
+        /// </summary>
+        public static HashSet<IntVec3> Dilate(HashSet<IntVec3> source, int pad)
+        {
+            var result = new HashSet<IntVec3>();
+            if (source == null)
+            {
+                return result;
+            }
+
+            if (pad <= 0)
+            {
+                result.UnionWith(source);
+                return result;
+            }
+
+            foreach (IntVec3 c in source)
+            {
+                for (int dx = -pad; dx <= pad; dx++)
+                {
+                    for (int dz = -pad; dz <= pad; dz++)
+                    {
+                        result.Add(new IntVec3(c.x + dx, 0, c.z + dz));
+                    }
+                }
             }
 
             return result;

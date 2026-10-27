@@ -11,7 +11,7 @@ Ein eigenständiger Mod, der **rechteckige Schutzfelder** statt der üblichen kr
 | Energie / Regen | 600 / 900 / 1200 · 0,5–0,7 | 1400 · 0,7 | **2400 · 1,2** |
 | Forschung | 900 | 1600 (nach Mk I) | **2600 (nach Mk II)** |
 
-Stufe 3 legt ihr Feld **automatisch um alle Gravschiff-Bodenplatten** (Odyssey-Substructure) auf der Karte. Der Auto-Fit-Modus lässt sich per Gizmo abschalten.
+Stufe 3 folgt **automatisch der exakten Form aller Gravschiff-Bodenplatten** (Odyssey-Substructure) – eine **L-Form bleibt eine L-Form**, die Aussparung wird weder geschützt noch berechnet. Der Strom richtet sich nach der echten Zellenzahl. Der Auto-Fit-Modus lässt sich per Gizmo abschalten.
 
 Schüsse **aus dem Schild heraus** bleiben immer möglich – geblockt wird nur beim **Eintritt** in das Rechteck (`!Contains(from) && Contains(to)`).
 

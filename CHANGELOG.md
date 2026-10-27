@@ -1,5 +1,41 @@
 # Changelog
 
+## [0.4.0] - 2026-10-26 - Gravship-Schild folgt der exakten Rumpfform
+
+### Problem
+Der Auto-Fit nahm nur die **Bounding Box** aller Bodenplatten. Bei einer
+**L-Form** des Schiffs wurde daraus ein ausgefuelltes Quadrat/Rechteck – die
+leere Aussparung wurde mitgeschtuetzt, das Feld "wurde nur groesser".
+
+### Umsetzung
+- `RectShieldSubstructure.Scan()` liefert jetzt zusaetzlich ein
+  `RectShieldHull`-Objekt mit der **kompletten Zellmenge** (`HashSet<IntVec3>`),
+  nicht mehr nur `RectShieldBounds`.
+- `RectShieldSubstructure.Dilate(cells, pad)` erweitert die Form um N Kacheln
+  in alle Richtungen (Chebyshev/8er-Nachbarschaft). Die Form bleibt erhalten:
+  eine L-Form wird zu einer groesseren L-Form, nicht zu einem Quadrat.
+- `RectShieldShape.BuildFromCells(...)` baut das Schild aus dieser Zellmenge.
+  `RectShieldShape` unterstuetzt jetzt zwei Modi: klassisches Rechteck
+  (`Build`) **oder** exakte Zellmenge (`HasCustomCells`). `Contains`, `IsEdge`,
+  `Area`, `AllCells`, `EdgeCells` und `BlocksEntry` arbeiten in beiden Modi.
+  Randzellen werden beim Aufbau einmalig gecacht (kein O(n)-Scan pro Frame).
+- `GenDraw.DrawFieldEdges` bekommt im Rumpf-Modus `AllCells()` und zeichnet
+  dadurch automatisch die **Aussenkontur der L-Form** (nicht die Box-Kanten).
+- `Area` = echte Zellenzahl → **Strombedarf folgt jetzt der echten Form**, nicht
+  mehr der aufgeblaehten Bounding Box. Eine L-Form ist damit guenstiger.
+- Inspect-String zeigt beides: „Rumpf: N Platten -> M Feldzellen, Rand P".
+
+### Verifikation
+Geometrie-Test mit einer 6×6-L-Form (27 Platten, 9 Zellen Aussparung, Box = 36):
+- Rand 0 → exakt 27 Feldzellen, **0/9** Aussparungszellen geschuetzt.
+- `Contains`/`BlocksEntry` pruefen die echte Form: Schuss in die Luecke geht
+  durch, Schuss auf einen Plattenarm wird gestoppt.
+- Rand 1/2/3 → 40/55/72 Feldzellen; die Innenecken der L runden sich durch die
+  Dilatation naturgemaess ab (bei Rand 3 ist die kleine Luecke gefuellt). Wer die
+  exakte Form will, laesst den Rand auf **0** (Standard).
+
+### Hinweis
+C# geaendert -> DLLs fuer 1.6/1.7 in GitHub Actions neu gebaut.
 ## [0.3.1] - 2026-10-26 - Fix: Gravship-Feld lag asymmetrisch am Rumpf
 
 ### Fehlerbild (aus einem echten Spielstand gemeldet)
