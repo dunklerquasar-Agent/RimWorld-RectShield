@@ -35,7 +35,7 @@
 
   <RS_GizmoFitOn>Fit hull: ON</RS_GizmoFitOn>
   <RS_GizmoFitOff>Fit hull: OFF</RS_GizmoFitOff>
-  <RS_DescFit>Follow the exact shape of all gravship hull plates (L-shapes stay L-shaped). Turn off to size the field manually.</RS_DescFit>
+  <RS_DescFit>Follows the exact shape of all gravship hull plates. ANY layout works: L, U, T, rings with courtyards, branching ships and separate decks. Turn off to size the field manually.</RS_DescFit>
   <RS_InspectFit> | hull: {0} plates -> {1} field cells, margin {2}</RS_InspectFit>
   <RS_GizmoPadding>Margin: {0} tiles</RS_GizmoPadding>
   <RS_DescPadding>Expands the hull shape outwards by N tiles in every direction (shape is preserved). 0 = exactly the plates. Click to cycle 0-4.</RS_DescPadding>
