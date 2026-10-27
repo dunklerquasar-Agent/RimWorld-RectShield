@@ -1,5 +1,46 @@
 # Changelog
 
+## [0.4.1] - 2026-10-27 - Klarstellung + Robustheit fuer beliebige Rumpfformen
+
+Die L-Form aus v0.4.0 war nur ein **Beispiel**. Der Schild soll **jede Form**
+abdecken, in der man ein Gravship bauen kann. Das ist mit der Zellmenge aus
+v0.4.0 bereits der Fall – es gibt im Code **keine Form-Annahme** mehr. Dieses
+Release belegt das mit einem Formen-Test und macht den Scan fit fuer grosse
+Schiffe (bis 2000 Substructure-Platten mit 6 Gravfeld-Extendern).
+
+### Formen-Test (8 Formen, Rand 0)
+| Form | Platten | Bounding Box (alt) | Feldzellen | exakt |
+|---|---|---|---|---|
+| L | 48 | 64 | 48 | ja |
+| U | 44 | 64 | 44 | ja |
+| T | 34 | 64 | 34 | ja |
+| Kreuz | 28 | 64 | 28 | ja |
+| Ring mit Innenhof | 48 | 64 | 48 | ja |
+| 3 getrennte Plateaus | 41 | 224 | 41 | ja |
+| organisch / zufaellig | 59 | 110 | 59 | ja |
+| gross (2000 Platten) | 2000 | 2000 | 2000 | ja |
+
+Innenhoefe, Aussparungen und Luecken bleiben bei Rand 0 frei. `BlocksEntry`
+wurde am Ring geprueft: Eintritt von aussen wird blockiert, Austritt nach
+aussen bleibt erlaubt, Schuesse in den Innenhof gehen durch.
+
+### Technische Verbesserungen
+- `RectShieldSubstructure.GetSubstructureDefs()` cacht die TerrainDefs mit dem
+  Tag `Substructure` einmalig (Referenzvergleich statt `HasTag`-String-Suche pro
+  Zelle). Der Def-Zaehler faengt nachgeladene Defs ab.
+- `SameCells()` vergleicht zwei Rumpfmengen. Der 180-Tick-Timer baut das Feld
+  nur noch dann neu, wenn sich die Plattenmenge **tatsaechlich geaendert** hat.
+  `RebuildShape()` nutzt beim ersten Aufbau (Spawn/Laden) den gecachten Scan.
+- Performance der Dilatation bei 2000 Platten: Rand 0 = 0,1 ms, Rand 1 = 3,3 ms,
+  Rand 4 = 19,5 ms – und das nur bei einer echten Aenderung, nicht alle 3 s.
+- Alle Substructure-Platten der Map werden beruecksichtigt. Verzweigte Schiffe,
+  mehrere getrennte Plateaus und ausgedehnte Formen mit Extendern funktionieren.
+- Der Rand-Gizmo dilatiert die Form (nicht eine Box). Hoehere Raender runden
+  Innenecken naturgemaess ab; fuer die exakte Form Rand **0** lassen.
+
+### Hinweis
+Keine neue Spielmechanik – die Formfreiheit kam mit v0.4.0. C# geaendert ->
+DLLs fuer 1.6/1.7 in GitHub Actions neu gebaut.
 ## [0.4.0] - 2026-10-26 - Gravship-Schild folgt der exakten Rumpfform
 
 ### Problem

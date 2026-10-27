@@ -47,11 +47,60 @@ namespace RectShield
     {
         public const string SubstructureTag = "Substructure";
 
+        // Defs werden einmalig geladen. Statt pro Zelle HasTag (String-Vergleich
+        // ueber die Tag-Liste) cachen wir die passenden TerrainDef-Referenzen.
+        // Der Zaehler faengt ein spaeteres Nachladen von Defs ab.
+        private static HashSet<TerrainDef> substructureDefs;
+        private static int cachedDefCount = -1;
+
+        private static HashSet<TerrainDef> GetSubstructureDefs()
+        {
+            int count = 0;
+            foreach (TerrainDef def in DefDatabase<TerrainDef>.AllDefs)
+            {
+                count++;
+            }
+
+            if (substructureDefs == null || cachedDefCount != count)
+            {
+                substructureDefs = new HashSet<TerrainDef>();
+                foreach (TerrainDef def in DefDatabase<TerrainDef>.AllDefs)
+                {
+                    if (def.HasTag(SubstructureTag))
+                    {
+                        substructureDefs.Add(def);
+                    }
+                }
+
+                cachedDefCount = count;
+            }
+
+            return substructureDefs;
+        }
+
+        /// <summary>Vergleicht zwei Rumpfmengen, ohne unnoetig neu zu dilatieren.</summary>
+        public static bool SameCells(RectShieldHull a, RectShieldHull b)
+        {
+            if (a == null || b == null)
+            {
+                return ReferenceEquals(a, b);
+            }
+
+            return a.Count == b.Count && a.Cells.SetEquals(b.Cells);
+        }
+
         public static RectShieldHull Scan(Map map)
         {
             var hull = new RectShieldHull();
             if (map == null)
             {
+                return hull;
+            }
+
+            HashSet<TerrainDef> defs = GetSubstructureDefs();
+            if (defs.Count == 0)
+            {
+                // Kein Odyssey-DLC / keine Substructure-Defs vorhanden.
                 return hull;
             }
 
@@ -65,7 +114,7 @@ namespace RectShield
                 foreach (IntVec3 cell in map.AllCells)
                 {
                     TerrainDef foundation = map.terrainGrid.FoundationAt(cell);
-                    if (foundation == null || !foundation.HasTag(SubstructureTag))
+                    if (foundation == null || !defs.Contains(foundation))
                     {
                         continue;
                     }

@@ -197,7 +197,13 @@ namespace RectShield
             // halbe Zelle zu weit westlich -> 1-2 Kacheln Versatz (Bug v0.3.0).
             if (autoFit && p.autoFitSubstructure)
             {
-                lastHull = RectShieldSubstructure.Scan(parent.Map);
+                // Erster Aufbau (Spawn/Laden) scannt selbst; danach haelt der
+                // 180-Tick-Timer lastHull aktuell und triggert nur bei Aenderung.
+                if (lastHull == null || !lastHull.Found)
+                {
+                    lastHull = RectShieldSubstructure.Scan(parent.Map);
+                }
+
                 if (lastHull.Found)
                 {
                     // Exakte Rumpfform: nur echte Plattenzellen (+ Rand) werden
@@ -259,13 +265,20 @@ namespace RectShield
                 EnsureInitialized();
 
                 // Im Rumpf-Modus periodisch auf neue/entfernte Platten reagieren.
+                // Nur bei echter Aenderung neu bauen: beliebig grosse und beliebig
+                // geformte Schiffe sollen nicht alle 3 s neu dilatiert werden.
                 if (autoFit && Props.autoFitSubstructure && Props.substructureRefreshTicks > 0)
                 {
                     autoFitCounter++;
                     if (autoFitCounter >= Props.substructureRefreshTicks)
                     {
                         autoFitCounter = 0;
-                        shapeDirty = true;
+                        RectShieldHull fresh = RectShieldSubstructure.Scan(parent.Map);
+                        if (!RectShieldSubstructure.SameCells(fresh, lastHull))
+                        {
+                            lastHull = fresh;
+                            shapeDirty = true;
+                        }
                     }
                 }
 

@@ -147,6 +147,14 @@ Geprüft gegen das 1.6-Dekompilat ([Dyyrlysh/RimworldDecompile](https://github.c
 | `Verse.Def.HasTag(string)` | Stabile Basis-API; in `RectShieldSubstructure` bewusst **statt** `IsSubstructure` verwendet, um keine Odyssey-Abhängigkeit zu kompilieren. |
 | `RimWorld.GravshipUtility.GetConnectedSubstructure(Building_GravEngine, HashSet<IntVec3>, int, bool)` | Vanilla-Floodfill ab dem Grav-Engine. **Nicht verwendet**, weil es einen Odyssey-Typ voraussetzt und nur *verbundene* Platten liefert. Unser Scan nimmt alle Platten auf der Map. |
 
+**Beliebige Formen (v0.4.1):** Es gibt keine Form-Annahme im Code – die
+`HashSet<IntVec3>` nimmt jede Anordnung auf. Getestet: L, U, T, Kreuz, Ring mit
+Innenhof, 3 getrennte Plateaus, organische Zufallsform und 2000 Platten.
+Der Scan cacht die `TerrainDef`-Referenzen mit Tag `Substructure`
+(`GetSubstructureDefs`) statt pro Zelle `HasTag` aufzurufen; `SameCells()`
+verhindert unnoetige Rebuilds im 180-Tick-Timer. Dilatation von 2000 Platten
+mit Rand 4 dauert ~20 ms und laeuft nur bei echter Aenderung.
+
 **Zellmenge statt Bounding Box (v0.4.0):** `GenDraw.DrawFieldEdges` zeichnet
 die Kanten zwischen uebergebenen Zellen und ihren Nachbarn ausserhalb der Liste.
 Uebergibt man `Shape.AllCells()` statt einer Box, entsteht automatisch die

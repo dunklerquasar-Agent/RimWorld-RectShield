@@ -1,4 +1,4 @@
-# Balance-Werte (v0.4.0)
+# Balance-Werte (v0.4.1)
 
 Alle Werte stehen in `Common/Defs/ThingDefs_Buildings/Buildings_RectShield.xml` und können dort ohne Neukompilieren geändert werden.
 
@@ -62,8 +62,10 @@ Gemeinsam: `blocksShots = true`, `blocksIndirectFire = false`, `blocksSkyfallers
 scannt der Comp alle 180 Ticks `map.terrainGrid.FoundationAt(cell)` und prüft
 `TerrainDef.HasTag("Substructure")`. Aus der Bounding Box aller gefundenen Platten
 wird die **exakte Zellmenge** aller Platten gebildet – keine Bounding Box mehr.
-Eine L-Form des Schiffs bleibt eine L-Form; die leere Aussparung wird nicht
-mitgeschuetzt und **kostet auch keinen Strom** (`Area` = echte Zellenzahl).
+Es gibt **keine Form-Annahme**: L, U, T, Kreuze, Ringe mit Innenhof, verzweigte
+Schiffe und mehrere getrennte Plateaus werden gleichermassen abgedeckt. Getestet
+bis 2000 Platten. Aussparungen werden nicht mitgeschuetzt und **kosten auch
+keinen Strom** (`Area` = echte Zellenzahl).
 Standard `substructurePadding = 0` = Feld liegt buendig auf den Platten. Der
 Gizmo „Rand: N Kacheln" dilatiert die Form um 0–4 Kacheln (Innenecken runden
 sich dabei ab). Bleibt das Odyssey-DLC aus, greift das manuelle Feld. Per Gizmo
