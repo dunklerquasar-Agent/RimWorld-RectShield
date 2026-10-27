@@ -332,7 +332,10 @@ def main() -> None:
     gizmo_icon(GIZMOS / "RectShield_FitHull.png", "fit")
 
     mod_icon(ROOT / "About/ModIcon.png")
-    preview(ROOT / "About/Preview.png", tier_paths)
+    # About/Preview.png ist die 1280x720-Workshop-Vorschau. Sie wird von
+    # workshop-release/make_workshop_preview.py erzeugt und darf hier NICHT
+    # durch die alte 512x512-Grafik ueberschrieben werden.
+    print("  Hinweis: About/Preview.png (1280x720) kommt aus make_workshop_preview.py")
 
     legacy = BUILDINGS / "RectShield_Mk1.png"
     if legacy.exists():
